@@ -1,356 +1,342 @@
-# Panini as a portable, object-oriented BAML superset
+# Panini: a new object-oriented agentic language
 
-## Decision summary
+## Status and scope
 
-It is feasible to design a Panini language that retains BAML's typed LLM
-functions while adding Java/C#-familiar declarations and declarative agent
-graphs. A LALR(1) grammar is also feasible for a deliberately chosen **canonical
-core syntax**. It is not feasible to turn every contextual and recovery form
-accepted by today's BAML parser into one clean portable LALR(1) grammar without
-either changing edge-case syntax or moving decisions into the lexer and
-semantic passes.
+Panini is a new language, not a BAML dialect, compatibility mode, or alternate
+spelling of another language. It incorporates the useful ideas proven by typed
+prompt languages—schema-constrained model calls, provider configuration,
+retries, tests, and streaming—but assigns them Panini syntax, semantics,
+diagnostics, runtime behavior, and versioning.
 
-The recommended architecture is therefore:
+This clean break is intentional. It avoids carrying contextual grammar,
+deprecated forms, two method syntaxes, and legacy runtime assumptions into a
+language whose primary abstraction is a stateful, policy-governed agent graph.
+Migration is a separate source-to-source tool and never a parser mode.
 
-1. retain valid BAML declarations as the compatibility surface;
-2. add Java/C#-familiar syntax as syntactic sugar, not as a second type system;
-3. add `agent`, `graph`, and `policy` declarations with precisely limited
-   semantics;
-4. publish one normative token specification, action-free LALR grammar, AST
-   schema, and conformance suite; and
-5. lower all accepted syntax into one language-neutral typed IR before runtime
-   or backend generation.
+## Product principles
 
-`grammars/panini-core.y` is an action-free Bison prototype of that canonical
-syntax. Bison can construct its LALR(1) tables without shift/reduce or
-reduce/reduce conflicts. It proves that the proposed core is parseable with one
-token of lookahead; it does **not** prove that the semantics, type system, or
-generated orchestration are correct.
+1. **One language and one canonical syntax.** Python and C++ frontends must
+   accept and reject the same programs and construct the same normalized AST.
+2. **Object-oriented at the surface.** Classes, interfaces, agents, visibility,
+   packages, typed fields, and methods follow familiar Java/C# conventions.
+3. **Composition before inheritance.** Interfaces and injected capabilities are
+   preferred. Class inheritance is single and deliberately limited.
+4. **Model calls are typed methods.** Instructions are method bodies with declared
+   inputs, outputs, errors, provider, capabilities, and policies.
+5. **Orchestration is visible.** Graphs, transitions, bounds, parallel branches,
+   joins, and compensation are compiler-visible declarations.
+6. **Safety claims are precise.** A scheduling bound is not a proof that node
+   code terminates; compensation is not rollback; a lock is not serializability.
+7. **Every representation is inspectable.** Tokens, CST, AST, symbols, types,
+   effects, graph IR, and backend IR have deterministic debug formats.
 
-## What LALR(1) buys us—and what it does not
+## Canonical source model
 
-### Benefits
-
-- A deterministic grammar can be implemented by mature parser generators.
-- The same productions can be ported mechanically to Python, Java, C#, Rust,
-  Go, or C/C++ parser frameworks.
-- Conflicts become visible during parser generation instead of being hidden in
-  handwritten lookahead.
-- A stable CST/AST contract makes alternate implementations and IDE tooling
-  practical.
-- Parser conformance can be tested independently from type checking and graph
-  execution.
-
-### Limits
-
-- A `.y` file is not literally portable source code. Parser-generator syntax,
-  lexer integration, semantic actions, error recovery, and generated APIs differ
-  by ecosystem.
-- LALR(1) only describes syntax. Name resolution, generics, type checking,
-  exhaustiveness, effects, policy conflicts, cycle bounds, and concurrency
-  safety require later compiler passes.
-- Error recovery often matters more to editor usability than accepting valid
-  programs. BAML's handwritten parser is intentionally tolerant, so a strict
-  generated parser may initially produce worse diagnostics.
-- Prompt strings need lexer modes. Delimiters, escapes, interpolation, and raw
-  text should be tokenized separately from ordinary code.
-- Generic `>` tokens need a policy. A lexer that always emits `>>` forces the
-  parser to split it inside nested types; the portable alternative is to let a
-  type-mode lexer emit two `>` tokens.
-
-## Why the existing extracted EBNF is not enough
-
-The existing BAML extraction is descriptive documentation, not a
-machine-consumable grammar. It intentionally summarizes contextual behavior:
-
-- ordinary and LLM function bodies use the same braces and are selected using
-  content lookahead;
-- `<` may start generic arguments or be a comparison;
-- `{...}` may be an object constructor or a statement block;
-- unions and union patterns reuse `|`;
-- newline placement participates in a few decisions;
-- deprecated or malformed syntax is accepted for targeted diagnostics; and
-- several words are contextual rather than reserved keywords.
-
-A portable grammar should not reproduce all of those decisions inside grammar
-actions. It should define canonical forms and isolate unavoidable context in a
-small, shared lexical contract.
-
-## Proposed language layers
-
-### Layer 1: BAML-compatible typed data and LLM functions
-
-Keep the concepts that make BAML useful:
-
-```baml
-class AuditResult {
-  violating bool
-  reason string
-}
-
-function AuditTransaction(amount: float, country: string) -> AuditResult {
-  client OpenAI
-  prompt #"
-    Audit {{ amount }} in {{ country }}.
-    {{ ctx.output_format }}
-  "#
-}
-```
-
-Existing source should retain its meaning. Panini should not reinterpret BAML
-classes, unions, optional types, clients, prompt templates, retries, or typed
-LLM results.
-
-### Layer 2: familiar OO spelling as desugaring
-
-Permit an optional Java/C#-style method spelling:
+### Packages, data, and interfaces
 
 ```panini
-public AuditResult audit(float amount, string country) {
-  return AuditTransaction(amount, country);
+package com.biggraph.compliance;
+
+public class WorkflowState {
+  public string inputQuery;
+  public List<string> logs;
+  public int iteration;
+}
+
+public class AuditResult {
+  public bool violating;
+  public string reason;
+}
+
+public interface Auditor {
+  AuditResult analyze(float amount, string country) throws AuditError;
 }
 ```
 
-Lower it immediately to the same function AST as:
+Fields and method parameters use the Java/C# order `Type name`. Semicolons are
+required for field and simple-statement boundaries. The declarative graph header
+uses `state: WorkflowState` to label its state binding; this is graph metadata,
+not a second field or method-parameter syntax.
 
-```baml
-function audit(amount: float, country: string) -> AuditResult {
-  return AuditTransaction(amount, country)
-}
-```
-
-This provides familiarity without duplicating overload resolution, error types,
-dispatch, or code generation. The compiler should pick one canonical formatter
-style per file or project; freely mixing both styles makes code review and
-documentation harder.
-
-### Layer 3: agents are classes with capabilities
-
-`agent` should be a constrained class-like declaration, not a magical runtime
-object:
+### Agents and typed inference methods
 
 ```panini
 @Model("openai/gpt-4.1")
-agent FinancialAuditor implements Auditor {
+public agent FinancialAuditor implements Auditor {
   private float riskThreshold = 10000.0;
 
-  public AuditResult analyze(float amount, string country) {
-    return AuditTransaction(amount, country);
+  public AuditResult analyze(float amount, string country) throws AuditError {
+    provider OpenAI;
+    capabilities [LookupSanctions];
+    instruction #"
+      Analyze transaction {{ amount }} in {{ country }}.
+      Use threshold {{ this.riskThreshold }}.
+      {{ context.outputSchema }}
+    "#;
   }
 }
 ```
 
-The safest default is interface composition. Single `extends` syntax may be
-offered for familiarity, but it should desugar to field/default-method reuse or
-be prohibited for agents with mutable state. Java-like implementation
-inheritance introduces fragile-base-class behavior, initialization ordering,
-state aliasing, and policy-override questions that are especially dangerous in
-long-running agents.
+An inference method is not an untyped string macro. Its declared return type defines
+the response contract. The compiler generates request rendering, response
+validation, typed capability dispatch, streaming projections, and retry integration.
+Provider calls remain effects and must appear in the method's inferred or
+declared effect set.
 
-### Layer 4: graphs describe orchestration topology
+An `agent` is a restricted class whose lifecycle and state persistence are
+runtime-managed. Static schema fields and runtime checkpointed fields must be
+distinguishable in the semantic specification; visibility alone is insufficient.
+
+### Providers and retry policies
+
+Provider settings are typed objects, even if the initial lexer treats the body
+as a single configuration token:
+
+```panini
+provider OpenAI {
+  adapter: "openai";
+  model: "gpt-4.1";
+  retry: StandardRetry;
+}
+
+policy StandardRetry {
+  rule RetryTransient: error.transient && attempts < 3 => retry();
+  rule StopOtherwise: true => fail(error);
+}
+```
+
+Retry is a policy library feature rather than a special top-level grammar form.
+Configuration must eventually receive its own typed grammar and AST; opaque
+`PROVIDER_BLOCK` tokenization is acceptable only for the parser prototype.
+
+The complete reserved-word policy and migration vocabulary are specified in
+[`panini-keywords.md`](panini-keywords.md).
+
+### Typed orchestration graphs
 
 ```panini
 graph ComplianceGraph(state: WorkflowState) -> WorkflowState {
-  node init using Init;
-  node process using Process max_visits 3 timeout 30s;
+  node init using WorkflowSteps.init;
+  node process using WorkflowSteps.process max_visits 3 timeout seconds(30);
 
   start -> init;
   init -> process;
-  process -> when UnderLimit(state) => process otherwise => end;
+  process -> when WorkflowRules.underLimit(state)
+             => process
+             otherwise => end;
 }
 ```
 
-Nodes refer to ordinary typed functions. This is important: graph nodes should
-not contain a second prompt/function language. The type checker can require a
-node signature such as `WorkflowState -> WorkflowState throws E` and a guard
-signature such as `WorkflowState -> bool throws never`.
+Graph nodes refer to typed static or capability-bound methods. A basic state
+node has an effective signature like:
 
-`max_visits` must be maintained by the graph runtime, not by user-writable
-state. Otherwise a node can reset the counter and defeat the bound. A graph
-bound limits node scheduling only; it cannot prove termination if a node blocks
-forever. `timeout` and cancellation behavior are separate contracts.
-
-### Layer 5: policies are checked contracts
-
-```panini
-policy ComplianceLimits for ComplianceGraph {
-  invariant state.loop_counter >= 0;
-  rule RejectHighRisk:
-    state.risk_score > 0.95 => Escalate(state);
-}
+```text
+(WorkflowState, GraphContext) -> WorkflowState throws E effects F
 ```
 
-Policies need explicit attachment points and deterministic conflict semantics.
-Avoid an unspecified “most specific rule wins” mechanism. Prefer one of:
+Guards must be pure, total Boolean methods. Visit counters and deadlines are
+owned by the runtime and cannot be changed through workflow state. Before code
+generation, graph verification performs reachability, terminal-path,
+strongly-connected-component, bound, type-flow, and backend-capability checks.
 
-- all invariants must hold;
-- rules are evaluated in declared order and the first matching rule wins; or
-- priorities are explicit integers and duplicate priorities are compile errors.
-
-Policy predicates should be pure and total. Effects should call typed functions
-and participate in the ordinary error/effect system.
-
-## Concurrency and compensation
-
-Avoid presenting a named mutex as proof of serializability. Prefer graph-visible
-read/write effects:
+### Parallel execution and merging
 
 ```panini
 parallel review {
-  branch risk using AnalyzeRisk;
-  branch sanctions using CheckSanctions;
-  join reviewed merge using MergeReview;
+  branch risk using ReviewSteps.analyzeRisk;
+  branch sanctions using ReviewSteps.checkSanctions;
+  join reviewed merge using ReviewSteps.merge;
 }
 ```
 
-The compiler should require either disjoint state writes or an explicit typed
-merge function. External effects need capabilities such as `PaymentWrite` or
-`EmailSend`, plus idempotency and retry metadata.
+Every branch receives an immutable snapshot. A join is valid only when branch
+writes are disjoint or an explicit, typed, deterministic merge method resolves
+them. Shared mutable state plus a named mutex is not the default concurrency
+model.
 
-Compensation is a fallible saga action, not rollback:
+### Effects and compensation
 
 ```panini
-node reserve using ReserveFunds
-  compensate using ReleaseFunds;
+node reserve using PaymentSteps.reserve
+  compensate using PaymentSteps.release;
 ```
 
-Both forward and compensation functions need typed errors. Durable runtimes
-must persist whether the forward effect started, completed, or was compensated.
+External operations have declared capabilities and idempotency requirements.
+Compensation is a durable, fallible saga step with its own result and error
+types. The runtime records whether forward work was scheduled, started,
+completed, and compensated.
 
-## Portable compiler architecture
+### Policies
+
+```panini
+policy ComplianceLimits for ComplianceGraph {
+  invariant state.iteration >= 0;
+  rule EscalateHighRisk: state.riskScore > 0.95
+      => WorkflowActions.escalate(state);
+}
+```
+
+All invariants must hold. Rules are evaluated in declaration order and the first
+matching rule wins; unreachable rules are diagnostics. Predicates are pure and
+total. Panini does not use implicit “specificity” because it is difficult to
+define predictably across inheritance, graph scope, and runtime state.
+
+## Object model boundaries
+
+### Supported initially
+
+- classes with typed fields and methods;
+- agents as runtime-managed class-like types;
+- interfaces with default methods;
+- single class inheritance;
+- multiple interface implementation;
+- generics with invariant type parameters;
+- explicit constructors and dependency injection;
+- virtual dispatch only where declared; and
+- package-qualified access control.
+
+### Deferred until semantics are complete
+
+- method overloading and implicit numeric conversions;
+- multiple class inheritance;
+- operator overloading;
+- reflection-based mutation;
+- implicit actor reentrancy;
+- covariant mutable collections; and
+- policy overrides through inheritance.
+
+Familiar syntax must not be confused with copying all Java or C# behavior.
+Panini should choose the smallest object model that supports readable agent
+systems and remains statically analyzable.
+
+## One language, two frontend implementations
+
+“Two frontend” means two independent implementations of the **same** lexical,
+syntactic, AST, and diagnostic contracts:
+
+```text
+                  +-> Python: Lark ----------------+
+source.panini ----|                                 |-> canonical AST JSON
+                  +-> C++: re2c + Bison lalr1.cc --+
+```
+
+It does not mean BAML mode versus Panini mode or functional syntax versus OO
+syntax. The Python frontend is the executable reference and development tool.
+The C++ frontend is the production implementation. Neither frontend may invent
+target-specific syntax.
+
+Both frontends run the same corpus containing:
+
+- token fixtures with exact spans and lexer modes;
+- valid programs with normalized AST JSON;
+- invalid programs with diagnostic codes and primary spans;
+- ambiguity and precedence cases;
+- incomplete-source recovery fixtures; and
+- round-trip formatter fixtures.
+
+CI fails if accepted language, normalized AST, or required diagnostic locations
+diverge. Diagnostic prose may differ during the prototype, but stable codes may
+not.
+
+## Compiler and runtime architecture
 
 ```text
 source
   -> mode-aware lexer
-  -> generated LALR parser
   -> lossless CST
-  -> canonical AST
-  -> names and scopes
-  -> type/effect checking
+  -> normalized AST
+  -> package/name resolution
+  -> type, effect, and capability checking
   -> graph and policy verification
   -> portable typed IR
-  -> interpreter or backend adapters
+  -> reference interpreter
+  -> backend adapters (LangGraph, durable workflow engines, native runtime)
 ```
 
-### Normative artifacts
+The reference interpreter defines semantics. A backend is conforming only if it
+preserves those semantics or rejects unsupported features. Generated LangGraph
+code is an adapter output, never the definition of Panini behavior.
 
-To make independent implementations agree, the project needs more than a
-grammar:
+## Migration from BAML
 
-1. **Token specification**—Unicode policy, keyword rules, comments, numeric
-   literals, prompt delimiters, and interpolation modes.
-2. **Grammar**—an action-free canonical grammar with an explicit version.
-3. **CST schema**—including trivia and spans for formatters and language
-   servers.
-4. **AST schema**—preferably serialized as versioned JSON/Protocol Buffers so
-   parsers in different languages can be compared.
-5. **Semantic specification**—names, types, effects, dispatch, graph merges,
-   policies, and errors.
-6. **Conformance corpus**—valid programs, invalid programs, expected ASTs, and
-   diagnostic codes/spans.
-7. **Typed IR schema**—the stable boundary between frontend implementations and
-   runtimes/backends.
+Removing BAML from the language design does not require abandoning existing
+users. Build a separate `baml-to-panini` migration command that:
 
-### Implementation choices
+1. parses a supported BAML version with its original parser;
+2. maps schemas, enums, clients, tests, and model functions into Panini AST;
+3. wraps top-level functions in generated static service classes;
+4. emits canonical `.panini` source;
+5. reports constructs with no semantics-preserving translation; and
+6. never runs implicitly during Panini compilation.
 
-For the concrete frontend recommendation, parser/lexer tradeoffs, debug dumps,
-and Bison automaton tooling, see
-[`panini-frontend-tooling.md`](panini-frontend-tooling.md).
+This keeps the Panini compiler and specification clean while providing an
+explicit adoption path. Migration fixtures should compare observable model
+request and response behavior, not merely formatted source.
 
-| Ecosystem | Reasonable parser choices | Note |
-| --- | --- | --- |
-| Python | Lark in LALR mode, PLY, SLY | Good reference implementation; startup and packaging need measurement. |
-| Java | CUP, Beaver, Bison Java target | ANTLR is popular but uses adaptive LL rather than LALR. |
-| C# | GOLD-compatible tooling, Irony, Gardens Point tools | Tool maturity and error recovery should be prototyped first. |
-| Rust | LALRPOP or Bison-generated FFI | Existing handwritten parser can remain the compatibility oracle initially. |
-| C/C++ | Bison | Best direct consumer of the prototype `.y` grammar. |
+## Normative artifacts
 
-Do not put language-specific AST construction actions into the normative
-grammar. Each implementation should map generated reductions into the shared
-AST schema and run the same fixtures.
+Panini version 1 is not ready until these are versioned together:
 
-## Compatibility strategy
+1. token and lexer-mode specification;
+2. conflict-free canonical grammar;
+3. CST and AST schemas;
+4. type, object, effect, graph, and policy semantics;
+5. stable diagnostic catalog;
+6. cross-frontend conformance corpus;
+7. portable typed IR schema;
+8. reference interpreter behavior; and
+9. formatter style specification.
 
-### Canonical versus compatibility syntax
+The current Bison grammar proves only that the prototype's syntactic core is
+LALR(1). Opaque instruction/provider tokens and incomplete semantic rules remain
+prototype limitations.
 
-Define two modes:
+## Delivery plan
 
-- **Panini canonical mode** accepts only deterministic forms represented in the
-  LALR grammar.
-- **BAML compatibility mode** accepts current BAML files, including contextual
-  conveniences, then lowers them to the canonical AST.
+### Phase 0: freeze the language identity
 
-This is preferable to forcing every legacy recovery rule into every new parser.
-The formatter can provide an automatic compatibility-to-canonical migration.
+- remove compatibility syntax from the normative grammar;
+- choose `.panini`, package layout, keyword casing, and semicolon rules;
+- finalize Java-order fields and parameters;
+- publish the token and AST schema; and
+- create the conformance repository layout.
 
-### Versioning
+### Phase 1: dual parser proof
 
-- Put a `language_version` in project configuration, not in every file.
-- Never change an existing production's meaning silently.
-- Reserve keywords before assigning semantics, with a diagnostic and migration
-  period.
-- Version the AST and typed IR separately from the surface grammar.
-- Require backend capability declarations; for example, a LangGraph backend may
-  not support the same durable compensation semantics as a workflow engine.
+- implement the Python Lark lexer/parser and AST dumper;
+- switch the Bison prototype to the C++ `lalr1.cc` skeleton and add re2c;
+- compare token streams and AST JSON in CI; and
+- implement deterministic representation dumps.
 
-## Risks
+### Phase 2: typed OO core
 
-| Risk | Impact | Mitigation |
-| --- | --- | --- |
-| Two spellings for every construct | Fragmented style and documentation | Canonical formatter and project-level style mode. |
-| Java inheritance conflicts with BAML interfaces | Duplicate or unsound dispatch rules | One semantic model; OO syntax only desugars to it. |
-| Strict generated parser degrades diagnostics | Poor IDE adoption | Keep CST recovery layer; snapshot invalid-input diagnostics. |
-| Grammar forks across languages | Programs parse differently | Action-free grammar, versioned AST, shared corpus in CI. |
-| Graph “safety” is overstated | Incorrect operational guarantees | Specify assumptions; type effects, timeouts, and persistence. |
-| Backend semantics leak into the language | Non-portable programs | Backend-neutral IR plus explicit capability checks. |
-| Full BAML syntax is forced into LALR(1) | Grammar conflicts and hacks | Canonical/compatibility split and lexer modes. |
+- implement packages, classes, interfaces, agents, generics, constructors,
+  access control, name resolution, and type checking;
+- add typed provider configuration; and
+- implement inference-method request/response validation.
 
-## Recommended delivery plan
+### Phase 3: graph reference semantics
 
-### Phase 0: specification and corpus
+- implement the graph IR, local interpreter, checkpoints, scheduling bounds,
+  deadlines, cancellation, guards, and graph analysis;
+- add deterministic replay tests; and
+- expose DOT and JSON graph dumps.
 
-- Freeze a representative BAML compatibility corpus.
-- Assign stable AST node and diagnostic names.
-- Decide canonical keyword, semicolon, parameter, and prompt forms.
-- Check the prototype grammar for zero LALR conflicts in CI.
+### Phase 4: effects and policies
 
-### Phase 1: portable parser proof
+- implement capability/effect checking, parallel merge validation, idempotency,
+  compensation, invariants, and ordered rules.
 
-- Implement one generated parser beside the Rust parser.
-- Parse the same valid corpus and compare normalized AST JSON.
-- Compare invalid-input diagnostics, but do not require identical wording.
-- Add one second-language parser—Python is a low-cost candidate—to prove the
-  grammar and AST contract are genuinely portable.
+### Phase 5: migration and backends
 
-### Phase 2: OO sugar
+- build the explicit BAML migration tool;
+- generate LangGraph and durable-workflow adapters; and
+- reject programs requiring unsupported backend capabilities.
 
-- Add modifiers, Java/C# method spelling, packages, and imports.
-- Lower them to existing classes, interfaces, and functions.
-- Do not add inheritance or overloading until dispatch semantics are specified.
+## Decision
 
-### Phase 3: graph core
-
-- Add typed nodes, guards, transitions, runtime-owned visit budgets, timeouts,
-  reachability checks, and strongly-connected-component analysis.
-- Execute locally before generating third-party backend code.
-
-### Phase 4: policies and effects
-
-- Add pure invariants and deterministic rule ordering.
-- Add read/write effect declarations, parallel merge checking, idempotency, and
-  fallible compensation.
-
-### Phase 5: backends
-
-- Generate LangGraph only after the graph IR has an executable reference
-  semantics.
-- Add backend capability validation and golden generated-code tests.
-
-## Recommendation
-
-Proceed, but treat “Java/C#-like” as an **adoption-oriented surface syntax**, not
-as the semantic foundation. BAML's typed LLM boundary is the valuable core;
-Panini should add analyzable orchestration without weakening it. The first
-engineering milestone should be a normative lexer contract, a conflict-free
-canonical grammar, and cross-parser AST conformance—not inheritance, mutexes, or
-LangGraph code generation.
+Proceed with Panini as a standalone OO agentic language. Preserve the proven
+functionality of typed schemas and model calls at the semantic level, not by
+embedding BAML grammar or exposing two source-language modes. Use the two
+frontends to cross-check one specification, and make the reference interpreter
+and inspectable IR—not generated backend code—the authority for behavior.

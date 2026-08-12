@@ -2,7 +2,8 @@
 
 ## Recommendation
 
-Use one grammar and two deliberately different frontends:
+Use one Panini grammar and two deliberately different implementations of that
+same frontend contract:
 
 1. **Python reference frontend: Lark** with its LALR parser, for rapid language
    development, parse-tree inspection, interactive parsing, and approachable
@@ -19,8 +20,11 @@ Tree-sitter should be an editor parser, not the normative compiler parser. It is
 excellent for incremental concrete syntax trees but intentionally tolerates
 incomplete code and can therefore disagree with a strict compiler frontend.
 
-The portable contract is not a particular generator. It is the versioned token
-specification, grammar, AST schema, diagnostics, and shared conformance corpus.
+The two implementations are not compatibility modes and do not accept different
+surface syntaxes. The portable contract is not a particular generator. It is
+the versioned token specification, grammar, AST schema, diagnostics, and shared
+conformance corpus. Canonical source spellings and token names are listed in
+[`panini-keywords.md`](panini-keywords.md).
 
 ## Decision matrix
 
@@ -29,7 +33,7 @@ specification, grammar, AST schema, diagnostics, and shared conformance corpus.
 | Lark | Earley, CYK, or LALR in Python | Python reference compiler and grammar experimentation | Grammar files, automatic trees, visitors/transformers, interactive parser API, strict mode, contextual lexer | Not a classic yacc API; benchmark large files and startup time |
 | PLY | lex + yacc/LALR in Python | Traditional Python yacc implementation | Small dependency surface, familiar yacc productions, `parser.out` state report, precedence support | Semantic actions live in Python docstrings/functions; weaker shared-grammar story unless generated |
 | GNU Bison C++ | LALR/IELR/GLR in generated C++ | Production native compiler | Mature, typed C++ skeleton, detailed automaton reports, counterexamples, traces, Graphviz/XML reports | Requires a separate lexer and C++ build; semantic actions are generator-specific |
-| re2c | Generated lexer in C/C++ | Production lexer paired with Bison | Fast deterministic scanners, explicit conditions for prompt/interpolation modes | Less convenient during early grammar iteration than Python lexing |
+| re2c | Generated lexer in C/C++ | Production lexer paired with Bison | Fast deterministic scanners, explicit conditions for instruction/interpolation modes | Less convenient during early grammar iteration than Python lexing |
 | Flex + Bison | Generated C/C++ | Conventional yacc toolchain | Familiar and widely packaged | re2c generally gives more direct control over scanner code and modes |
 | ANTLR | Adaptive LL, many targets | One grammar generating several target languages | Broad ecosystem and parse-tree tooling | Not LALR(1); generated runtimes and behavior differ by target |
 | tree-sitter | Incremental GLR-style parsing | IDEs, highlighting, structural navigation | Fast incremental CST and robust incomplete-input handling | Not a substitute for compiler acceptance or semantic validation |
@@ -81,10 +85,10 @@ No parser generator removes the need for a precise lexer contract. Panini needs
 lexical modes for at least:
 
 - ordinary code;
-- raw prompt content;
-- prompt interpolation expressions;
+- raw instruction content;
+- instruction interpolation expressions;
 - nested block comments; and
-- possibly configuration literals during BAML compatibility parsing.
+- typed provider configuration literals.
 
 The lexer must attach this information to every token:
 
@@ -142,7 +146,7 @@ frontend implementations to share golden files.
     {"name": "amount", "type": {"kind": "NamedType", "name": "float"}}
   ],
   "returnType": {"kind": "NamedType", "name": "AuditResult"},
-  "body": {"kind": "LlmBody", "client": "OpenAI", "promptId": "prompt:4"}
+  "body": {"kind": "InferenceBody", "provider": "OpenAI", "instructionId": "instruction:4"}
 }
 ```
 
@@ -204,7 +208,7 @@ count and can allow one conflict to replace another unnoticed.
 
 For runtime C++ parser traces, enable Bison's parse tracing in the implementation
 build and route it through the compiler's structured logger. Do not enable full
-traces by default because prompt literals may contain sensitive data.
+traces by default because instruction literals may contain sensitive data.
 
 ## Error handling and editor behavior
 
@@ -223,7 +227,7 @@ Never recover by silently inventing graph bounds, policy effects, or types.
 
 1. Convert `panini-core.y` into a generator-neutral grammar source or generate
    Lark and Bison grammars from one constrained grammar model.
-2. Define token fixtures before implementing prompt interpolation.
+2. Define token fixtures before implementing instruction interpolation.
 3. Implement the Python lexer/parser and normalized AST JSON dumper.
 4. Add valid, invalid, ambiguity, and recovery corpora.
 5. Build the Bison C++/re2c frontend and compare AST JSON in CI.

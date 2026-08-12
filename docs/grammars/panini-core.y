@@ -1,10 +1,10 @@
 /*
- * Panini/BAML core syntax prototype.
+ * Panini language syntax prototype.
  *
  * This is an action-free GNU Bison grammar used to verify that the proposed
  * declaration and orchestration syntax is LALR(1). It is not the production
- * BAML grammar: templates and configuration bodies are deliberately emitted by
- * a mode-aware lexer as PROMPT_LITERAL and CONFIG_BLOCK tokens.
+ * language grammar: templates and provider configuration bodies are emitted by
+ * a mode-aware lexer as INSTRUCTION_LITERAL and PROVIDER_BLOCK tokens.
  *
  * Verify and emit state, Graphviz, and XML debug reports with:
  *   tools/check-panini-grammar.sh
@@ -14,14 +14,14 @@
 %define parse.error detailed
 %locations
 
-%token IDENT STRING_LITERAL PROMPT_LITERAL CONFIG_BLOCK
+%token IDENT STRING_LITERAL INSTRUCTION_LITERAL PROVIDER_BLOCK
 %token INTEGER_LITERAL FLOAT_LITERAL TRUE FALSE NULL_LITERAL
 
 %token PACKAGE IMPORT AS
 %token CLASS AGENT INTERFACE ENUM TYPE
-%token EXTENDS IMPLEMENTS REQUIRES IMPLEMENT
+%token EXTENDS IMPLEMENTS REQUIRES
 %token PUBLIC PRIVATE PROTECTED INTERNAL STATIC ABSTRACT FINAL OVERRIDE ASYNC
-%token FUNCTION CLIENT PROMPT TOOLS THROWS RETRY_POLICY TEMPLATE_STRING
+%token PROVIDER INSTRUCTION CAPABILITIES THROWS
 %token GRAPH STATE NODE START END POLICY RULE
 %token ENTRY EXIT INVARIANT WHEN OTHERWISE MAX_VISITS TIMEOUT
 %token PARALLEL BRANCH JOIN MERGE USING COMPENSATE WITH
@@ -82,12 +82,8 @@ declaration
     | attribute_list class_decl
     | attribute_list agent_decl
     | attribute_list interface_decl
-    | attribute_list function_decl
-    | implementation_decl
     | type_alias_decl
-    | client_decl
-    | retry_policy_decl
-    | template_string_decl
+    | provider_decl
     | graph_decl
     | policy_decl
     ;
@@ -165,15 +161,8 @@ class_member_list
     ;
 
 class_member
-    : field_decl
-    | function_decl
-    | java_style_member_decl
-    | implementation_body
-    | system_prompt_decl
-    ;
-
-field_decl
-    : modifier_list IDENT ':' type_ref initializer_opt ';'
+    : java_style_member_decl
+    | system_instruction_decl
     ;
 
 initializer_opt
@@ -200,9 +189,7 @@ interface_member_list
     ;
 
 interface_member
-    : function_signature ';'
-    | function_decl
-    | java_style_method_signature ';'
+    : java_style_method_signature ';'
     | java_style_member_decl
     | associated_type_decl
     ;
@@ -226,36 +213,6 @@ type_default_opt
     | EQ type_ref
     ;
 
-implementation_decl
-    : IMPLEMENT generic_params_opt type_ref FOR type_ref implementation_body
-    ;
-
-implementation_body
-    : '{' implementation_member_list '}'
-    ;
-
-implementation_member_list
-    : %empty
-    | implementation_member_list attribute_list implementation_member
-    ;
-
-implementation_member
-    : function_decl
-    | java_style_member_decl
-    | associated_type_decl
-    | field_decl
-    ;
-
-function_decl
-    : modifier_list FUNCTION IDENT generic_params_opt parameter_list
-      ARROW type_ref throws_opt function_body
-    ;
-
-function_signature
-    : modifier_list FUNCTION IDENT generic_params_opt parameter_list
-      ARROW type_ref throws_opt
-    ;
-
 java_style_member_decl
     : modifier_list type_ref IDENT java_style_member_tail
     ;
@@ -276,20 +233,20 @@ throws_opt
 
 function_body
     : block
-    | llm_body
+    | inference_body
     ;
 
-llm_body
-    : '{' CLIENT expression PROMPT PROMPT_LITERAL tools_opt '}'
+inference_body
+    : '{' PROVIDER expression ';' capabilities_opt INSTRUCTION INSTRUCTION_LITERAL ';' '}'
     ;
 
-tools_opt
+capabilities_opt
     : %empty
-    | TOOLS expression
+    | CAPABILITIES expression ';'
     ;
 
-system_prompt_decl
-    : PROMPT PROMPT_LITERAL ';'
+system_instruction_decl
+    : INSTRUCTION INSTRUCTION_LITERAL ';'
     ;
 
 parameter_list
@@ -307,9 +264,7 @@ parameter_seq
     ;
 
 parameter
-    : IDENT ':' type_ref default_arg_opt
-    | type_ref IDENT default_arg_opt
-    | IDENT
+    : type_ref IDENT default_arg_opt
     ;
 
 default_arg_opt
@@ -335,17 +290,9 @@ type_alias_decl
     : TYPE IDENT generic_params_opt EQ type_ref ';'
     ;
 
-client_decl
-    : CLIENT IDENT EQ expression ';'
-    | CLIENT IDENT CONFIG_BLOCK
-    ;
-
-retry_policy_decl
-    : RETRY_POLICY IDENT CONFIG_BLOCK
-    ;
-
-template_string_decl
-    : TEMPLATE_STRING IDENT parameter_list PROMPT_LITERAL
+provider_decl
+    : PROVIDER IDENT EQ expression ';'
+    | PROVIDER IDENT PROVIDER_BLOCK
     ;
 
 policy_decl
@@ -578,7 +525,7 @@ object_field
     ;
 
 literal
-    : STRING_LITERAL | PROMPT_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL
+    : STRING_LITERAL | INSTRUCTION_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL
     | TRUE | FALSE | NULL_LITERAL
     ;
 
