@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-Panini is a new language compatibility mode, or alternate
+Panini is a new language, not a BAML dialect, compatibility mode, or alternate
 spelling of another language. It incorporates the useful ideas proven by typed
 prompt languages—schema-constrained model calls, provider configuration,
 retries, tests, and streaming—but assigns them Panini syntax, semantics,
@@ -220,7 +220,8 @@ source.panini ----|                                 |-> canonical AST JSON
                   +-> C++: re2c + Bison lalr1.cc --+
 ```
 
-The Python frontend is the executable reference and development tool.
+It does not mean BAML mode versus Panini mode or functional syntax versus OO
+syntax. The Python frontend is the executable reference and development tool.
 The C++ frontend is the production implementation. Neither frontend may invent
 target-specific syntax.
 
@@ -256,6 +257,26 @@ The reference interpreter defines semantics. A backend is conforming only if it
 preserves those semantics or rejects unsupported features. Generated LangGraph
 code is an adapter output, never the definition of Panini behavior.
 
+Panini initially generates native host SDKs for Python and TypeScript, followed
+by C#/.NET, Java, and Go, plus OpenAPI/JSON Schema as a universal target. The
+target architecture, type mappings, async contract, and capability checks are
+specified in [`panini-targets.md`](panini-targets.md).
+
+## Migration from BAML
+
+Removing BAML from the language design does not require abandoning existing
+users. Build a separate `baml-to-panini` migration command that:
+
+1. parses a supported BAML version with its original parser;
+2. maps schemas, enums, clients, tests, and model functions into Panini AST;
+3. wraps top-level functions in generated static service classes;
+4. emits canonical `.panini` source;
+5. reports constructs with no semantics-preserving translation; and
+6. never runs implicitly during Panini compilation.
+
+This keeps the Panini compiler and specification clean while providing an
+explicit adoption path. Migration fixtures should compare observable model
+request and response behavior, not merely formatted source.
 
 ## Normative artifacts
 
@@ -311,12 +332,17 @@ prototype limitations.
 - implement capability/effect checking, parallel merge validation, idempotency,
   compensation, invariants, and ordered rules.
 
+### Phase 5: migration and backends
 
+- build the explicit BAML migration tool;
+- generate Python, TypeScript, C#/.NET, OpenAPI, LangGraph, and
+  durable-workflow adapters; and
+- reject programs requiring unsupported backend capabilities.
 
 ## Decision
 
 Proceed with Panini as a standalone OO agentic language. Preserve the proven
 functionality of typed schemas and model calls at the semantic level, not by
-exposing two source-language modes. Use the two
+embedding BAML grammar or exposing two source-language modes. Use the two
 frontends to cross-check one specification, and make the reference interpreter
 and inspectable IR—not generated backend code—the authority for behavior.

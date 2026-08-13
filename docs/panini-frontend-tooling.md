@@ -26,6 +26,11 @@ the versioned token specification, grammar, AST schema, diagnostics, and shared
 conformance corpus. Canonical source spellings and token names are listed in
 [`panini-keywords.md`](panini-keywords.md).
 
+Frontend implementation languages are distinct from generated host targets.
+Python/Lark and C++/Bison produce one typed IR; Python, TypeScript, C#/.NET,
+Java, Go, and OpenAPI generators consume it. See
+[`panini-targets.md`](panini-targets.md).
+
 ## Decision matrix
 
 | Choice | Algorithm / host | Best use | Strengths | Important tradeoffs |

@@ -28,11 +28,12 @@ normally use `PascalCase`; methods, fields, graph nodes, and local variables use
 | `compensate` | Fallible durable saga action associated with forward work |
 | `scenario` | Proposed executable test case written in Panini |
 | `suite` | Proposed group or generator of scenarios |
-| `backend` | Proposed compiler/runtime target configuration |
+| `backend` | Compiler/runtime adapter; configured outside `.panini` source |
 
-The words `scenario`, `suite`, and `backend` are design-reserved but are not yet
-accepted by `panini-core.y`. Reserving them now prevents ordinary identifiers
-from blocking their introduction during the version 1 prototype.
+The words `scenario` and `suite` are design-reserved but are not yet accepted by
+`panini-core.y`. `backend` is project-configuration vocabulary and is not a
+source keyword; reserving the concept does not require reserving the identifier
+inside `.panini` files.
 
 ## Migration map
 
