@@ -1,0 +1,28 @@
+package com.biggraph.compliance;
+
+public class AuditResult {
+  public bool violating;
+  public string reason;
+}
+
+@Model("openai/gpt-4.1")
+public agent FinancialAuditor {
+  private float riskThreshold = 10000.0;
+
+  public AuditResult analyze(float amount, string country) throws AuditError {
+    provider OpenAI;
+    capabilities [LookupSanctions];
+    instruction #"
+      Analyze transaction {{ amount }} in {{ country }}.
+      {{ context.outputSchema }}
+    "#;
+  }
+}
+
+graph ComplianceGraph(state: WorkflowState) -> WorkflowState {
+  node init using WorkflowSteps.init;
+  node process using WorkflowSteps.process max_visits 3 timeout seconds(30);
+  start -> init;
+  init -> process;
+  process -> when underLimit(state) => process otherwise => end;
+}
