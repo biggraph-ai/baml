@@ -11,7 +11,61 @@ the specification:
 .panini source -> tokens -> LALR concrete syntax tree -> normalized AST JSON
 ```
 
-## Development
+## Install and run on Windows
+
+Panini requires Python 3.11 or newer. In PowerShell, run these commands
+from the repository root:
+
+```powershell
+cd panini
+py -3.11 -m venv .venv
+& .\.venv\Scripts\python.exe -m pip install --upgrade pip
+& .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+& .\.venv\Scripts\python.exe -m pytest
+& .\.venv\Scripts\panini.exe parse examples\audit.panini --emit ast
+```
+
+Activation is intentionally not required, so these commands also work when the
+PowerShell execution policy prevents running `Activate.ps1`. If you prefer an
+activated environment, run `.\.venv\Scripts\Activate.ps1` first and then use
+`python`, `pytest`, and `panini` without their full paths.
+
+From `cmd.exe`, the equivalent setup is:
+
+```batch
+cd panini
+py -3.11 -m venv .venv
+.venv\Scripts\python.exe -m pip install --upgrade pip
+.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.venv\Scripts\python.exe -m pytest
+.venv\Scripts\panini.exe parse examples\audit.panini --emit ast
+```
+
+This Python frontend does not need a C/C++ compiler: installing it creates the
+`panini.exe` command-line launcher inside `.venv\Scripts`. The repository's
+Bison C++ grammar tooling is separate and is not required for this initial
+frontend.
+
+### Build an installable package
+
+To produce a wheel and source archive on Windows, run:
+
+```powershell
+& .\.venv\Scripts\python.exe -m build
+& .\.venv\Scripts\python.exe -m pip install --force-reinstall .\dist\panini_compiler-0.1.0-py3-none-any.whl
+& .\.venv\Scripts\panini.exe --help
+```
+
+The artifacts are written to `panini\dist`. A wheel is the normal compiled
+distribution artifact for this pure-Python project; it is portable across
+Windows machines that have a supported Python version.
+
+If `py` is not recognized, install Python from python.org with the Python
+Launcher enabled, or replace `py -3.11` with the full path to a Python 3.11+
+executable. If Windows Store aliases intercept `python`, using `py` or the
+explicit `.venv\Scripts\python.exe` path avoids the alias.
+
+## Development on macOS or Linux
 
 Panini requires Python 3.11 or newer.
 
