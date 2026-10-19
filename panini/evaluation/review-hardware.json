@@ -1,0 +1,8 @@
+{
+  "cpuModel": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "logicalCpuCount": 5,
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "note": "Host-visible hardware; container quotas below constrain this run.",
+  "cpuQuota": "400000 100000",
+  "memoryLimitBytes": "34359738368"
+}

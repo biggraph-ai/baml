@@ -122,3 +122,34 @@ labels must reproduce. Exact source inputs remain in Git, with report hashes.
 - The mutation-denial test observes the remote call and retained receipt before
   compensation. Invocation authorization is distinct from local state commit;
   there is no external prepare/commit protocol.
+
+## Recorded review run
+
+The clean archive run validated implementation commit
+`07ca7b064ac0c07e6825f7d05dc7d1de26555a88` on Linux with Python 3.12.14.
+`review-validation-results.json` records 26 successful commands, including
+**196 passed** tests. `review-matrix-results.json` contains nine fresh-process
+runs (25/100/400 nodes, three runs per size, seven samples per stage).
+`review-hardware.json` records host-visible CPU and container quotas separately.
+The 40-case regression set emitted the expected diagnostic sets and no valid
+control produced a diagnostic. These are case results, not general detection
+rate estimates.
+
+The cloud sandbox has a read-only home cache. The successful outer invocation
+was (from repository root, after creating the clean archive/extraction above):
+
+```
+UV_CACHE_DIR=/workspace/.cache/uv panini/.venv/bin/python /tmp/panini-review-source/panini/evaluation/validate.py --revision 07ca7b064ac0c07e6825f7d05dc7d1de26555a88 --archive /tmp/panini-review-source.tar --output /tmp/panini-review-validation-results.json --matrix-output /tmp/panini-review-matrix-results.json
+```
+
+The bootstrap interpreter only drives validation; tests and examples use the
+new environment and installed wheel. No editable project install is used there.
+`--matrix-output` requests the full matrix while that fresh environment exists.
+The earlier attempt with uv's default home cache failed before installation;
+using the writable cache fixed setup without changing the package or lock.
+
+The annotated tag `panini-reference-m6-review-20261019` freezes implementation,
+inputs, the hash-pinned validation lock, and the recorded evidence. It marks a
+review artifact, not completion of the independent corpus, multi-machine or
+external comparison studies. Recreate source inputs through Git; timing samples
+are archival observations and are expected to vary on reproduction.
