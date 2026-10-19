@@ -202,7 +202,7 @@ def test_cli_valid_and_parse_remains_syntax_only(tmp_path, capsys):
     file = tmp_path / "valid.panini"
     file.write_text(BASE)
     assert main(["check", str(file)]) == 0
-    assert json.loads(capsys.readouterr().out)["profile"] == "local-static-state-v1"
+    assert json.loads(capsys.readouterr().out)["profile"] == "sequential-decisions-v1"
     file.write_text(BASE.replace("using Steps.attempt", "using Missing.step"))
     assert main(["parse", str(file)]) == 0
     assert json.loads(capsys.readouterr().out)["schemaVersion"] == 1

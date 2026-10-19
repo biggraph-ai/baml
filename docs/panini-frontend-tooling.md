@@ -255,12 +255,13 @@ of debugging only generated backend code.
 - [tree-sitter documentation](https://tree-sitter.github.io/tree-sitter/)
 
 
-## Executable M0/M1 status
+## Executable M0–M3 status
 
-The Python reference frontend now preserves semantic AST v2 separately from
-legacy AST v1, and resolves/types a deliberately small local static-method
-graph profile into PNIR. See [the semantic profile](panini-semantic-profile.md)
-for accepted features, CLI behavior, schemas, and stable diagnostics. Broader
-language/runtime features described above remain design goals unless explicitly
-listed there. Graph structure/budget verification and runtime enforcement are
-not implemented by M0/M1.
+The Python reference frontend preserves semantic AST v2 alongside legacy AST v1,
+resolves/types a restricted sequential graph/decision profile, and checks entry,
+transitions, reachability, cyclic budgets, and a conservative dispatch bound.
+Typed decision methods, direct output bindings, manifests, and a minimal local
+callback executor are implemented. See the [M2/M3 contract](panini-graph-decisions.md)
+for exact syntax, schemas, diagnostics, and limitations. General host-code
+termination, real vendor integration, deadlines, durable recovery, compensation
+execution, authorization, and policy proofs remain future work.

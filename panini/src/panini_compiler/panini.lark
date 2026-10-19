@@ -27,7 +27,7 @@ interface_body: "{" interface_member* "}"
 ?interface_member: attribute* member_decl
 member_decl: modifier* type_ref NAME (field_tail | method_tail)
 field_tail: ["=" expression] ";"
-method_tail: generic_params? parameters throws_clause? (block | inference_body | ";")
+method_tail: generic_params? parameters throws_clause? (block | inference_body | decision_body | ";")
 throws_clause: "throws" type_ref
 parameters: "(" [parameter ("," parameter)*] ")"
 parameter: type_ref NAME ["=" expression]
@@ -35,6 +35,9 @@ generic_params: "<" generic_param ("," generic_param)* ">"
 generic_param: NAME ["extends" type_ref ("&" type_ref)*]
 
 inference_body: "{" "provider" expression ";" ["capabilities" expression ";"] "instruction" INSTRUCTION_LITERAL ";" "}"
+decision_body: "{" "decision_model" expression ";" "decide" expression "over" "{" decision_option+ "}" decision_gate? ";" "}"
+decision_option: NAME ":" STRING ";"
+decision_gate: "abstain_below" expression
 instruction_decl: "instruction" INSTRUCTION_LITERAL ";"
 provider_decl: "provider" NAME ("=" expression ";" | provider_block)
 provider_block: "{" provider_field* "}"
@@ -46,7 +49,7 @@ graph_decl: "graph" NAME "(" NAME ":" type_ref ")" ["->" type_ref] "{" graph_mem
              | "start" "->" NAME ";"                                                  -> graph_start
              | NAME "->" graph_transition ";"                                         -> graph_edge
              | "invariant" expression ";"                                             -> graph_invariant
-node_contract: "max_visits" INT | "timeout" expression | "compensate" "using" qualified_name
+node_contract: "max_visits" INT | "timeout" expression | "compensate" "using" qualified_name | "writes" qualified_name
 ?graph_transition: "end"                                                               -> end_transition
                  | NAME                                                                -> target_transition
                  | "when" expression FAT_ARROW graph_target "otherwise" FAT_ARROW graph_target -> conditional_transition

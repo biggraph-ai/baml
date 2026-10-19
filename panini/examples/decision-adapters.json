@@ -1,0 +1,6 @@
+{
+  "MockClassifier": {
+    "output": "probabilities",
+    "version": "deterministic-mock-v1"
+  }
+}

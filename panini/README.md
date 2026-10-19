@@ -4,11 +4,11 @@ This directory contains the Python reference frontend for the Panini language
 specified in [`../docs`](../docs/panini-language-design.md). It is deliberately
 an independent project: Panini is a new language rather than a BAML parser mode.
 
-The first milestone implements the inspectable frontend pipeline described by
-the specification:
+The reference compiler implements an inspectable semantic and graph-checking
+pipeline plus a minimal callback-based executor:
 
 ```text
-.panini source -> tokens -> LALR concrete syntax tree -> normalized AST JSON
+.panini source -> tokens/CST -> semantic AST -> typed PNIR -> graph checks
 ```
 
 ## Install and run on Windows
@@ -82,22 +82,27 @@ The installed command exposes the initial compiler debugging surface:
 panini lex examples/audit.panini
 panini parse examples/audit.panini --emit cst
 panini parse examples/audit.panini --emit ast
-panini check examples/audit.panini --emit ast
+panini check examples/retry.panini
+panini check examples/decision.panini --adapters examples/decision-adapters.json
+python examples/run_decision.py
 ```
 
-`parse` performs syntax checking. `check` now resolves and type-checks the small
-`local-static-state-v1` profile and emits versioned PNIR. Try
-`.venv/bin/panini check examples/retry.panini`; `audit.panini` is a syntax-only
-demo with unresolved references and features outside that profile.
+`parse` performs syntax checking. `check` resolves/types the
+`sequential-decisions-v1` profile, verifies graph structure and dispatch budgets,
+and emits PNIR v2. `audit.panini` remains a syntax-only demo with unresolved
+references and unsupported features.
 
-Use `parse --emit semantic-ast` for the semantics-preserving AST v2; the default
-`parse --emit ast` remains AST v1. Every `check --emit` mode runs semantic checks.
-Use `check --diagnostics json` for structured errors. See the
-[M0/M1 profile and diagnostic contract](../docs/panini-semantic-profile.md).
+`parse --emit ast` remains AST v1; use `--emit semantic-ast` for semantic AST v2.
+Every `check --emit` mode validates the program; `--diagnostics json` emits
+structured errors. See the [M2/M3 contract](../docs/panini-graph-decisions.md)
+for supported syntax, manifests, runtime callbacks, schemas, and diagnostics.
+The [M0/M1 profile](../docs/panini-semantic-profile.md) records the earlier stage.
 
-Graph topology/budget verification (M2), method-body verification, effects,
-invariant proofs, runtime execution, and the independent C++ frontend remain
-future work. M1 acceptance is not a guarantee of bounded or safe execution.
+The minimal executor enforces budgets and supports mocked decisions/checkpoints.
+It does not execute source method bodies or integrate a real model provider.
+Timeouts, compensation, durable external effects, invariant proofs, and the
+independent C++ frontend remain future work. A finite dispatch bound is not a
+proof of successful completion or host-code termination.
 
 ## Project layout
 
@@ -106,3 +111,7 @@ future work. M1 acceptance is not a guarantee of bounded or safe execution.
 - `parser.py` constructs strict LALR trees and deterministic normalized ASTs.
 - `cli.py` implements the representation-debugging commands.
 - `tests/` is the beginning of the shared conformance corpus.
+- `resolver.py` checks local symbols, types, decisions, and output bindings.
+- `verifier.py` checks graph structure and cyclic budgets with iterative traversal.
+- `decisions.py` validates probability results and applies threshold/tie rules.
+- `runtime.py` executes trusted callbacks with enforced budgets/checkpoints.

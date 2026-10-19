@@ -11,6 +11,8 @@ from lark.exceptions import UnexpectedInput
 
 from .parser import PaniniParser
 from .resolver import Resolver
+from .verifier import verify_program
+from .diagnostics import Diagnostic
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -32,6 +34,11 @@ def _parser() -> argparse.ArgumentParser:
         )
         if name == "check":
             command.add_argument(
+                "--adapters",
+                type=Path,
+                help="JSON adapter identity/version manifest (no credentials)",
+            )
+            command.add_argument(
                 "--diagnostics", choices=("text", "json"), default="text"
             )
     return parser
@@ -46,7 +53,26 @@ def main(argv: list[str] | None = None) -> int:
             output = [token.to_dict() for token in frontend.lex(source, args.file)]
         elif args.command == "check":
             semantic = frontend.semantic_ast(source, args.file)
-            result = Resolver().resolve(semantic)
+            adapters = {}
+            if args.adapters:
+                try:
+                    adapters = json.loads(args.adapters.read_text(encoding="utf-8"))
+                    if not isinstance(adapters, dict):
+                        raise ValueError("Manifest must be an object")
+                except (OSError, ValueError):
+                    diagnostic = Diagnostic(
+                        "E2504",
+                        "Cannot load adapter manifest: expected a readable JSON object",
+                        {"file": str(args.adapters), "start": 0, "end": 0},
+                    )
+                    print(
+                        json.dumps([diagnostic.to_dict()])
+                        if args.diagnostics == "json"
+                        else diagnostic.render(""),
+                        file=sys.stderr,
+                    )
+                    return 1
+            result = verify_program(Resolver(adapters).resolve(semantic))
             if result.diagnostics:
                 if args.diagnostics == "json":
                     print(

@@ -1,0 +1,828 @@
+{
+  "checks": [
+    "name-resolution",
+    "graph-types",
+    "contract-types",
+    "decision-types",
+    "graph-topology",
+    "dispatch-budget-verification"
+  ],
+  "deferred": [
+    "runtime-enforcement",
+    "method-body-verification",
+    "effects",
+    "policy/invariant-verification"
+  ],
+  "diagnostics": [],
+  "graphs": [
+    {
+      "id": "syntax:150",
+      "name": "Route",
+      "nodes": [
+        {
+          "callable": "syntax:52",
+          "contracts": [
+            {
+              "binding": {
+                "field": "triage",
+                "symbol": "syntax:26",
+                "type": "Decision<Intent>"
+              },
+              "kind": "WritesContract",
+              "span": {
+                "end": 703,
+                "file": "decision.panini",
+                "start": 684
+              }
+            },
+            {
+              "kind": "MaxVisitsContract",
+              "span": {
+                "end": 716,
+                "file": "decision.panini",
+                "start": 704
+              },
+              "value": 1
+            }
+          ],
+          "id": "syntax:165",
+          "name": "triage",
+          "outputBinding": {
+            "field": "triage",
+            "symbol": "syntax:26",
+            "type": "Decision<Intent>"
+          },
+          "span": {
+            "end": 717,
+            "file": "decision.panini",
+            "start": 650
+          }
+        },
+        {
+          "callable": "syntax:111",
+          "contracts": [],
+          "id": "syntax:183",
+          "name": "approve",
+          "span": {
+            "end": 754,
+            "file": "decision.panini",
+            "start": 720
+          }
+        },
+        {
+          "callable": "syntax:130",
+          "contracts": [],
+          "id": "syntax:192",
+          "name": "review",
+          "span": {
+            "end": 789,
+            "file": "decision.panini",
+            "start": 757
+          }
+        }
+      ],
+      "span": {
+        "end": 999,
+        "file": "decision.panini",
+        "start": 611
+      },
+      "starts": [
+        {
+          "span": {
+            "end": 808,
+            "file": "decision.panini",
+            "start": 792
+          },
+          "target": "syntax:165",
+          "targetName": "triage"
+        }
+      ],
+      "stateParameter": "state",
+      "stateParameterSymbol": "syntax:154",
+      "stateType": "syntax:14",
+      "transitions": [
+        {
+          "branches": [
+            {
+              "guard": {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "id": "syntax:216",
+                                    "kind": "Token",
+                                    "span": {
+                                      "end": 831,
+                                      "file": "decision.panini",
+                                      "start": 826
+                                    },
+                                    "text": "state",
+                                    "tokenType": "NAME"
+                                  }
+                                ],
+                                "id": "syntax:215",
+                                "kind": "Name",
+                                "resolvedSymbol": "syntax:154",
+                                "resolvedType": "State",
+                                "span": {
+                                  "end": 831,
+                                  "file": "decision.panini",
+                                  "start": 826
+                                }
+                              },
+                              {
+                                "id": "syntax:217",
+                                "kind": "Token",
+                                "span": {
+                                  "end": 832,
+                                  "file": "decision.panini",
+                                  "start": 831
+                                },
+                                "text": ".",
+                                "tokenType": "DOT"
+                              },
+                              {
+                                "id": "syntax:218",
+                                "kind": "Token",
+                                "span": {
+                                  "end": 838,
+                                  "file": "decision.panini",
+                                  "start": 832
+                                },
+                                "text": "triage",
+                                "tokenType": "NAME"
+                              }
+                            ],
+                            "id": "syntax:214",
+                            "kind": "Member",
+                            "resolvedSymbol": "syntax:26",
+                            "resolvedType": "Decision<Intent>",
+                            "span": {
+                              "end": 838,
+                              "file": "decision.panini",
+                              "start": 826
+                            }
+                          },
+                          {
+                            "id": "syntax:219",
+                            "kind": "Token",
+                            "span": {
+                              "end": 839,
+                              "file": "decision.panini",
+                              "start": 838
+                            },
+                            "text": ".",
+                            "tokenType": "DOT"
+                          },
+                          {
+                            "id": "syntax:220",
+                            "kind": "Token",
+                            "span": {
+                              "end": 848,
+                              "file": "decision.panini",
+                              "start": 839
+                            },
+                            "text": "abstained",
+                            "tokenType": "NAME"
+                          }
+                        ],
+                        "id": "syntax:213",
+                        "kind": "Member",
+                        "resolvedType": "bool",
+                        "span": {
+                          "end": 848,
+                          "file": "decision.panini",
+                          "start": 826
+                        }
+                      },
+                      {
+                        "id": "syntax:221",
+                        "kind": "Token",
+                        "span": {
+                          "end": 851,
+                          "file": "decision.panini",
+                          "start": 849
+                        },
+                        "text": "==",
+                        "tokenType": "EQUALITY_OP"
+                      },
+                      {
+                        "children": [
+                          {
+                            "id": "syntax:223",
+                            "kind": "Token",
+                            "span": {
+                              "end": 857,
+                              "file": "decision.panini",
+                              "start": 852
+                            },
+                            "text": "false",
+                            "tokenType": "FALSE"
+                          }
+                        ],
+                        "id": "syntax:222",
+                        "kind": "False",
+                        "resolvedType": "bool",
+                        "span": {
+                          "end": 857,
+                          "file": "decision.panini",
+                          "start": 852
+                        }
+                      }
+                    ],
+                    "id": "syntax:212",
+                    "kind": "Binary",
+                    "operator": "==",
+                    "resolvedType": "bool",
+                    "span": {
+                      "end": 857,
+                      "file": "decision.panini",
+                      "start": 826
+                    }
+                  },
+                  {
+                    "id": "syntax:224",
+                    "kind": "Token",
+                    "span": {
+                      "end": 878,
+                      "file": "decision.panini",
+                      "start": 876
+                    },
+                    "text": "&&",
+                    "tokenType": "__ANON_3"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "children": [
+                                  {
+                                    "id": "syntax:229",
+                                    "kind": "Token",
+                                    "span": {
+                                      "end": 884,
+                                      "file": "decision.panini",
+                                      "start": 879
+                                    },
+                                    "text": "state",
+                                    "tokenType": "NAME"
+                                  }
+                                ],
+                                "id": "syntax:228",
+                                "kind": "Name",
+                                "resolvedSymbol": "syntax:154",
+                                "resolvedType": "State",
+                                "span": {
+                                  "end": 884,
+                                  "file": "decision.panini",
+                                  "start": 879
+                                }
+                              },
+                              {
+                                "id": "syntax:230",
+                                "kind": "Token",
+                                "span": {
+                                  "end": 885,
+                                  "file": "decision.panini",
+                                  "start": 884
+                                },
+                                "text": ".",
+                                "tokenType": "DOT"
+                              },
+                              {
+                                "id": "syntax:231",
+                                "kind": "Token",
+                                "span": {
+                                  "end": 891,
+                                  "file": "decision.panini",
+                                  "start": 885
+                                },
+                                "text": "triage",
+                                "tokenType": "NAME"
+                              }
+                            ],
+                            "id": "syntax:227",
+                            "kind": "Member",
+                            "resolvedSymbol": "syntax:26",
+                            "resolvedType": "Decision<Intent>",
+                            "span": {
+                              "end": 891,
+                              "file": "decision.panini",
+                              "start": 879
+                            }
+                          },
+                          {
+                            "id": "syntax:232",
+                            "kind": "Token",
+                            "span": {
+                              "end": 892,
+                              "file": "decision.panini",
+                              "start": 891
+                            },
+                            "text": ".",
+                            "tokenType": "DOT"
+                          },
+                          {
+                            "id": "syntax:233",
+                            "kind": "Token",
+                            "span": {
+                              "end": 898,
+                              "file": "decision.panini",
+                              "start": 892
+                            },
+                            "text": "choice",
+                            "tokenType": "NAME"
+                          }
+                        ],
+                        "id": "syntax:226",
+                        "kind": "Member",
+                        "resolvedType": "Intent",
+                        "span": {
+                          "end": 898,
+                          "file": "decision.panini",
+                          "start": 879
+                        }
+                      },
+                      {
+                        "id": "syntax:234",
+                        "kind": "Token",
+                        "span": {
+                          "end": 901,
+                          "file": "decision.panini",
+                          "start": 899
+                        },
+                        "text": "==",
+                        "tokenType": "EQUALITY_OP"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "id": "syntax:237",
+                                "kind": "Token",
+                                "span": {
+                                  "end": 908,
+                                  "file": "decision.panini",
+                                  "start": 902
+                                },
+                                "text": "Intent",
+                                "tokenType": "NAME"
+                              }
+                            ],
+                            "id": "syntax:236",
+                            "kind": "Name",
+                            "span": {
+                              "end": 908,
+                              "file": "decision.panini",
+                              "start": 902
+                            }
+                          },
+                          {
+                            "id": "syntax:238",
+                            "kind": "Token",
+                            "span": {
+                              "end": 909,
+                              "file": "decision.panini",
+                              "start": 908
+                            },
+                            "text": ".",
+                            "tokenType": "DOT"
+                          },
+                          {
+                            "id": "syntax:239",
+                            "kind": "Token",
+                            "span": {
+                              "end": 916,
+                              "file": "decision.panini",
+                              "start": 909
+                            },
+                            "text": "approve",
+                            "tokenType": "NAME"
+                          }
+                        ],
+                        "id": "syntax:235",
+                        "kind": "Member",
+                        "resolvedSymbol": "syntax:10",
+                        "resolvedType": "Intent",
+                        "span": {
+                          "end": 916,
+                          "file": "decision.panini",
+                          "start": 902
+                        }
+                      }
+                    ],
+                    "id": "syntax:225",
+                    "kind": "Binary",
+                    "operator": "==",
+                    "resolvedType": "bool",
+                    "span": {
+                      "end": 916,
+                      "file": "decision.panini",
+                      "start": 879
+                    }
+                  }
+                ],
+                "id": "syntax:211",
+                "kind": "Binary",
+                "operator": "&&",
+                "resolvedType": "bool",
+                "span": {
+                  "end": 916,
+                  "file": "decision.panini",
+                  "start": 826
+                }
+              },
+              "target": "syntax:183",
+              "targetName": "approve"
+            },
+            {
+              "otherwise": true,
+              "target": "syntax:192",
+              "targetName": "review"
+            }
+          ],
+          "source": "syntax:165",
+          "sourceName": "triage",
+          "span": {
+            "end": 962,
+            "file": "decision.panini",
+            "start": 811
+          }
+        },
+        {
+          "branches": [
+            {
+              "target": "$end",
+              "targetName": "end"
+            }
+          ],
+          "source": "syntax:183",
+          "sourceName": "approve",
+          "span": {
+            "end": 980,
+            "file": "decision.panini",
+            "start": 965
+          }
+        },
+        {
+          "branches": [
+            {
+              "target": "$end",
+              "targetName": "end"
+            }
+          ],
+          "source": "syntax:192",
+          "sourceName": "review",
+          "span": {
+            "end": 997,
+            "file": "decision.panini",
+            "start": 983
+          }
+        }
+      ],
+      "verification": {
+        "assumptions": [
+          "single-token",
+          "complete-static-control-flow",
+          "global-per-run-budgets-enforced-before-dispatch"
+        ],
+        "cycleRule": "all-cyclic-nodes-bounded",
+        "dispatchBound": 3,
+        "doesNotProve": [
+          "host-call-termination",
+          "successful-completion",
+          "wall-clock-bound",
+          "external-effect-safety"
+        ],
+        "terminalReachability": "possible-not-guaranteed"
+      }
+    }
+  ],
+  "kind": "Program",
+  "profile": "sequential-decisions-v1",
+  "schemaVersion": 2,
+  "symbols": [
+    {
+      "id": "syntax:6",
+      "kind": "EnumDecl",
+      "name": "Intent",
+      "span": {
+        "end": 49,
+        "file": "decision.panini",
+        "start": 18
+      }
+    },
+    {
+      "id": "syntax:10",
+      "kind": "EnumMember",
+      "name": "Intent.approve",
+      "owner": "syntax:6",
+      "span": {
+        "end": 39,
+        "file": "decision.panini",
+        "start": 32
+      },
+      "type": "Intent",
+      "typeSymbol": "syntax:6"
+    },
+    {
+      "id": "syntax:12",
+      "kind": "EnumMember",
+      "name": "Intent.review",
+      "owner": "syntax:6",
+      "span": {
+        "end": 47,
+        "file": "decision.panini",
+        "start": 41
+      },
+      "type": "Intent",
+      "typeSymbol": "syntax:6"
+    },
+    {
+      "id": "syntax:14",
+      "kind": "ClassDecl",
+      "name": "State",
+      "span": {
+        "end": 125,
+        "file": "decision.panini",
+        "start": 50
+      }
+    },
+    {
+      "id": "syntax:19",
+      "kind": "Field",
+      "name": "State.reason",
+      "owner": "syntax:14",
+      "span": {
+        "end": 80,
+        "file": "decision.panini",
+        "start": 66
+      },
+      "type": "string",
+      "typeSymbol": "builtin:string"
+    },
+    {
+      "id": "syntax:26",
+      "kind": "Field",
+      "name": "State.triage",
+      "owner": "syntax:14",
+      "span": {
+        "end": 107,
+        "file": "decision.panini",
+        "start": 83
+      },
+      "type": "Decision<Intent>",
+      "typeSymbol": "builtin:Decision:syntax:6"
+    },
+    {
+      "id": "syntax:39",
+      "kind": "Field",
+      "name": "State.route",
+      "owner": "syntax:14",
+      "span": {
+        "end": 123,
+        "file": "decision.panini",
+        "start": 110
+      },
+      "type": "string",
+      "typeSymbol": "builtin:string"
+    },
+    {
+      "id": "syntax:47",
+      "kind": "AgentDecl",
+      "name": "Triage",
+      "span": {
+        "end": 504,
+        "file": "decision.panini",
+        "start": 210
+      }
+    },
+    {
+      "bodyStatus": "typed-decision",
+      "decision": {
+        "enum": "Intent",
+        "input": {
+          "children": [
+            {
+              "children": [
+                {
+                  "id": "syntax:83",
+                  "kind": "Token",
+                  "span": {
+                    "end": 326,
+                    "file": "decision.panini",
+                    "start": 321
+                  },
+                  "text": "state",
+                  "tokenType": "NAME"
+                }
+              ],
+              "id": "syntax:82",
+              "kind": "Name",
+              "resolvedSymbol": "syntax:68",
+              "resolvedType": "State",
+              "span": {
+                "end": 326,
+                "file": "decision.panini",
+                "start": 321
+              }
+            },
+            {
+              "id": "syntax:84",
+              "kind": "Token",
+              "span": {
+                "end": 327,
+                "file": "decision.panini",
+                "start": 326
+              },
+              "text": ".",
+              "tokenType": "DOT"
+            },
+            {
+              "id": "syntax:85",
+              "kind": "Token",
+              "span": {
+                "end": 333,
+                "file": "decision.panini",
+                "start": 327
+              },
+              "text": "reason",
+              "tokenType": "NAME"
+            }
+          ],
+          "id": "syntax:81",
+          "kind": "Member",
+          "resolvedSymbol": "syntax:19",
+          "resolvedType": "string",
+          "span": {
+            "end": 333,
+            "file": "decision.panini",
+            "start": 321
+          }
+        },
+        "model": "MockClassifier",
+        "options": [
+          {
+            "description": "A clear request eligible for review under refund policy",
+            "name": "approve",
+            "span": {
+              "end": 414,
+              "file": "decision.panini",
+              "start": 347
+            }
+          },
+          {
+            "description": "An ambiguous request needing human review",
+            "name": "review",
+            "span": {
+              "end": 473,
+              "file": "decision.panini",
+              "start": 421
+            }
+          }
+        ],
+        "output": "probabilities",
+        "parameter": "state",
+        "threshold": 0.8,
+        "version": "deterministic-mock-v1"
+      },
+      "effects": [
+        "inference"
+      ],
+      "id": "syntax:52",
+      "kind": "Method",
+      "modifiers": [
+        "public"
+      ],
+      "name": "Triage.classify",
+      "owner": "syntax:47",
+      "parameters": [
+        {
+          "id": "syntax:68",
+          "name": "state",
+          "span": {
+            "end": 271,
+            "file": "decision.panini",
+            "start": 260
+          },
+          "type": "State",
+          "typeSymbol": "syntax:14"
+        }
+      ],
+      "span": {
+        "end": 502,
+        "file": "decision.panini",
+        "start": 227
+      },
+      "throws": [],
+      "type": "Decision<Intent>",
+      "typeSymbol": "builtin:Decision:syntax:6"
+    },
+    {
+      "id": "syntax:106",
+      "kind": "ClassDecl",
+      "name": "Routes",
+      "span": {
+        "end": 609,
+        "file": "decision.panini",
+        "start": 506
+      }
+    },
+    {
+      "bodyStatus": "opaque-unverified",
+      "id": "syntax:111",
+      "kind": "Method",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "name": "Routes.approve",
+      "owner": "syntax:106",
+      "parameters": [
+        {
+          "id": "syntax:123",
+          "name": "state",
+          "span": {
+            "end": 562,
+            "file": "decision.panini",
+            "start": 551
+          },
+          "type": "State",
+          "typeSymbol": "syntax:14"
+        }
+      ],
+      "span": {
+        "end": 564,
+        "file": "decision.panini",
+        "start": 523
+      },
+      "throws": [],
+      "type": "State",
+      "typeSymbol": "syntax:14"
+    },
+    {
+      "bodyStatus": "opaque-unverified",
+      "id": "syntax:130",
+      "kind": "Method",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "name": "Routes.review",
+      "owner": "syntax:106",
+      "parameters": [
+        {
+          "id": "syntax:142",
+          "name": "state",
+          "span": {
+            "end": 605,
+            "file": "decision.panini",
+            "start": 594
+          },
+          "type": "State",
+          "typeSymbol": "syntax:14"
+        }
+      ],
+      "span": {
+        "end": 607,
+        "file": "decision.panini",
+        "start": 567
+      },
+      "throws": [],
+      "type": "State",
+      "typeSymbol": "syntax:14"
+    },
+    {
+      "id": "syntax:150",
+      "kind": "GraphDecl",
+      "name": "Route",
+      "span": {
+        "end": 999,
+        "file": "decision.panini",
+        "start": 611
+      }
+    },
+    {
+      "id": "syntax:154",
+      "kind": "StateParameter",
+      "name": "Route.state",
+      "span": {
+        "end": 628,
+        "file": "decision.panini",
+        "start": 623
+      },
+      "type": "State",
+      "typeSymbol": "syntax:14"
+    }
+  ]
+}

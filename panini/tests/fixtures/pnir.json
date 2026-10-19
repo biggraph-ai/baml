@@ -2,7 +2,8 @@
   "checks": [
     "name-resolution",
     "graph-types",
-    "contract-types"
+    "contract-types",
+    "decision-types"
   ],
   "deferred": [
     "graph-topology",
@@ -350,8 +351,8 @@
     }
   ],
   "kind": "Program",
-  "profile": "local-static-state-v1",
-  "schemaVersion": 1,
+  "profile": "sequential-decisions-v1",
+  "schemaVersion": 2,
   "symbols": [
     {
       "id": "syntax:1",

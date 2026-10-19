@@ -1,0 +1,36 @@
+package example;
+
+enum Intent { approve, review }
+class State {
+  string reason;
+  Decision<Intent> triage;
+  string route;
+}
+
+// Stateless decision entry point; the adapter manifest pins its protocol/version.
+agent Triage {
+  public Decision<Intent> classify(State state) {
+    decision_model MockClassifier;
+    decide state.reason over {
+      approve: "A clear request eligible for review under refund policy";
+      review: "An ambiguous request needing human review";
+    } abstain_below 0.8;
+  }
+}
+
+class Routes {
+  public static State approve(State state);
+  public static State review(State state);
+}
+
+graph Route(state: State) -> State {
+  node triage using Triage.classify writes state.triage max_visits 1;
+  node approve using Routes.approve;
+  node review using Routes.review;
+  start -> triage;
+  triage -> when state.triage.abstained == false
+                  && state.triage.choice == Intent.approve
+              => approve otherwise => review;
+  approve -> end;
+  review -> end;
+}

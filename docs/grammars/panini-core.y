@@ -22,6 +22,7 @@
 %token EXTENDS IMPLEMENTS REQUIRES
 %token PUBLIC PRIVATE PROTECTED INTERNAL STATIC ABSTRACT FINAL OVERRIDE ASYNC
 %token PROVIDER INSTRUCTION CAPABILITIES THROWS
+%token DECISION_MODEL DECIDE OVER ABSTAIN_BELOW WRITES
 %token GRAPH STATE NODE START END POLICY RULE
 %token ENTRY EXIT INVARIANT WHEN OTHERWISE MAX_VISITS TIMEOUT
 %token PARALLEL BRANCH JOIN MERGE USING COMPENSATE WITH
@@ -234,6 +235,21 @@ throws_opt
 function_body
     : block
     | inference_body
+    | decision_body
+    ;
+
+decision_body
+    : '{' DECISION_MODEL expression ';' DECIDE expression OVER '{' decision_option_list '}' decision_gate_opt ';' '}'
+    ;
+
+decision_option_list
+    : IDENT ':' STRING_LITERAL ';'
+    | decision_option_list IDENT ':' STRING_LITERAL ';'
+    ;
+
+decision_gate_opt
+    : %empty
+    | ABSTAIN_BELOW expression
     ;
 
 inference_body
@@ -367,6 +383,7 @@ node_contract
     : MAX_VISITS INTEGER_LITERAL
     | TIMEOUT expression
     | COMPENSATE USING qualified_name
+    | WRITES qualified_name
     ;
 
 graph_transition

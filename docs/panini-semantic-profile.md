@@ -1,5 +1,9 @@
 # M0/M1: semantic AST and local graph typing
 
+Historical milestone contract: [M2/M3](panini-graph-decisions.md) supersedes the
+PNIR version, profile, and deferred-feature status below. AST v1/v2 compatibility
+remains as documented. This page records the earlier M0/M1 scope.
+
 ## Implemented scope
 
 The Python frontend now provides a versioned semantic syntax representation and
