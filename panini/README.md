@@ -128,3 +128,7 @@ C++ frontend remain outside this reference implementation.
 - `journal.py` stores transactional invocation/event history with stale-writer fencing.
 - `execution.py` implements local isolation and bounded remote waits.
 - `modelcheck.py` explores a restricted finite safety model with explicit proof statuses.
+
+Portable reference artifacts and reproducible M6 measurements are documented in
+[artifacts and evaluation](../docs/panini-artifacts-evaluation.md). Use `panini build SOURCE -o program.pnir`, `panini inspect program.pnir`, and `panini capabilities`
+to build, validate, and query the reference profile.

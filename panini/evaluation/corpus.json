@@ -1,0 +1,8 @@
+[
+  {"id":"straight-line", "defect":null, "expected":[], "body":"node a using Steps.run; start -> a; a -> end;"},
+  {"id":"bounded-cycle", "defect":null, "expected":[], "body":"node a using Steps.run max_visits 2; start -> a; a -> when s.retry => a otherwise => end;"},
+  {"id":"missing-method", "defect":"resolution", "expected":["E2001"], "body":"node a using Steps.absent; start -> a; a -> end;"},
+  {"id":"unreachable", "defect":"reachability", "expected":["E2303"], "body":"node a using Steps.run; node b using Steps.run; start -> a; a -> end; b -> end;"},
+  {"id":"unbounded-cycle", "defect":"budget", "expected":["E2306"], "body":"node a using Steps.run; start -> a; a -> when s.retry => a otherwise => end;"},
+  {"id":"unsupported-import", "defect":"unsupported", "expected":["E2000"], "source":"import other.State; class State { bool retry; }"}
+]

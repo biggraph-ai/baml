@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "processor": ""
+  },
+  "nodes": 100,
+  "timings": {
+    "parserInitialization": {
+      "medianSeconds": 0.32031446200016944,
+      "samplesSeconds": [
+        0.32031446200016944
+      ]
+    },
+    "semanticParsing": {
+      "medianSeconds": 0.011162886001329753,
+      "samplesSeconds": [
+        0.008768476000113878,
+        0.013471831998685957,
+        0.011162886001329753
+      ]
+    },
+    "resolutionAndLowering": {
+      "medianSeconds": 0.007786416001181351,
+      "samplesSeconds": [
+        0.015645781999410246,
+        0.007222893000289332,
+        0.007786416001181351
+      ]
+    },
+    "topologyVerification": {
+      "medianSeconds": 0.0013601260016002925,
+      "samplesSeconds": [
+        0.001829945000281441,
+        0.0013601260016002925,
+        0.0012671799995587207
+      ]
+    },
+    "serialization": {
+      "medianSeconds": 0.0012313090010138694,
+      "samplesSeconds": [
+        0.0012313090010138694,
+        0.001026304998958949,
+        0.0017789140001696069
+      ]
+    },
+    "finiteModelExploration": {
+      "medianSeconds": 0.0018538219992478844,
+      "samplesSeconds": [
+        0.0018538219992478844,
+        0.0029357399998843903,
+        0.0015458119996765163
+      ]
+    }
+  },
+  "topology": {
+    "deep-chain": {
+      "vertices": 100,
+      "edges": 99,
+      "scc": {
+        "medianSeconds": 8.939200051827356e-05,
+        "samplesSeconds": [
+          8.939200051827356e-05,
+          7.10989988874644e-05,
+          0.00013503500122169498
+        ]
+      },
+      "reachability": {
+        "medianSeconds": 1.432899989595171e-05,
+        "samplesSeconds": [
+          2.0554000002448447e-05,
+          1.432899989595171e-05,
+          1.31840006361017e-05
+        ]
+      }
+    },
+    "large-scc": {
+      "vertices": 100,
+      "edges": 100,
+      "scc": {
+        "medianSeconds": 5.5525999414385296e-05,
+        "samplesSeconds": [
+          0.00014175500109558925,
+          5.5525999414385296e-05,
+          5.308499930833932e-05
+        ]
+      },
+      "reachability": {
+        "medianSeconds": 1.3177999790059403e-05,
+        "samplesSeconds": [
+          1.5738000001874752e-05,
+          1.3177999790059403e-05,
+          1.3156000932212919e-05
+        ]
+      }
+    },
+    "dense": {
+      "vertices": 100,
+      "edges": 9900,
+      "scc": {
+        "medianSeconds": 0.0013949749991297722,
+        "samplesSeconds": [
+          0.0013949749991297722,
+          0.0016791859998193104,
+          0.0011163780000060797
+        ]
+      },
+      "reachability": {
+        "medianSeconds": 0.00017394399947079364,
+        "samplesSeconds": [
+          0.00020149699957983103,
+          0.00017394399947079364,
+          0.00017262300025322475
+        ]
+      }
+    },
+    "disconnected": {
+      "vertices": 100,
+      "edges": 0,
+      "scc": {
+        "medianSeconds": 5.010699896956794e-05,
+        "samplesSeconds": [
+          5.670900100085419e-05,
+          5.010699896956794e-05,
+          4.6967999878688715e-05
+        ]
+      },
+      "reachability": {
+        "medianSeconds": 5.029996827943251e-07,
+        "samplesSeconds": [
+          9.309987945016474e-07,
+          5.029996827943251e-07,
+          4.650009941542521e-07
+        ]
+      }
+    }
+  },
+  "corpus": {
+    "cases": [
+      {
+        "id": "straight-line",
+        "expected": [],
+        "actual": []
+      },
+      {
+        "id": "bounded-cycle",
+        "expected": [],
+        "actual": []
+      },
+      {
+        "id": "missing-method",
+        "expected": [
+          "E2001"
+        ],
+        "actual": [
+          "E2001"
+        ]
+      },
+      {
+        "id": "unreachable",
+        "expected": [
+          "E2303"
+        ],
+        "actual": [
+          "E2303"
+        ]
+      },
+      {
+        "id": "unbounded-cycle",
+        "expected": [
+          "E2306"
+        ],
+        "actual": [
+          "E2306"
+        ]
+      },
+      {
+        "id": "unsupported-import",
+        "expected": [
+          "E2000"
+        ],
+        "actual": [
+          "E2000"
+        ]
+      }
+    ],
+    "classes": {
+      "negative-control": {
+        "cases": 2,
+        "detected": 0,
+        "correctDiagnostic": 2,
+        "recall": null,
+        "diagnosticAccuracy": 1.0
+      },
+      "resolution": {
+        "cases": 1,
+        "detected": 1,
+        "correctDiagnostic": 1,
+        "recall": 1.0,
+        "diagnosticAccuracy": 1.0
+      },
+      "reachability": {
+        "cases": 1,
+        "detected": 1,
+        "correctDiagnostic": 1,
+        "recall": 1.0,
+        "diagnosticAccuracy": 1.0
+      },
+      "budget": {
+        "cases": 1,
+        "detected": 1,
+        "correctDiagnostic": 1,
+        "recall": 1.0,
+        "diagnosticAccuracy": 1.0
+      },
+      "unsupported": {
+        "cases": 1,
+        "detected": 1,
+        "correctDiagnostic": 1,
+        "recall": 1.0,
+        "diagnosticAccuracy": 1.0
+      }
+    },
+    "falsePositives": 0,
+    "scope": "Hand-labeled smoke corpus; no population-level accuracy claim or external baseline comparison."
+  },
+  "limitations": [
+    "Resolution and lowering are fused.",
+    "Topology verification and finite-model timing include input copies; graph kernels are isolated.",
+    "No adapter latency or external baseline measured."
+  ]
+}

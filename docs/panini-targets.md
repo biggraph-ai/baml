@@ -282,3 +282,12 @@ concurrency semantics.
 This ordering gives experimentation and web workloads first-class support while
 preserving an enterprise path and preventing target languages from fragmenting
 Panini's execution semantics.
+
+### Reference implementation status (M6)
+
+The Python reference profile now provides `panini build`, `panini inspect`, and
+`panini capabilities`. Its self-checking source/PNIR bundle, compatibility
+fixture and measured evaluation harness are described in
+[artifacts and evaluation](panini-artifacts-evaluation.md). Additional target
+SDKs and generators above remain design directions rather than implemented
+backends.

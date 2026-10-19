@@ -20,6 +20,14 @@ def _parser() -> argparse.ArgumentParser:
         prog="panini", description="Panini reference compiler"
     )
     commands = parser.add_subparsers(dest="command", required=True)
+    build = commands.add_parser("build", help="build a portable reference artifact")
+    build.add_argument("file", type=Path)
+    build.add_argument("--output", "-o", type=Path, required=True)
+    for manifest in ("adapters", "effects", "model"):
+        build.add_argument(f"--{manifest}", type=Path)
+    inspect = commands.add_parser("inspect", help="validate and emit artifact PNIR")
+    inspect.add_argument("file", type=Path)
+    commands.add_parser("capabilities", help="emit reference runtime capabilities")
     lex = commands.add_parser("lex", help="emit the token stream as JSON")
     lex.add_argument("file", type=Path)
     for name in ("parse", "check"):
@@ -53,6 +61,42 @@ def _parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    if args.command == "capabilities":
+        from .artifact import CAPABILITIES
+
+        print(
+            json.dumps(
+                {"target": "python-reference", "supported": sorted(CAPABILITIES)}
+            )
+        )
+        return 0
+    if args.command in {"build", "inspect"}:
+        from .artifact import build_artifact, load_artifact
+
+        try:
+            content = args.file.read_text(encoding="utf-8")
+            if args.command == "inspect":
+                print(
+                    json.dumps(
+                        load_artifact(content).to_dict(), indent=2, sort_keys=True
+                    )
+                )
+            else:
+                manifests = {
+                    key: json.loads(getattr(args, key).read_text(encoding="utf-8"))
+                    if getattr(args, key)
+                    else None
+                    for key in ("adapters", "effects", "model")
+                }
+                artifact = build_artifact(content, args.file, **manifests)
+                args.output.write_text(
+                    json.dumps(artifact, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+        except (OSError, ValueError, TypeError, UnexpectedInput) as error:
+            print(f"E2801: {error}", file=sys.stderr)
+            return 1
+        return 0
     source = args.file.read_text(encoding="utf-8")
     frontend = PaniniParser.create()
     try:

@@ -1,0 +1,277 @@
+{
+  "format": "panini-reference-artifact-v1",
+  "inputs": {
+    "adapters": null,
+    "effects": null,
+    "model": null,
+    "path": "portable.panini",
+    "source": "package example;\n\nclass State {\n  bool retry;\n}\n\nclass Steps {\n  public static State attempt(State state);\n}\n\ngraph BoundedRetry(state: State) -> State {\n  node attempt using Steps.attempt max_visits 3;\n  start -> attempt;\n  attempt -> when state.retry => attempt otherwise => end;\n}\n"
+  },
+  "program": {
+    "analysis": null,
+    "checks": [
+      "name-resolution",
+      "graph-types",
+      "contract-types",
+      "decision-types",
+      "effect-contracts",
+      "runtime-policy-types",
+      "graph-topology",
+      "dispatch-budget-verification"
+    ],
+    "deferred": [
+      "runtime-enforcement",
+      "method-body-verification",
+      "arbitrary-host-effect-inference",
+      "external-effect-atomicity",
+      "static-invariant-proof",
+      "temporal-liveness"
+    ],
+    "diagnostics": [],
+    "graphs": [
+      {
+        "id": "syntax:44",
+        "invariants": [],
+        "name": "BoundedRetry",
+        "nodes": [
+          {
+            "callable": "syntax:24",
+            "contracts": [
+              {
+                "kind": "MaxVisitsContract",
+                "span": {
+                  "end": 201,
+                  "file": "portable.panini",
+                  "start": 189
+                },
+                "value": 3
+              }
+            ],
+            "id": "syntax:59",
+            "name": "attempt",
+            "span": {
+              "end": 202,
+              "file": "portable.panini",
+              "start": 156
+            }
+          }
+        ],
+        "policies": [],
+        "span": {
+          "end": 283,
+          "file": "portable.panini",
+          "start": 110
+        },
+        "starts": [
+          {
+            "span": {
+              "end": 222,
+              "file": "portable.panini",
+              "start": 205
+            },
+            "target": "syntax:59",
+            "targetName": "attempt"
+          }
+        ],
+        "stateParameter": "state",
+        "stateParameterSymbol": "syntax:48",
+        "stateType": "syntax:6",
+        "transitions": [
+          {
+            "branches": [
+              {
+                "guard": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:83",
+                          "kind": "Token",
+                          "span": {
+                            "end": 246,
+                            "file": "portable.panini",
+                            "start": 241
+                          },
+                          "text": "state",
+                          "tokenType": "NAME"
+                        }
+                      ],
+                      "id": "syntax:82",
+                      "kind": "Name",
+                      "resolvedSymbol": "syntax:48",
+                      "resolvedType": "State",
+                      "span": {
+                        "end": 246,
+                        "file": "portable.panini",
+                        "start": 241
+                      }
+                    },
+                    {
+                      "id": "syntax:84",
+                      "kind": "Token",
+                      "span": {
+                        "end": 247,
+                        "file": "portable.panini",
+                        "start": 246
+                      },
+                      "text": ".",
+                      "tokenType": "DOT"
+                    },
+                    {
+                      "id": "syntax:85",
+                      "kind": "Token",
+                      "span": {
+                        "end": 252,
+                        "file": "portable.panini",
+                        "start": 247
+                      },
+                      "text": "retry",
+                      "tokenType": "NAME"
+                    }
+                  ],
+                  "id": "syntax:81",
+                  "kind": "Member",
+                  "resolvedSymbol": "syntax:11",
+                  "resolvedType": "bool",
+                  "span": {
+                    "end": 252,
+                    "file": "portable.panini",
+                    "start": 241
+                  }
+                },
+                "target": "syntax:59",
+                "targetName": "attempt"
+              },
+              {
+                "otherwise": true,
+                "target": "$end",
+                "targetName": "end"
+              }
+            ],
+            "source": "syntax:59",
+            "sourceName": "attempt",
+            "span": {
+              "end": 281,
+              "file": "portable.panini",
+              "start": 225
+            }
+          }
+        ],
+        "verification": {
+          "assumptions": [
+            "single-token",
+            "complete-static-control-flow",
+            "global-per-run-budgets-enforced-before-dispatch"
+          ],
+          "compensationAttemptBound": 0,
+          "cycleRule": "all-cyclic-nodes-bounded",
+          "dispatchBound": 3,
+          "doesNotProve": [
+            "host-call-termination",
+            "successful-completion",
+            "wall-clock-bound",
+            "external-effect-safety"
+          ],
+          "reconciliationAttemptBound": 0,
+          "terminalReachability": "possible-not-guaranteed"
+        }
+      }
+    ],
+    "kind": "Program",
+    "profile": "sequential-effects-v1",
+    "schemaVersion": 3,
+    "symbols": [
+      {
+        "id": "syntax:6",
+        "kind": "ClassDecl",
+        "name": "State",
+        "span": {
+          "end": 47,
+          "file": "portable.panini",
+          "start": 18
+        }
+      },
+      {
+        "id": "syntax:11",
+        "kind": "Field",
+        "name": "State.retry",
+        "owner": "syntax:6",
+        "span": {
+          "end": 45,
+          "file": "portable.panini",
+          "start": 34
+        },
+        "type": "bool",
+        "typeSymbol": "builtin:bool"
+      },
+      {
+        "id": "syntax:19",
+        "kind": "ClassDecl",
+        "name": "Steps",
+        "span": {
+          "end": 108,
+          "file": "portable.panini",
+          "start": 49
+        }
+      },
+      {
+        "bodyStatus": "opaque-unverified",
+        "id": "syntax:24",
+        "kind": "Method",
+        "modifiers": [
+          "public",
+          "static"
+        ],
+        "name": "Steps.attempt",
+        "owner": "syntax:19",
+        "parameters": [
+          {
+            "id": "syntax:36",
+            "name": "state",
+            "span": {
+              "end": 104,
+              "file": "portable.panini",
+              "start": 93
+            },
+            "type": "State",
+            "typeSymbol": "syntax:6"
+          }
+        ],
+        "span": {
+          "end": 106,
+          "file": "portable.panini",
+          "start": 65
+        },
+        "throws": [],
+        "type": "State",
+        "typeSymbol": "syntax:6"
+      },
+      {
+        "id": "syntax:44",
+        "kind": "GraphDecl",
+        "name": "BoundedRetry",
+        "span": {
+          "end": 283,
+          "file": "portable.panini",
+          "start": 110
+        }
+      },
+      {
+        "id": "syntax:48",
+        "kind": "StateParameter",
+        "name": "BoundedRetry.state",
+        "span": {
+          "end": 134,
+          "file": "portable.panini",
+          "start": 129
+        },
+        "type": "State",
+        "typeSymbol": "syntax:6"
+      }
+    ]
+  },
+  "requires": [
+    "sequential-effects-v1"
+  ],
+  "sha256": "55b5f3b8935433434d1dd44f4e75545668d98a6f0909375fe1d2d358adfc9577"
+}
