@@ -1,5 +1,9 @@
 # M2/M3: graph checks, dispatch budgets, and typed decisions
 
+Historical milestone contract: [M4/M5](panini-effects-verification.md) supersedes
+the PNIR/checkpoint versions, runtime capabilities, and deferred-feature status
+below. Existing AST v1/v2 compatibility remains as documented.
+
 ## Implemented workflow
 
 ```bash

@@ -49,7 +49,7 @@ graph_decl: "graph" NAME "(" NAME ":" type_ref ")" ["->" type_ref] "{" graph_mem
              | "start" "->" NAME ";"                                                  -> graph_start
              | NAME "->" graph_transition ";"                                         -> graph_edge
              | "invariant" expression ";"                                             -> graph_invariant
-node_contract: "max_visits" INT | "timeout" expression | "compensate" "using" qualified_name | "writes" qualified_name
+node_contract: "max_visits" INT | "timeout" expression ["on_timeout" FAT_ARROW graph_target] | "compensate" "using" qualified_name | "writes" qualified_name | "on_error" FAT_ARROW graph_target
 ?graph_transition: "end"                                                               -> end_transition
                  | NAME                                                                -> target_transition
                  | "when" expression FAT_ARROW graph_target "otherwise" FAT_ARROW graph_target -> conditional_transition

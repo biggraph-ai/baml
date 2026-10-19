@@ -1,22 +1,28 @@
 {
+  "analysis": null,
   "checks": [
     "name-resolution",
     "graph-types",
     "contract-types",
     "decision-types",
+    "effect-contracts",
+    "runtime-policy-types",
     "graph-topology",
     "dispatch-budget-verification"
   ],
   "deferred": [
     "runtime-enforcement",
     "method-body-verification",
-    "effects",
-    "policy/invariant-verification"
+    "arbitrary-host-effect-inference",
+    "external-effect-atomicity",
+    "static-invariant-proof",
+    "temporal-liveness"
   ],
   "diagnostics": [],
   "graphs": [
     {
       "id": "syntax:150",
+      "invariants": [],
       "name": "Route",
       "nodes": [
         {
@@ -81,6 +87,7 @@
           }
         }
       ],
+      "policies": [],
       "span": {
         "end": 999,
         "file": "decision.panini",
@@ -496,6 +503,7 @@
           "complete-static-control-flow",
           "global-per-run-budgets-enforced-before-dispatch"
         ],
+        "compensationAttemptBound": 0,
         "cycleRule": "all-cyclic-nodes-bounded",
         "dispatchBound": 3,
         "doesNotProve": [
@@ -504,13 +512,14 @@
           "wall-clock-bound",
           "external-effect-safety"
         ],
+        "reconciliationAttemptBound": 0,
         "terminalReachability": "possible-not-guaranteed"
       }
     }
   ],
   "kind": "Program",
-  "profile": "sequential-decisions-v1",
-  "schemaVersion": 2,
+  "profile": "sequential-effects-v1",
+  "schemaVersion": 3,
   "symbols": [
     {
       "id": "syntax:6",

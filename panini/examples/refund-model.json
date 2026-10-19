@@ -1,0 +1,23 @@
+{
+  "graph": "Refund",
+  "property": "invariant-safety",
+  "domains": {
+    "approved": "bool",
+    "balance": {"min": 0, "max": 2}
+  },
+  "initial": [
+    {"approved": true, "balance": 2},
+    {"approved": false, "balance": 2}
+  ],
+  "summaries": {
+    "Payments.reserve": {
+      "cases": [{"when": {"balance": 2}, "outputs": [{"balance": 1}]}]
+    },
+    "Payments.release": {
+      "cases": [{"outputs": [{"balance": 2}]}]
+    },
+    "Payments.notify": {
+      "cases": [{"outputs": [{}]}]
+    }
+  }
+}

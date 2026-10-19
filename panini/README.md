@@ -4,8 +4,8 @@ This directory contains the Python reference frontend for the Panini language
 specified in [`../docs`](../docs/panini-language-design.md). It is deliberately
 an independent project: Panini is a new language rather than a BAML parser mode.
 
-The reference compiler implements an inspectable semantic and graph-checking
-pipeline plus a minimal callback-based executor:
+The reference compiler implements an inspectable semantic/graph pipeline,
+a durable capability-based executor, and opt-in finite invariant verification:
 
 ```text
 .panini source -> tokens/CST -> semantic AST -> typed PNIR -> graph checks
@@ -85,24 +85,33 @@ panini parse examples/audit.panini --emit ast
 panini check examples/retry.panini
 panini check examples/decision.panini --adapters examples/decision-adapters.json
 python examples/run_decision.py
+panini check examples/refund.panini --effects examples/refund-effects.json --model examples/refund-model.json
+python examples/run_refund.py
 ```
 
 `parse` performs syntax checking. `check` resolves/types the
-`sequential-decisions-v1` profile, verifies graph structure and dispatch budgets,
-and emits PNIR v2. `audit.panini` remains a syntax-only demo with unresolved
-references and unsupported features.
+`sequential-effects-v1` profile, verifies graph structure and dispatch budgets,
+and emits PNIR v3. `audit.panini` remains a syntax-only design demo.
 
-`parse --emit ast` remains AST v1; use `--emit semantic-ast` for semantic AST v2.
-Every `check --emit` mode validates the program; `--diagnostics json` emits
-structured errors. See the [M2/M3 contract](../docs/panini-graph-decisions.md)
-for supported syntax, manifests, runtime callbacks, schemas, and diagnostics.
-The [M0/M1 profile](../docs/panini-semantic-profile.md) records the earlier stage.
+`parse --emit ast` remains AST v1; `--emit semantic-ast` emits semantic AST v2.
+All `check --emit` modes validate. `--diagnostics json` emits structured errors.
+Use `--effects` for typed capability/receipt metadata and `--model` for finite
+safety analysis. Non-proofs return a nonzero exit code with a counterexample,
+`unknown`, or `unsupported` report instead of a proof.
 
-The minimal executor enforces budgets and supports mocked decisions/checkpoints.
-It does not execute source method bodies or integrate a real model provider.
-Timeouts, compensation, durable external effects, invariant proofs, and the
-independent C++ frontend remain future work. A finite dispatch bound is not a
-proof of successful completion or host-code termination.
+The runtime supports deadlines, exceptional edges, authorized effects, SQLite
+journaling/resume, bounded reconciliation/compensation, and runtime invariants
+and ordered policies. The finite checker uses explicit domains, initial states,
+and checked transition-summary contracts; the runtime enforces those contracts.
+See the [M4/M5 contract and examples](../docs/panini-effects-verification.md).
+[M2/M3](../docs/panini-graph-decisions.md) and [M0/M1](../docs/panini-semantic-profile.md)
+remain historical milestone documentation.
+
+No real provider/payment adapter ships with these examples. Opaque host bodies
+are not executed or verified. External idempotency/authorization protocols are
+trusted; compensation is fallible and does not imply rollback or success.
+General liveness, arbitrary host termination, remote atomicity, and the native
+C++ frontend remain outside this reference implementation.
 
 ## Project layout
 
@@ -115,3 +124,7 @@ proof of successful completion or host-code termination.
 - `verifier.py` checks graph structure and cyclic budgets with iterative traversal.
 - `decisions.py` validates probability results and applies threshold/tie rules.
 - `runtime.py` executes trusted callbacks with enforced budgets/checkpoints.
+- `effects.py` defines typed capability, receipt, authorization, and reconciliation contracts.
+- `journal.py` stores transactional invocation/event history with stale-writer fencing.
+- `execution.py` implements local isolation and bounded remote waits.
+- `modelcheck.py` explores a restricted finite safety model with explicit proof statuses.

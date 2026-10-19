@@ -54,7 +54,7 @@ def spec(parser):
 def test_typed_decision_ir_and_binding(parser):
     result = compiled(parser)
     assert not result.diagnostics
-    assert result.to_dict()["schemaVersion"] == 2
+    assert result.to_dict()["schemaVersion"] == 3
     node = result.graphs[0]["nodes"][0]
     assert node["outputBinding"]["type"] == "Decision<Intent>"
     method = next(s for s in result.symbols if s["id"] == node["callable"])

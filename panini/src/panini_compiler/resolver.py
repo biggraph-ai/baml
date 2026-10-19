@@ -11,6 +11,7 @@ from copy import deepcopy
 import json
 import math
 import re
+from threading import TIMEOUT_MAX
 
 from .diagnostics import Diagnostic
 from .ir import CheckResult, PROFILE
@@ -85,7 +86,9 @@ def non_abstaining(expression: dict, truth: bool) -> set[str]:
 
 
 class Resolver:
-    def __init__(self, adapters: dict | None = None) -> None:
+    def __init__(
+        self, adapters: dict | None = None, effects: dict | None = None
+    ) -> None:
         self.result = CheckResult()
         self.declarations: dict[str, dict] = {}
         self.fields: dict[str, dict[str, tuple[str, dict]]] = {}
@@ -94,6 +97,7 @@ class Resolver:
         self.types = set(PRIMITIVES)
         self.used = False
         self.adapters = deepcopy(adapters or {})
+        self.effects = deepcopy(effects or {})
         self.decisions: dict[str, dict] = {}
         self.safe_choices: set[str] = set()
 
@@ -120,7 +124,13 @@ class Resolver:
             kind = declaration["kind"]
             if kind == "PackageDecl":
                 continue
-            if kind not in {"ClassDecl", "AgentDecl", "EnumDecl", "GraphDecl"}:
+            if kind not in {
+                "ClassDecl",
+                "AgentDecl",
+                "EnumDecl",
+                "GraphDecl",
+                "PolicyDecl",
+            }:
                 self.unsupported(declaration, kind)
                 continue
             name = tokens(declaration, "NAME")[0]["text"]
@@ -161,10 +171,12 @@ class Resolver:
             if declaration["kind"] in {"ClassDecl", "AgentDecl"}:
                 self.collect_class(name, declaration)
         self.collect_decisions()
+        self.collect_effects()
         for name, declaration in self.declarations.items():
             if declaration["kind"] == "GraphDecl":
                 graph = self.graph(name, declaration)
                 self.result.graphs.append(graph)
+        self.attach_policies()
         for symbol in self.result.symbols:
             if "type" in symbol:
                 symbol["typeSymbol"] = (
@@ -293,6 +305,124 @@ class Resolver:
                             self.error("E2003", "throws cannot have type void", throws)
                     if nodes(tail, "GenericParams"):
                         self.unsupported(tail, "generic methods")
+
+    def collect_effects(self) -> None:
+        from .effects import validate_effect
+
+        for name, descriptor in self.effects.items():
+            method = self.methods.get(name)
+            if method is None:
+                location = next(
+                    iter(self.declarations.values()),
+                    {"span": {"file": "<manifest>", "start": 0, "end": 0}},
+                )
+                self.error(
+                    "E2401",
+                    f"Effect manifest references unknown callable '{name}'",
+                    location,
+                )
+                continue
+            _, member = method
+            try:
+                effect = validate_effect(descriptor)
+                if effect["kind"] in {"mutation", "recovery"}:
+                    if (
+                        self.declarations.get(effect["receiptType"], {}).get("kind")
+                        != "ClassDecl"
+                    ):
+                        raise ValueError("receiptType must name a local receipt class")
+                if name in self.decisions:
+                    raise ValueError(
+                        "Decision adapters cannot be declared external mutation capabilities"
+                    )
+                symbol = next(s for s in self.result.symbols if s["id"] == member["id"])
+                symbol["effect"] = effect
+            except ValueError as error:
+                self.error("E2401", str(error), member)
+
+    def attach_policies(self) -> None:
+        for name, declaration in self.declarations.items():
+            if declaration["kind"] != "PolicyDecl":
+                continue
+            names = tokens(declaration, "NAME")
+            if len(names) != 2:
+                self.error(
+                    "E2601",
+                    "A policy requires an explicit 'for GraphName' binding",
+                    declaration,
+                )
+                continue
+            graph = next(
+                (g for g in self.result.graphs if g["name"] == names[1]["text"]), None
+            )
+            if graph is None:
+                self.error("E2001", "Unknown policy graph", declaration)
+                continue
+            self.state_parameter_id = graph["stateParameterSymbol"]
+            state = next(
+                s["name"] for s in self.result.symbols if s["id"] == graph["stateType"]
+            )
+            policy = {"name": name, "rules": [], "span": declaration["span"]}
+            seen = set()
+            for member in nodes(declaration):
+                if member["kind"] == "PolicyInvariant":
+                    expression = nodes(member)[0]
+                    self.safe_choices = set()
+                    if (
+                        self.expression_type(expression, state, graph["stateParameter"])
+                        != "bool"
+                    ):
+                        self.error(
+                            "E2601", "Policy invariant must be Boolean", expression
+                        )
+                    graph["invariants"].append(expression)
+                elif member["kind"] == "PolicyRule":
+                    rule_name = tokens(member, "NAME")[0]["text"]
+                    if rule_name in seen:
+                        self.error("E2002", "Duplicate policy rule", member)
+                    seen.add(rule_name)
+                    expression = nodes(member)[0]
+                    self.safe_choices = set()
+                    if (
+                        self.expression_type(expression, state, graph["stateParameter"])
+                        != "bool"
+                    ):
+                        self.error(
+                            "E2601", "Policy predicate must be Boolean", expression
+                        )
+                    effect = nodes(member)[1] if len(nodes(member)) > 1 else None
+                    # keep_all_tokens preserves the policy effect rule even for 'end'.
+                    effect_text = text(effect) if effect else ""
+                    if (
+                        any(t["text"] == "end" for t in tokens(member))
+                        and effect is None
+                    ):
+                        action = {"kind": "end"}
+                    elif (
+                        effect
+                        and effect["kind"] == "PolicyEffect"
+                        and effect_text.startswith("throw")
+                    ):
+                        value = nodes(effect)[0]
+                        if (
+                            self.expression_type(value, state, graph["stateParameter"])
+                            != "string"
+                        ):
+                            self.error(
+                                "E2601",
+                                "Policy throw requires a string expression",
+                                value,
+                            )
+                        action = {"kind": "throw", "expression": value}
+                    else:
+                        self.error(
+                            "E2601", "Policy actions support end and throw only", member
+                        )
+                        continue
+                    policy["rules"].append(
+                        {"name": rule_name, "predicate": expression, "action": action}
+                    )
+            graph["policies"].append(policy)
 
     def string_value(self, spelling: str, location: dict) -> str:
         try:
@@ -672,6 +802,8 @@ class Resolver:
             "nodes": [],
             "starts": [],
             "transitions": [],
+            "invariants": [],
+            "policies": [],
         }
         seen = set()
         for member in children:
@@ -747,8 +879,13 @@ class Resolver:
                         lowered["callable"] = self.method(nodes(contract)[0], state)
                     elif contract_kind == "WritesContract":
                         lowered["binding"] = binding
+                    elif contract_kind == "OnErrorContract":
+                        lowered["targetName"] = text(nodes(contract)[0])
                     elif contract_kind == "TimeoutContract":
                         expression = nodes(contract)[0]
+                        targets = nodes(contract)[1:]
+                        if targets:
+                            lowered["targetName"] = text(targets[0])
                         valid = False
                         if expression["kind"] == "Call":
                             call_parts = nodes(expression)
@@ -764,7 +901,16 @@ class Resolver:
                                     "Float",
                                 }:
                                     value = float(text(args[0]))
-                                    valid = 0 < value < float("inf")
+                                    seconds = (
+                                        value
+                                        * {"seconds": 1, "minutes": 60, "hours": 3600}[
+                                            text(call_parts[0])
+                                        ]
+                                    )
+                                    valid = (
+                                        0 < seconds <= TIMEOUT_MAX
+                                        and math.isfinite(seconds)
+                                    )
                                     lowered.update(
                                         {"unit": text(call_parts[0]), "value": value}
                                     )
@@ -804,11 +950,70 @@ class Resolver:
                 else:
                     edge["branches"] = [{"targetName": text(transition)}]
                 graph["transitions"].append(edge)
-            elif kind in {"GraphInvariant", "GraphState"}:
-                self.unsupported(member, f"{kind} obligations are not verified")
+            elif kind == "GraphInvariant":
+                expression = nodes(member)[0]
+                self.safe_choices = set()
+                if self.expression_type(expression, state, variable) != "bool":
+                    self.error(
+                        "E2601",
+                        "Invariant must be a pure Boolean expression",
+                        expression,
+                    )
+                graph["invariants"].append(expression)
+            elif kind == "GraphState":
+                self.unsupported(member, "GraphState initializers")
         # Names are retained alongside IDs. Unknown endpoints are M1 name errors;
         # entry cardinality, duplicate transitions, reachability and cycles are M2.
         node_ids = {n["name"]: n["id"] for n in graph["nodes"]}
+        for node in graph["nodes"]:
+            for contract in node["contracts"]:
+                if "targetName" in contract:
+                    self.endpoint(contract, "target", node_ids, contract)
+            method = next(
+                (s for s in self.result.symbols if s["id"] == node["callable"]), {}
+            )
+            effect = method.get("effect")
+            if effect and effect["kind"] == "mutation":
+                compensators = [
+                    c for c in node["contracts"] if c["kind"] == "CompensateContract"
+                ]
+                if not compensators and not effect.get("irreversiblePolicy"):
+                    self.error(
+                        "E2401",
+                        "Mutation requires compensation or an explicit irreversible policy",
+                        node,
+                    )
+                if compensators and effect.get("irreversiblePolicy"):
+                    self.error(
+                        "E2401",
+                        "Choose compensation or irreversible policy, not both",
+                        node,
+                    )
+                if compensators:
+                    recovery = next(
+                        (
+                            s
+                            for s in self.result.symbols
+                            if s["id"] == compensators[0]["callable"]
+                        ),
+                        {},
+                    )
+                    recovery_effect = recovery.get("effect", {})
+                    if (
+                        recovery_effect.get("kind") != "recovery"
+                        or recovery_effect.get("receiptType") != effect["receiptType"]
+                    ):
+                        self.error(
+                            "E2401",
+                            "Compensator requires a recovery capability with the same receipt type",
+                            node,
+                        )
+            if effect and effect["kind"] == "recovery":
+                self.error(
+                    "E2401",
+                    "Recovery capabilities can only be invoked as compensators",
+                    node,
+                )
         for start in graph["starts"]:
             self.endpoint(start, "target", node_ids, declaration)
         for edge in graph["transitions"]:

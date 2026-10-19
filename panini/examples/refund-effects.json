@@ -1,0 +1,23 @@
+{
+  "Payments.reserve": {
+    "kind": "mutation",
+    "capability": "payments.reserve",
+    "receiptType": "Receipt",
+    "idempotent": true,
+    "reconcilable": true,
+    "timeoutSeconds": 0.2,
+    "reconcileTimeoutSeconds": 0.2,
+    "maxReconciliations": 3
+  },
+  "Payments.release": {
+    "kind": "recovery",
+    "capability": "payments.release",
+    "receiptType": "Receipt",
+    "idempotent": true,
+    "reconcilable": true,
+    "timeoutSeconds": 0.2,
+    "reconcileTimeoutSeconds": 0.2,
+    "maxAttempts": 2,
+    "maxReconciliations": 3
+  }
+}

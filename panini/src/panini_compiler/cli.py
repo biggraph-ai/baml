@@ -39,6 +39,13 @@ def _parser() -> argparse.ArgumentParser:
                 help="JSON adapter identity/version manifest (no credentials)",
             )
             command.add_argument(
+                "--effects", type=Path, help="Capability/receipt contract manifest"
+            )
+            command.add_argument(
+                "--model", type=Path, help="Restricted finite-state safety model"
+            )
+            command.add_argument("--max-states", type=int, default=10000)
+            command.add_argument(
                 "--diagnostics", choices=("text", "json"), default="text"
             )
     return parser
@@ -72,8 +79,44 @@ def main(argv: list[str] | None = None) -> int:
                         file=sys.stderr,
                     )
                     return 1
-            result = verify_program(Resolver(adapters).resolve(semantic))
+            metadata = {}
+            for name, code in [("effects", "E2401"), ("model", "E2703")]:
+                path = getattr(args, name)
+                if path:
+                    try:
+                        value = json.loads(path.read_text(encoding="utf-8"))
+                        if not isinstance(value, dict):
+                            raise ValueError("Expected an object")
+                        metadata[name] = value
+                    except (OSError, ValueError):
+                        diagnostic = Diagnostic(
+                            code,
+                            f"Cannot load {name}: expected a readable JSON object",
+                            {"file": str(path), "start": 0, "end": 0},
+                        )
+                        print(
+                            json.dumps([diagnostic.to_dict()])
+                            if args.diagnostics == "json"
+                            else diagnostic.render(""),
+                            file=sys.stderr,
+                        )
+                        return 1
+            result = verify_program(
+                Resolver(adapters, metadata.get("effects")).resolve(semantic)
+            )
+            if "model" in metadata and not result.diagnostics:
+                from .modelcheck import analyze_program
+
+                analyze_program(result, metadata["model"], max_states=args.max_states)
             if result.diagnostics:
+                if result.analysis is not None:
+                    print(
+                        json.dumps(
+                            {"kind": "FiniteVerificationReport", **result.analysis},
+                            indent=2,
+                            sort_keys=True,
+                        )
+                    )
                 if args.diagnostics == "json":
                     print(
                         json.dumps(

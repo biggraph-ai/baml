@@ -25,6 +25,7 @@ normally use `PascalCase`; methods, fields, graph nodes, and local variables use
 | `node` | Graph step backed by a typed method |
 | `decide`, `decision_model`, `over`, `abstain_below` | Typed enum decisions through a configured probability adapter |
 | `writes` | Bind a node result into a compatible direct state field |
+| `on_timeout`, `on_error` | Explicit exceptional targets; uncertain mutations reconcile before routing |
 | `max_visits` | Runtime-owned scheduling bound for a node |
 | `parallel`, `branch`, `join`, `merge` | Structured concurrency and deterministic state combination |
 | `compensate` | Fallible durable saga action associated with forward work |
@@ -69,7 +70,7 @@ class agent interface enum type
 extends implements requires
 public private protected internal static abstract final override async
 provider instruction capabilities throws
-decision_model decide over abstain_below writes
+decision_model decide over abstain_below writes on_timeout on_error
 graph state node start end policy rule
 entry exit invariant when otherwise max_visits timeout
 parallel branch join merge using compensate with
@@ -112,6 +113,8 @@ The Python and C++ lexers emit shared symbolic token kinds:
 | `over` | `OVER` |
 | `abstain_below` | `ABSTAIN_BELOW` |
 | `writes` | `WRITES` |
+| `on_timeout` | `ON_TIMEOUT` |
+| `on_error` | `ON_ERROR` |
 | provider configuration body | `PROVIDER_BLOCK` during the parser prototype |
 
 `INSTRUCTION_LITERAL` and `PROVIDER_BLOCK` are internal token names, not source
@@ -136,5 +139,5 @@ precise vocabulary instead of inheriting accidental terminology.
 
 `Decision<E>` is a built-in type constructor rather than a lowercase keyword.
 See [the M2/M3 contract](panini-graph-decisions.md) for its enum, abstention,
-adapter, and stateless agent-binding semantics. Timeout/error routing keywords
-remain proposals, not implemented grammar.
+adapter, and stateless agent-binding semantics. Timeout/error routing is implemented in M4; see the
+[M4/M5 contract](panini-effects-verification.md) for reconciliation and effect semantics.

@@ -163,6 +163,17 @@ def verify_graph(graph: dict) -> tuple[list[Diagnostic], dict | None]:
                 adjacency[source].append(target)
             else:
                 error("E2301", "Unknown transition target in graph IR", transition)
+    for node in node_list:
+        for contract in node["contracts"]:
+            if "target" not in contract:
+                continue
+            target = contract["target"]
+            if target == "$end":
+                terminal_sources.append(node["id"])
+            elif target in by_id:
+                adjacency[node["id"]].append(target)
+            else:
+                error("E2301", "Unknown exceptional transition target", contract)
     for node_id, transitions in outgoing.items():
         if len(transitions) != 1:
             error(
@@ -246,6 +257,29 @@ def verify_program(result: CheckResult) -> CheckResult:
         result.diagnostics.extend(diagnostics)
         if report is not None:
             graph["verification"] = report
+            symbols = {s["id"]: s for s in result.symbols}
+            compensation_bound = reconciliation_bound = 0
+            for node in graph["nodes"]:
+                visits = next(
+                    (
+                        c["value"]
+                        for c in node["contracts"]
+                        if c["kind"] == "MaxVisitsContract"
+                    ),
+                    1,
+                )
+                effect = symbols[node["callable"]].get("effect", {})
+                if effect.get("kind") == "mutation":
+                    reconciliation_bound += visits * effect["maxReconciliations"]
+                for contract in node["contracts"]:
+                    if contract["kind"] == "CompensateContract":
+                        recovery = symbols[contract["callable"]].get("effect", {})
+                        compensation_bound += visits * recovery.get("maxAttempts", 0)
+                        reconciliation_bound += visits * recovery.get(
+                            "maxReconciliations", 0
+                        )
+            report["compensationAttemptBound"] = compensation_bound
+            report["reconciliationAttemptBound"] = reconciliation_bound
     result.diagnostics.sort(
         key=lambda d: (d.span["file"], d.span["start"], d.code, d.message)
     )

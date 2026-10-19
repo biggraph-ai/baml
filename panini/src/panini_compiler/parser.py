@@ -137,6 +137,7 @@ class PaniniParser:
                     "timeout": "TimeoutContract",
                     "compensate": "CompensateContract",
                     "writes": "WritesContract",
+                    "on_error": "OnErrorContract",
                 }[str(value.children[0])]
             span = (
                 {"file": str(path), "start": 0, "end": len(source.encode("utf-8"))}

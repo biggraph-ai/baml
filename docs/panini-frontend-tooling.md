@@ -255,13 +255,15 @@ of debugging only generated backend code.
 - [tree-sitter documentation](https://tree-sitter.github.io/tree-sitter/)
 
 
-## Executable M0–M3 status
+## Executable M0–M5 status
 
-The Python reference frontend preserves semantic AST v2 alongside legacy AST v1,
-resolves/types a restricted sequential graph/decision profile, and checks entry,
-transitions, reachability, cyclic budgets, and a conservative dispatch bound.
-Typed decision methods, direct output bindings, manifests, and a minimal local
-callback executor are implemented. See the [M2/M3 contract](panini-graph-decisions.md)
-for exact syntax, schemas, diagnostics, and limitations. General host-code
-termination, real vendor integration, deadlines, durable recovery, compensation
-execution, authorization, and policy proofs remain future work.
+The Python reference frontend preserves semantic AST v2 alongside legacy AST v1
+and lowers to PNIR v3. Graph/dispatch checks, typed decisions, direct output
+bindings, timeout/error edges, capability manifests, SQLite invocation journals,
+authorization boundaries, bounded saga recovery, runtime invariants/ordered
+policies, and opt-in finite invariant checking are implemented. See the
+[M4/M5 contract](panini-effects-verification.md) for exact schemas, proof statuses,
+CLI examples, and trusted runtime assumptions. Opaque host method verification,
+real vendor integrations, external atomicity, and general liveness remain outside
+this reference profile. A safety proof under finite contracts is not a proof of
+successful completion or arbitrary host-code termination.

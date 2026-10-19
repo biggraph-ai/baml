@@ -1,0 +1,27 @@
+package example;
+
+class State { bool approved; int balance; }
+class Receipt { string id; }
+class Payments {
+  public static State reserve(State state);
+  public static State release(State state);
+  public static State notify(State state);
+}
+
+graph Refund(state: State) -> State {
+  invariant state.balance >= 0;
+  invariant state.balance != 1 || state.approved;
+  node reserve using Payments.reserve max_visits 1
+    timeout seconds(0.2) on_timeout => notify
+    on_error => notify
+    compensate using Payments.release;
+  node notify using Payments.notify;
+  start -> reserve;
+  reserve -> notify;
+  notify -> end;
+}
+
+policy Approval for Refund {
+  invariant state.balance <= 2;
+  rule RequireApproval: !state.approved => throw "approval required";
+}

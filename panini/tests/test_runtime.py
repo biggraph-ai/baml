@@ -163,7 +163,7 @@ def test_runtime_does_not_trust_topology_marker_or_ignore_m4_contracts(retry_pro
     forged["graphs"][0]["transitions"].clear()
     with pytest.raises(RuntimeFailure):
         Executor(forged, "G", {"retry": True, "count": 0})
-    for contract in ["timeout seconds(1)", "compensate using T.attempt"]:
+    for contract in ["compensate using T.attempt"]:
         program = compile_source(
             RETRY.replace("max_visits 3", "max_visits 3 " + contract)
         )
@@ -310,3 +310,17 @@ def test_numeric_guard_limits_are_checked_before_execution():
         result, "G", {"retry": False, "count": 0}, capabilities=BINDINGS
     )
     assert executor.run()["status"] == "ended"
+
+
+def test_unsupported_isolation_backend_is_rejected_before_dispatch(monkeypatch):
+    program = compile_source(
+        RETRY.replace("max_visits 3", "max_visits 3 timeout seconds(1)")
+    )
+    assert not program.diagnostics
+    monkeypatch.setattr(
+        "panini_compiler.runtime.multiprocessing.get_all_start_methods",
+        lambda: ["spawn"],
+    )
+    with pytest.raises(RuntimeFailure) as error:
+        Executor(program, "G", {"retry": True, "count": 0}, capabilities=BINDINGS)
+    assert error.value.code == "UnsupportedIsolation"

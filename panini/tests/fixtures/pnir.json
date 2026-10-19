@@ -1,22 +1,28 @@
 {
+  "analysis": null,
   "checks": [
     "name-resolution",
     "graph-types",
     "contract-types",
-    "decision-types"
+    "decision-types",
+    "effect-contracts",
+    "runtime-policy-types"
   ],
   "deferred": [
     "graph-topology",
     "dispatch-budget-verification",
     "runtime-enforcement",
     "method-body-verification",
-    "effects",
-    "policy/invariant-verification"
+    "arbitrary-host-effect-inference",
+    "external-effect-atomicity",
+    "static-invariant-proof",
+    "temporal-liveness"
   ],
   "diagnostics": [],
   "graphs": [
     {
       "id": "syntax:39",
+      "invariants": [],
       "name": "G",
       "nodes": [
         {
@@ -60,6 +66,7 @@
           }
         }
       ],
+      "policies": [],
       "span": {
         "end": 279,
         "file": "semantic.panini",
@@ -351,8 +358,8 @@
     }
   ],
   "kind": "Program",
-  "profile": "sequential-decisions-v1",
-  "schemaVersion": 2,
+  "profile": "sequential-effects-v1",
+  "schemaVersion": 3,
   "symbols": [
     {
       "id": "syntax:1",
