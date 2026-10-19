@@ -1,0 +1,1320 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "id": "syntax:2",
+          "kind": "Token",
+          "span": {
+            "end": 5,
+            "file": "semantic.panini",
+            "start": 0
+          },
+          "text": "class",
+          "tokenType": "CLASS"
+        },
+        {
+          "id": "syntax:3",
+          "kind": "Token",
+          "span": {
+            "end": 11,
+            "file": "semantic.panini",
+            "start": 6
+          },
+          "text": "State",
+          "tokenType": "NAME"
+        },
+        {
+          "children": [
+            {
+              "id": "syntax:5",
+              "kind": "Token",
+              "span": {
+                "end": 13,
+                "file": "semantic.panini",
+                "start": 12
+              },
+              "text": "{",
+              "tokenType": "LBRACE"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:9",
+                          "kind": "Token",
+                          "span": {
+                            "end": 18,
+                            "file": "semantic.panini",
+                            "start": 14
+                          },
+                          "text": "bool",
+                          "tokenType": "NAME"
+                        }
+                      ],
+                      "id": "syntax:8",
+                      "kind": "QualifiedName",
+                      "span": {
+                        "end": 18,
+                        "file": "semantic.panini",
+                        "start": 14
+                      }
+                    }
+                  ],
+                  "id": "syntax:7",
+                  "kind": "PrimaryType",
+                  "span": {
+                    "end": 18,
+                    "file": "semantic.panini",
+                    "start": 14
+                  }
+                },
+                {
+                  "id": "syntax:10",
+                  "kind": "Token",
+                  "span": {
+                    "end": 24,
+                    "file": "semantic.panini",
+                    "start": 19
+                  },
+                  "text": "retry",
+                  "tokenType": "NAME"
+                },
+                {
+                  "children": [
+                    {
+                      "id": "syntax:12",
+                      "kind": "Token",
+                      "span": {
+                        "end": 25,
+                        "file": "semantic.panini",
+                        "start": 24
+                      },
+                      "text": ";",
+                      "tokenType": "SEMICOLON"
+                    }
+                  ],
+                  "id": "syntax:11",
+                  "kind": "FieldTail",
+                  "span": {
+                    "end": 25,
+                    "file": "semantic.panini",
+                    "start": 24
+                  }
+                }
+              ],
+              "id": "syntax:6",
+              "kind": "MemberDecl",
+              "name": "retry",
+              "span": {
+                "end": 25,
+                "file": "semantic.panini",
+                "start": 14
+              }
+            },
+            {
+              "id": "syntax:13",
+              "kind": "Token",
+              "span": {
+                "end": 27,
+                "file": "semantic.panini",
+                "start": 26
+              },
+              "text": "}",
+              "tokenType": "RBRACE"
+            }
+          ],
+          "id": "syntax:4",
+          "kind": "ClassBody",
+          "span": {
+            "end": 27,
+            "file": "semantic.panini",
+            "start": 12
+          }
+        }
+      ],
+      "id": "syntax:1",
+      "kind": "ClassDecl",
+      "name": "State",
+      "span": {
+        "end": 27,
+        "file": "semantic.panini",
+        "start": 0
+      }
+    },
+    {
+      "children": [
+        {
+          "id": "syntax:15",
+          "kind": "Token",
+          "span": {
+            "end": 33,
+            "file": "semantic.panini",
+            "start": 28
+          },
+          "text": "class",
+          "tokenType": "CLASS"
+        },
+        {
+          "id": "syntax:16",
+          "kind": "Token",
+          "span": {
+            "end": 39,
+            "file": "semantic.panini",
+            "start": 34
+          },
+          "text": "Steps",
+          "tokenType": "NAME"
+        },
+        {
+          "children": [
+            {
+              "id": "syntax:18",
+              "kind": "Token",
+              "span": {
+                "end": 41,
+                "file": "semantic.panini",
+                "start": 40
+              },
+              "text": "{",
+              "tokenType": "LBRACE"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "id": "syntax:21",
+                      "kind": "Token",
+                      "span": {
+                        "end": 48,
+                        "file": "semantic.panini",
+                        "start": 42
+                      },
+                      "text": "public",
+                      "tokenType": "PUBLIC"
+                    }
+                  ],
+                  "id": "syntax:20",
+                  "kind": "Modifier",
+                  "span": {
+                    "end": 48,
+                    "file": "semantic.panini",
+                    "start": 42
+                  },
+                  "value": "public"
+                },
+                {
+                  "children": [
+                    {
+                      "id": "syntax:23",
+                      "kind": "Token",
+                      "span": {
+                        "end": 55,
+                        "file": "semantic.panini",
+                        "start": 49
+                      },
+                      "text": "static",
+                      "tokenType": "STATIC"
+                    }
+                  ],
+                  "id": "syntax:22",
+                  "kind": "Modifier",
+                  "span": {
+                    "end": 55,
+                    "file": "semantic.panini",
+                    "start": 49
+                  },
+                  "value": "static"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:26",
+                          "kind": "Token",
+                          "span": {
+                            "end": 61,
+                            "file": "semantic.panini",
+                            "start": 56
+                          },
+                          "text": "State",
+                          "tokenType": "NAME"
+                        }
+                      ],
+                      "id": "syntax:25",
+                      "kind": "QualifiedName",
+                      "span": {
+                        "end": 61,
+                        "file": "semantic.panini",
+                        "start": 56
+                      }
+                    }
+                  ],
+                  "id": "syntax:24",
+                  "kind": "PrimaryType",
+                  "span": {
+                    "end": 61,
+                    "file": "semantic.panini",
+                    "start": 56
+                  }
+                },
+                {
+                  "id": "syntax:27",
+                  "kind": "Token",
+                  "span": {
+                    "end": 69,
+                    "file": "semantic.panini",
+                    "start": 62
+                  },
+                  "text": "attempt",
+                  "tokenType": "NAME"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:30",
+                          "kind": "Token",
+                          "span": {
+                            "end": 70,
+                            "file": "semantic.panini",
+                            "start": 69
+                          },
+                          "text": "(",
+                          "tokenType": "LPAR"
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "id": "syntax:34",
+                                      "kind": "Token",
+                                      "span": {
+                                        "end": 75,
+                                        "file": "semantic.panini",
+                                        "start": 70
+                                      },
+                                      "text": "State",
+                                      "tokenType": "NAME"
+                                    }
+                                  ],
+                                  "id": "syntax:33",
+                                  "kind": "QualifiedName",
+                                  "span": {
+                                    "end": 75,
+                                    "file": "semantic.panini",
+                                    "start": 70
+                                  }
+                                }
+                              ],
+                              "id": "syntax:32",
+                              "kind": "PrimaryType",
+                              "span": {
+                                "end": 75,
+                                "file": "semantic.panini",
+                                "start": 70
+                              }
+                            },
+                            {
+                              "id": "syntax:35",
+                              "kind": "Token",
+                              "span": {
+                                "end": 81,
+                                "file": "semantic.panini",
+                                "start": 76
+                              },
+                              "text": "state",
+                              "tokenType": "NAME"
+                            }
+                          ],
+                          "id": "syntax:31",
+                          "kind": "Parameter",
+                          "span": {
+                            "end": 81,
+                            "file": "semantic.panini",
+                            "start": 70
+                          }
+                        },
+                        {
+                          "id": "syntax:36",
+                          "kind": "Token",
+                          "span": {
+                            "end": 82,
+                            "file": "semantic.panini",
+                            "start": 81
+                          },
+                          "text": ")",
+                          "tokenType": "RPAR"
+                        }
+                      ],
+                      "id": "syntax:29",
+                      "kind": "Parameters",
+                      "span": {
+                        "end": 82,
+                        "file": "semantic.panini",
+                        "start": 69
+                      }
+                    },
+                    {
+                      "id": "syntax:37",
+                      "kind": "Token",
+                      "span": {
+                        "end": 83,
+                        "file": "semantic.panini",
+                        "start": 82
+                      },
+                      "text": ";",
+                      "tokenType": "SEMICOLON"
+                    }
+                  ],
+                  "id": "syntax:28",
+                  "kind": "MethodTail",
+                  "span": {
+                    "end": 83,
+                    "file": "semantic.panini",
+                    "start": 69
+                  }
+                }
+              ],
+              "id": "syntax:19",
+              "kind": "MemberDecl",
+              "name": "attempt",
+              "span": {
+                "end": 83,
+                "file": "semantic.panini",
+                "start": 42
+              }
+            },
+            {
+              "id": "syntax:38",
+              "kind": "Token",
+              "span": {
+                "end": 85,
+                "file": "semantic.panini",
+                "start": 84
+              },
+              "text": "}",
+              "tokenType": "RBRACE"
+            }
+          ],
+          "id": "syntax:17",
+          "kind": "ClassBody",
+          "span": {
+            "end": 85,
+            "file": "semantic.panini",
+            "start": 40
+          }
+        }
+      ],
+      "id": "syntax:14",
+      "kind": "ClassDecl",
+      "name": "Steps",
+      "span": {
+        "end": 85,
+        "file": "semantic.panini",
+        "start": 28
+      }
+    },
+    {
+      "children": [
+        {
+          "id": "syntax:40",
+          "kind": "Token",
+          "span": {
+            "end": 91,
+            "file": "semantic.panini",
+            "start": 86
+          },
+          "text": "graph",
+          "tokenType": "GRAPH"
+        },
+        {
+          "id": "syntax:41",
+          "kind": "Token",
+          "span": {
+            "end": 93,
+            "file": "semantic.panini",
+            "start": 92
+          },
+          "text": "G",
+          "tokenType": "NAME"
+        },
+        {
+          "id": "syntax:42",
+          "kind": "Token",
+          "span": {
+            "end": 94,
+            "file": "semantic.panini",
+            "start": 93
+          },
+          "text": "(",
+          "tokenType": "LPAR"
+        },
+        {
+          "id": "syntax:43",
+          "kind": "Token",
+          "span": {
+            "end": 95,
+            "file": "semantic.panini",
+            "start": 94
+          },
+          "text": "s",
+          "tokenType": "NAME"
+        },
+        {
+          "id": "syntax:44",
+          "kind": "Token",
+          "span": {
+            "end": 96,
+            "file": "semantic.panini",
+            "start": 95
+          },
+          "text": ":",
+          "tokenType": "COLON"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "id": "syntax:47",
+                  "kind": "Token",
+                  "span": {
+                    "end": 102,
+                    "file": "semantic.panini",
+                    "start": 97
+                  },
+                  "text": "State",
+                  "tokenType": "NAME"
+                }
+              ],
+              "id": "syntax:46",
+              "kind": "QualifiedName",
+              "span": {
+                "end": 102,
+                "file": "semantic.panini",
+                "start": 97
+              }
+            }
+          ],
+          "id": "syntax:45",
+          "kind": "PrimaryType",
+          "span": {
+            "end": 102,
+            "file": "semantic.panini",
+            "start": 97
+          }
+        },
+        {
+          "id": "syntax:48",
+          "kind": "Token",
+          "span": {
+            "end": 103,
+            "file": "semantic.panini",
+            "start": 102
+          },
+          "text": ")",
+          "tokenType": "RPAR"
+        },
+        {
+          "id": "syntax:49",
+          "kind": "Token",
+          "span": {
+            "end": 105,
+            "file": "semantic.panini",
+            "start": 104
+          },
+          "text": "{",
+          "tokenType": "LBRACE"
+        },
+        {
+          "children": [
+            {
+              "id": "syntax:51",
+              "kind": "Token",
+              "span": {
+                "end": 112,
+                "file": "semantic.panini",
+                "start": 108
+              },
+              "text": "node",
+              "tokenType": "NODE"
+            },
+            {
+              "id": "syntax:52",
+              "kind": "Token",
+              "span": {
+                "end": 114,
+                "file": "semantic.panini",
+                "start": 113
+              },
+              "text": "a",
+              "tokenType": "NAME"
+            },
+            {
+              "id": "syntax:53",
+              "kind": "Token",
+              "span": {
+                "end": 120,
+                "file": "semantic.panini",
+                "start": 115
+              },
+              "text": "using",
+              "tokenType": "USING"
+            },
+            {
+              "children": [
+                {
+                  "id": "syntax:55",
+                  "kind": "Token",
+                  "span": {
+                    "end": 126,
+                    "file": "semantic.panini",
+                    "start": 121
+                  },
+                  "text": "Steps",
+                  "tokenType": "NAME"
+                },
+                {
+                  "id": "syntax:56",
+                  "kind": "Token",
+                  "span": {
+                    "end": 127,
+                    "file": "semantic.panini",
+                    "start": 126
+                  },
+                  "text": ".",
+                  "tokenType": "DOT"
+                },
+                {
+                  "id": "syntax:57",
+                  "kind": "Token",
+                  "span": {
+                    "end": 134,
+                    "file": "semantic.panini",
+                    "start": 127
+                  },
+                  "text": "attempt",
+                  "tokenType": "NAME"
+                }
+              ],
+              "id": "syntax:54",
+              "kind": "QualifiedName",
+              "span": {
+                "end": 134,
+                "file": "semantic.panini",
+                "start": 121
+              }
+            },
+            {
+              "children": [
+                {
+                  "id": "syntax:59",
+                  "kind": "Token",
+                  "span": {
+                    "end": 145,
+                    "file": "semantic.panini",
+                    "start": 135
+                  },
+                  "text": "max_visits",
+                  "tokenType": "MAX_VISITS"
+                },
+                {
+                  "id": "syntax:60",
+                  "kind": "Token",
+                  "span": {
+                    "end": 147,
+                    "file": "semantic.panini",
+                    "start": 146
+                  },
+                  "text": "2",
+                  "tokenType": "INT"
+                }
+              ],
+              "id": "syntax:58",
+              "kind": "MaxVisitsContract",
+              "span": {
+                "end": 147,
+                "file": "semantic.panini",
+                "start": 135
+              }
+            },
+            {
+              "children": [
+                {
+                  "id": "syntax:62",
+                  "kind": "Token",
+                  "span": {
+                    "end": 155,
+                    "file": "semantic.panini",
+                    "start": 148
+                  },
+                  "text": "timeout",
+                  "tokenType": "TIMEOUT"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:65",
+                          "kind": "Token",
+                          "span": {
+                            "end": 163,
+                            "file": "semantic.panini",
+                            "start": 156
+                          },
+                          "text": "seconds",
+                          "tokenType": "NAME"
+                        }
+                      ],
+                      "id": "syntax:64",
+                      "kind": "Name",
+                      "span": {
+                        "end": 163,
+                        "file": "semantic.panini",
+                        "start": 156
+                      }
+                    },
+                    {
+                      "id": "syntax:66",
+                      "kind": "Token",
+                      "span": {
+                        "end": 164,
+                        "file": "semantic.panini",
+                        "start": 163
+                      },
+                      "text": "(",
+                      "tokenType": "LPAR"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "id": "syntax:69",
+                              "kind": "Token",
+                              "span": {
+                                "end": 165,
+                                "file": "semantic.panini",
+                                "start": 164
+                              },
+                              "text": "3",
+                              "tokenType": "INT"
+                            }
+                          ],
+                          "id": "syntax:68",
+                          "kind": "Integer",
+                          "span": {
+                            "end": 165,
+                            "file": "semantic.panini",
+                            "start": 164
+                          }
+                        }
+                      ],
+                      "id": "syntax:67",
+                      "kind": "Arguments",
+                      "span": {
+                        "end": 165,
+                        "file": "semantic.panini",
+                        "start": 164
+                      }
+                    },
+                    {
+                      "id": "syntax:70",
+                      "kind": "Token",
+                      "span": {
+                        "end": 166,
+                        "file": "semantic.panini",
+                        "start": 165
+                      },
+                      "text": ")",
+                      "tokenType": "RPAR"
+                    }
+                  ],
+                  "id": "syntax:63",
+                  "kind": "Call",
+                  "span": {
+                    "end": 166,
+                    "file": "semantic.panini",
+                    "start": 156
+                  }
+                }
+              ],
+              "id": "syntax:61",
+              "kind": "TimeoutContract",
+              "span": {
+                "end": 166,
+                "file": "semantic.panini",
+                "start": 148
+              }
+            },
+            {
+              "children": [
+                {
+                  "id": "syntax:72",
+                  "kind": "Token",
+                  "span": {
+                    "end": 177,
+                    "file": "semantic.panini",
+                    "start": 167
+                  },
+                  "text": "compensate",
+                  "tokenType": "COMPENSATE"
+                },
+                {
+                  "id": "syntax:73",
+                  "kind": "Token",
+                  "span": {
+                    "end": 183,
+                    "file": "semantic.panini",
+                    "start": 178
+                  },
+                  "text": "using",
+                  "tokenType": "USING"
+                },
+                {
+                  "children": [
+                    {
+                      "id": "syntax:75",
+                      "kind": "Token",
+                      "span": {
+                        "end": 189,
+                        "file": "semantic.panini",
+                        "start": 184
+                      },
+                      "text": "Steps",
+                      "tokenType": "NAME"
+                    },
+                    {
+                      "id": "syntax:76",
+                      "kind": "Token",
+                      "span": {
+                        "end": 190,
+                        "file": "semantic.panini",
+                        "start": 189
+                      },
+                      "text": ".",
+                      "tokenType": "DOT"
+                    },
+                    {
+                      "id": "syntax:77",
+                      "kind": "Token",
+                      "span": {
+                        "end": 197,
+                        "file": "semantic.panini",
+                        "start": 190
+                      },
+                      "text": "attempt",
+                      "tokenType": "NAME"
+                    }
+                  ],
+                  "id": "syntax:74",
+                  "kind": "QualifiedName",
+                  "span": {
+                    "end": 197,
+                    "file": "semantic.panini",
+                    "start": 184
+                  }
+                }
+              ],
+              "id": "syntax:71",
+              "kind": "CompensateContract",
+              "span": {
+                "end": 197,
+                "file": "semantic.panini",
+                "start": 167
+              }
+            },
+            {
+              "id": "syntax:78",
+              "kind": "Token",
+              "span": {
+                "end": 198,
+                "file": "semantic.panini",
+                "start": 197
+              },
+              "text": ";",
+              "tokenType": "SEMICOLON"
+            }
+          ],
+          "id": "syntax:50",
+          "kind": "GraphNode",
+          "span": {
+            "end": 198,
+            "file": "semantic.panini",
+            "start": 108
+          }
+        },
+        {
+          "children": [
+            {
+              "id": "syntax:80",
+              "kind": "Token",
+              "span": {
+                "end": 206,
+                "file": "semantic.panini",
+                "start": 201
+              },
+              "text": "start",
+              "tokenType": "START"
+            },
+            {
+              "id": "syntax:81",
+              "kind": "Token",
+              "span": {
+                "end": 209,
+                "file": "semantic.panini",
+                "start": 207
+              },
+              "text": "->",
+              "tokenType": "__ANON_0"
+            },
+            {
+              "id": "syntax:82",
+              "kind": "Token",
+              "span": {
+                "end": 211,
+                "file": "semantic.panini",
+                "start": 210
+              },
+              "text": "a",
+              "tokenType": "NAME"
+            },
+            {
+              "id": "syntax:83",
+              "kind": "Token",
+              "span": {
+                "end": 212,
+                "file": "semantic.panini",
+                "start": 211
+              },
+              "text": ";",
+              "tokenType": "SEMICOLON"
+            }
+          ],
+          "id": "syntax:79",
+          "kind": "GraphStart",
+          "span": {
+            "end": 212,
+            "file": "semantic.panini",
+            "start": 201
+          }
+        },
+        {
+          "children": [
+            {
+              "id": "syntax:85",
+              "kind": "Token",
+              "span": {
+                "end": 216,
+                "file": "semantic.panini",
+                "start": 215
+              },
+              "text": "a",
+              "tokenType": "NAME"
+            },
+            {
+              "id": "syntax:86",
+              "kind": "Token",
+              "span": {
+                "end": 219,
+                "file": "semantic.panini",
+                "start": 217
+              },
+              "text": "->",
+              "tokenType": "__ANON_0"
+            },
+            {
+              "children": [
+                {
+                  "id": "syntax:88",
+                  "kind": "Token",
+                  "span": {
+                    "end": 224,
+                    "file": "semantic.panini",
+                    "start": 220
+                  },
+                  "text": "when",
+                  "tokenType": "WHEN"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:91",
+                          "kind": "Token",
+                          "span": {
+                            "end": 226,
+                            "file": "semantic.panini",
+                            "start": 225
+                          },
+                          "text": "!",
+                          "tokenType": "BANG"
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "id": "syntax:94",
+                                  "kind": "Token",
+                                  "span": {
+                                    "end": 227,
+                                    "file": "semantic.panini",
+                                    "start": 226
+                                  },
+                                  "text": "s",
+                                  "tokenType": "NAME"
+                                }
+                              ],
+                              "id": "syntax:93",
+                              "kind": "Name",
+                              "span": {
+                                "end": 227,
+                                "file": "semantic.panini",
+                                "start": 226
+                              }
+                            },
+                            {
+                              "id": "syntax:95",
+                              "kind": "Token",
+                              "span": {
+                                "end": 228,
+                                "file": "semantic.panini",
+                                "start": 227
+                              },
+                              "text": ".",
+                              "tokenType": "DOT"
+                            },
+                            {
+                              "id": "syntax:96",
+                              "kind": "Token",
+                              "span": {
+                                "end": 233,
+                                "file": "semantic.panini",
+                                "start": 228
+                              },
+                              "text": "retry",
+                              "tokenType": "NAME"
+                            }
+                          ],
+                          "id": "syntax:92",
+                          "kind": "Member",
+                          "span": {
+                            "end": 233,
+                            "file": "semantic.panini",
+                            "start": 226
+                          }
+                        }
+                      ],
+                      "id": "syntax:90",
+                      "kind": "Unary",
+                      "operator": "!",
+                      "span": {
+                        "end": 233,
+                        "file": "semantic.panini",
+                        "start": 225
+                      }
+                    },
+                    {
+                      "id": "syntax:97",
+                      "kind": "Token",
+                      "span": {
+                        "end": 236,
+                        "file": "semantic.panini",
+                        "start": 234
+                      },
+                      "text": "||",
+                      "tokenType": "__ANON_2"
+                    },
+                    {
+                      "children": [
+                        {
+                          "id": "syntax:99",
+                          "kind": "Token",
+                          "span": {
+                            "end": 238,
+                            "file": "semantic.panini",
+                            "start": 237
+                          },
+                          "text": "(",
+                          "tokenType": "LPAR"
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "id": "syntax:103",
+                                      "kind": "Token",
+                                      "span": {
+                                        "end": 239,
+                                        "file": "semantic.panini",
+                                        "start": 238
+                                      },
+                                      "text": "s",
+                                      "tokenType": "NAME"
+                                    }
+                                  ],
+                                  "id": "syntax:102",
+                                  "kind": "Name",
+                                  "span": {
+                                    "end": 239,
+                                    "file": "semantic.panini",
+                                    "start": 238
+                                  }
+                                },
+                                {
+                                  "id": "syntax:104",
+                                  "kind": "Token",
+                                  "span": {
+                                    "end": 240,
+                                    "file": "semantic.panini",
+                                    "start": 239
+                                  },
+                                  "text": ".",
+                                  "tokenType": "DOT"
+                                },
+                                {
+                                  "id": "syntax:105",
+                                  "kind": "Token",
+                                  "span": {
+                                    "end": 245,
+                                    "file": "semantic.panini",
+                                    "start": 240
+                                  },
+                                  "text": "retry",
+                                  "tokenType": "NAME"
+                                }
+                              ],
+                              "id": "syntax:101",
+                              "kind": "Member",
+                              "span": {
+                                "end": 245,
+                                "file": "semantic.panini",
+                                "start": 238
+                              }
+                            },
+                            {
+                              "id": "syntax:106",
+                              "kind": "Token",
+                              "span": {
+                                "end": 248,
+                                "file": "semantic.panini",
+                                "start": 246
+                              },
+                              "text": "&&",
+                              "tokenType": "__ANON_3"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "id": "syntax:108",
+                                  "kind": "Token",
+                                  "span": {
+                                    "end": 253,
+                                    "file": "semantic.panini",
+                                    "start": 249
+                                  },
+                                  "text": "true",
+                                  "tokenType": "TRUE"
+                                }
+                              ],
+                              "id": "syntax:107",
+                              "kind": "True",
+                              "span": {
+                                "end": 253,
+                                "file": "semantic.panini",
+                                "start": 249
+                              }
+                            }
+                          ],
+                          "id": "syntax:100",
+                          "kind": "Binary",
+                          "operator": "&&",
+                          "span": {
+                            "end": 253,
+                            "file": "semantic.panini",
+                            "start": 238
+                          }
+                        },
+                        {
+                          "id": "syntax:109",
+                          "kind": "Token",
+                          "span": {
+                            "end": 254,
+                            "file": "semantic.panini",
+                            "start": 253
+                          },
+                          "text": ")",
+                          "tokenType": "RPAR"
+                        }
+                      ],
+                      "id": "syntax:98",
+                      "kind": "Atom",
+                      "span": {
+                        "end": 254,
+                        "file": "semantic.panini",
+                        "start": 237
+                      }
+                    }
+                  ],
+                  "id": "syntax:89",
+                  "kind": "Binary",
+                  "operator": "||",
+                  "span": {
+                    "end": 254,
+                    "file": "semantic.panini",
+                    "start": 225
+                  }
+                },
+                {
+                  "id": "syntax:110",
+                  "kind": "Token",
+                  "span": {
+                    "end": 257,
+                    "file": "semantic.panini",
+                    "start": 255
+                  },
+                  "text": "=>",
+                  "tokenType": "FAT_ARROW"
+                },
+                {
+                  "children": [
+                    {
+                      "id": "syntax:112",
+                      "kind": "Token",
+                      "span": {
+                        "end": 259,
+                        "file": "semantic.panini",
+                        "start": 258
+                      },
+                      "text": "a",
+                      "tokenType": "NAME"
+                    }
+                  ],
+                  "id": "syntax:111",
+                  "kind": "NameTarget",
+                  "span": {
+                    "end": 259,
+                    "file": "semantic.panini",
+                    "start": 258
+                  }
+                },
+                {
+                  "id": "syntax:113",
+                  "kind": "Token",
+                  "span": {
+                    "end": 269,
+                    "file": "semantic.panini",
+                    "start": 260
+                  },
+                  "text": "otherwise",
+                  "tokenType": "OTHERWISE"
+                },
+                {
+                  "id": "syntax:114",
+                  "kind": "Token",
+                  "span": {
+                    "end": 272,
+                    "file": "semantic.panini",
+                    "start": 270
+                  },
+                  "text": "=>",
+                  "tokenType": "FAT_ARROW"
+                },
+                {
+                  "children": [
+                    {
+                      "id": "syntax:116",
+                      "kind": "Token",
+                      "span": {
+                        "end": 276,
+                        "file": "semantic.panini",
+                        "start": 273
+                      },
+                      "text": "end",
+                      "tokenType": "END"
+                    }
+                  ],
+                  "id": "syntax:115",
+                  "kind": "EndTarget",
+                  "span": {
+                    "end": 276,
+                    "file": "semantic.panini",
+                    "start": 273
+                  }
+                }
+              ],
+              "id": "syntax:87",
+              "kind": "ConditionalTransition",
+              "span": {
+                "end": 276,
+                "file": "semantic.panini",
+                "start": 220
+              }
+            },
+            {
+              "id": "syntax:117",
+              "kind": "Token",
+              "span": {
+                "end": 277,
+                "file": "semantic.panini",
+                "start": 276
+              },
+              "text": ";",
+              "tokenType": "SEMICOLON"
+            }
+          ],
+          "id": "syntax:84",
+          "kind": "GraphEdge",
+          "span": {
+            "end": 277,
+            "file": "semantic.panini",
+            "start": 215
+          }
+        },
+        {
+          "id": "syntax:118",
+          "kind": "Token",
+          "span": {
+            "end": 279,
+            "file": "semantic.panini",
+            "start": 278
+          },
+          "text": "}",
+          "tokenType": "RBRACE"
+        }
+      ],
+      "id": "syntax:39",
+      "kind": "GraphDecl",
+      "name": "G",
+      "span": {
+        "end": 279,
+        "file": "semantic.panini",
+        "start": 86
+      }
+    }
+  ],
+  "id": "syntax:0",
+  "kind": "Start",
+  "schemaVersion": 2,
+  "span": {
+    "end": 279,
+    "file": "semantic.panini",
+    "start": 0
+  }
+}

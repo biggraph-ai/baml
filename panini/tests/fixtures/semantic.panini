@@ -1,0 +1,7 @@
+class State { bool retry; }
+class Steps { public static State attempt(State state); }
+graph G(s: State) {
+  node a using Steps.attempt max_visits 2 timeout seconds(3) compensate using Steps.attempt;
+  start -> a;
+  a -> when !s.retry || (s.retry && true) => a otherwise => end;
+}

@@ -94,7 +94,7 @@ qualified_name: NAME ("." NAME)*
 
 ASSIGN_OP: "=" | "+=" | "-=" | "*=" | "/=" | "%="
 FAT_ARROW.10: "=>"
-EQUALITY_OP: "==" | "!="
+EQUALITY_OP.5: "==" | "!="
 COMPARE_OP: "<=" | ">=" | "<" | ">"
 ADD_OP: "+" | "-"
 MUL_OP: "*" | "/" | "%"

@@ -253,3 +253,14 @@ of debugging only generated backend code.
 - [GNU Bison Graphviz output](https://www.gnu.org/software/bison/manual/html_node/Graphviz.html)
 - [re2c manual](https://re2c.org/manual/manual_c.html)
 - [tree-sitter documentation](https://tree-sitter.github.io/tree-sitter/)
+
+
+## Executable M0/M1 status
+
+The Python reference frontend now preserves semantic AST v2 separately from
+legacy AST v1, and resolves/types a deliberately small local static-method
+graph profile into PNIR. See [the semantic profile](panini-semantic-profile.md)
+for accepted features, CLI behavior, schemas, and stable diagnostics. Broader
+language/runtime features described above remain design goals unless explicitly
+listed there. Graph structure/budget verification and runtime enforcement are
+not implemented by M0/M1.

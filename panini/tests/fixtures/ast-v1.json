@@ -1,0 +1,480 @@
+{
+  "children": [
+    {
+      "children": [
+        "State",
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        "bool"
+                      ],
+                      "kind": "QualifiedName",
+                      "span": {
+                        "end": 18,
+                        "file": "semantic.panini",
+                        "start": 14
+                      }
+                    }
+                  ],
+                  "kind": "PrimaryType",
+                  "span": {
+                    "end": 18,
+                    "file": "semantic.panini",
+                    "start": 14
+                  }
+                },
+                "retry",
+                {
+                  "children": [],
+                  "kind": "FieldTail",
+                  "span": {
+                    "end": 25,
+                    "file": "semantic.panini",
+                    "start": 24
+                  }
+                }
+              ],
+              "kind": "MemberDecl",
+              "span": {
+                "end": 25,
+                "file": "semantic.panini",
+                "start": 14
+              }
+            }
+          ],
+          "kind": "ClassBody",
+          "span": {
+            "end": 27,
+            "file": "semantic.panini",
+            "start": 12
+          }
+        }
+      ],
+      "kind": "ClassDecl",
+      "span": {
+        "end": 27,
+        "file": "semantic.panini",
+        "start": 0
+      }
+    },
+    {
+      "children": [
+        "Steps",
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "kind": "Modifier",
+                  "span": {
+                    "end": 48,
+                    "file": "semantic.panini",
+                    "start": 42
+                  }
+                },
+                {
+                  "children": [],
+                  "kind": "Modifier",
+                  "span": {
+                    "end": 55,
+                    "file": "semantic.panini",
+                    "start": 49
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        "State"
+                      ],
+                      "kind": "QualifiedName",
+                      "span": {
+                        "end": 61,
+                        "file": "semantic.panini",
+                        "start": 56
+                      }
+                    }
+                  ],
+                  "kind": "PrimaryType",
+                  "span": {
+                    "end": 61,
+                    "file": "semantic.panini",
+                    "start": 56
+                  }
+                },
+                "attempt",
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    "State"
+                                  ],
+                                  "kind": "QualifiedName",
+                                  "span": {
+                                    "end": 75,
+                                    "file": "semantic.panini",
+                                    "start": 70
+                                  }
+                                }
+                              ],
+                              "kind": "PrimaryType",
+                              "span": {
+                                "end": 75,
+                                "file": "semantic.panini",
+                                "start": 70
+                              }
+                            },
+                            "state"
+                          ],
+                          "kind": "Parameter",
+                          "span": {
+                            "end": 81,
+                            "file": "semantic.panini",
+                            "start": 70
+                          }
+                        }
+                      ],
+                      "kind": "Parameters",
+                      "span": {
+                        "end": 82,
+                        "file": "semantic.panini",
+                        "start": 69
+                      }
+                    }
+                  ],
+                  "kind": "MethodTail",
+                  "span": {
+                    "end": 83,
+                    "file": "semantic.panini",
+                    "start": 69
+                  }
+                }
+              ],
+              "kind": "MemberDecl",
+              "span": {
+                "end": 83,
+                "file": "semantic.panini",
+                "start": 42
+              }
+            }
+          ],
+          "kind": "ClassBody",
+          "span": {
+            "end": 85,
+            "file": "semantic.panini",
+            "start": 40
+          }
+        }
+      ],
+      "kind": "ClassDecl",
+      "span": {
+        "end": 85,
+        "file": "semantic.panini",
+        "start": 28
+      }
+    },
+    {
+      "children": [
+        "G",
+        "s",
+        {
+          "children": [
+            {
+              "children": [
+                "State"
+              ],
+              "kind": "QualifiedName",
+              "span": {
+                "end": 102,
+                "file": "semantic.panini",
+                "start": 97
+              }
+            }
+          ],
+          "kind": "PrimaryType",
+          "span": {
+            "end": 102,
+            "file": "semantic.panini",
+            "start": 97
+          }
+        },
+        {
+          "children": [
+            "a",
+            {
+              "children": [
+                "Steps",
+                "attempt"
+              ],
+              "kind": "QualifiedName",
+              "span": {
+                "end": 134,
+                "file": "semantic.panini",
+                "start": 121
+              }
+            },
+            {
+              "children": [
+                {
+                  "kind": "IntegerLiteral",
+                  "value": 2
+                }
+              ],
+              "kind": "NodeContract",
+              "span": {
+                "end": 147,
+                "file": "semantic.panini",
+                "start": 135
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        "seconds"
+                      ],
+                      "kind": "Name",
+                      "span": {
+                        "end": 163,
+                        "file": "semantic.panini",
+                        "start": 156
+                      }
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "kind": "IntegerLiteral",
+                              "value": 3
+                            }
+                          ],
+                          "kind": "Integer",
+                          "span": {
+                            "end": 165,
+                            "file": "semantic.panini",
+                            "start": 164
+                          }
+                        }
+                      ],
+                      "kind": "Arguments",
+                      "span": {
+                        "end": 165,
+                        "file": "semantic.panini",
+                        "start": 164
+                      }
+                    }
+                  ],
+                  "kind": "Call",
+                  "span": {
+                    "end": 166,
+                    "file": "semantic.panini",
+                    "start": 156
+                  }
+                }
+              ],
+              "kind": "NodeContract",
+              "span": {
+                "end": 166,
+                "file": "semantic.panini",
+                "start": 148
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    "Steps",
+                    "attempt"
+                  ],
+                  "kind": "QualifiedName",
+                  "span": {
+                    "end": 197,
+                    "file": "semantic.panini",
+                    "start": 184
+                  }
+                }
+              ],
+              "kind": "NodeContract",
+              "span": {
+                "end": 197,
+                "file": "semantic.panini",
+                "start": 167
+              }
+            }
+          ],
+          "kind": "GraphNode",
+          "span": {
+            "end": 198,
+            "file": "semantic.panini",
+            "start": 108
+          }
+        },
+        {
+          "children": [
+            "a"
+          ],
+          "kind": "GraphStart",
+          "span": {
+            "end": 212,
+            "file": "semantic.panini",
+            "start": 201
+          }
+        },
+        {
+          "children": [
+            "a",
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                "s"
+                              ],
+                              "kind": "Name",
+                              "span": {
+                                "end": 227,
+                                "file": "semantic.panini",
+                                "start": 226
+                              }
+                            },
+                            "retry"
+                          ],
+                          "kind": "Member",
+                          "span": {
+                            "end": 233,
+                            "file": "semantic.panini",
+                            "start": 226
+                          }
+                        }
+                      ],
+                      "kind": "Unary",
+                      "span": {
+                        "end": 233,
+                        "file": "semantic.panini",
+                        "start": 225
+                      }
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                "s"
+                              ],
+                              "kind": "Name",
+                              "span": {
+                                "end": 239,
+                                "file": "semantic.panini",
+                                "start": 238
+                              }
+                            },
+                            "retry"
+                          ],
+                          "kind": "Member",
+                          "span": {
+                            "end": 245,
+                            "file": "semantic.panini",
+                            "start": 238
+                          }
+                        },
+                        {
+                          "children": [],
+                          "kind": "True",
+                          "span": {
+                            "end": 253,
+                            "file": "semantic.panini",
+                            "start": 249
+                          }
+                        }
+                      ],
+                      "kind": "Binary",
+                      "span": {
+                        "end": 253,
+                        "file": "semantic.panini",
+                        "start": 238
+                      }
+                    }
+                  ],
+                  "kind": "Binary",
+                  "span": {
+                    "end": 254,
+                    "file": "semantic.panini",
+                    "start": 225
+                  }
+                },
+                "=>",
+                {
+                  "children": [
+                    "a"
+                  ],
+                  "kind": "NameTarget",
+                  "span": {
+                    "end": 259,
+                    "file": "semantic.panini",
+                    "start": 258
+                  }
+                },
+                "=>",
+                {
+                  "children": [],
+                  "kind": "EndTarget",
+                  "span": {
+                    "end": 276,
+                    "file": "semantic.panini",
+                    "start": 273
+                  }
+                }
+              ],
+              "kind": "ConditionalTransition",
+              "span": {
+                "end": 276,
+                "file": "semantic.panini",
+                "start": 220
+              }
+            }
+          ],
+          "kind": "GraphEdge",
+          "span": {
+            "end": 277,
+            "file": "semantic.panini",
+            "start": 215
+          }
+        }
+      ],
+      "kind": "GraphDecl",
+      "span": {
+        "end": 279,
+        "file": "semantic.panini",
+        "start": 86
+      }
+    }
+  ],
+  "kind": "Start",
+  "schemaVersion": 1,
+  "span": {
+    "end": 279,
+    "file": "semantic.panini",
+    "start": 0
+  }
+}

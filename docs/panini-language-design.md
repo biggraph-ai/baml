@@ -346,3 +346,14 @@ functionality of typed schemas and model calls at the semantic level, not by
 embedding BAML grammar or exposing two source-language modes. Use the two
 frontends to cross-check one specification, and make the reference interpreter
 and inspectable IR—not generated backend code—the authority for behavior.
+
+
+## Executable M0/M1 status
+
+The Python reference frontend now preserves semantic AST v2 separately from
+legacy AST v1, and resolves/types a deliberately small local static-method
+graph profile into PNIR. See [the semantic profile](panini-semantic-profile.md)
+for accepted features, CLI behavior, schemas, and stable diagnostics. Broader
+language/runtime features described above remain design goals unless explicitly
+listed there. Graph structure/budget verification and runtime enforcement are
+not implemented by M0/M1.

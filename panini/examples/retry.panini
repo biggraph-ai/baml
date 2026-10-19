@@ -1,0 +1,15 @@
+package example;
+
+class State {
+  bool retry;
+}
+
+class Steps {
+  public static State attempt(State state);
+}
+
+graph BoundedRetry(state: State) -> State {
+  node attempt using Steps.attempt max_visits 3;
+  start -> attempt;
+  attempt -> when state.retry => attempt otherwise => end;
+}

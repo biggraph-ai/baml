@@ -85,9 +85,19 @@ panini parse examples/audit.panini --emit ast
 panini check examples/audit.panini --emit ast
 ```
 
-`check` currently performs strict syntax checking and emits the normalized AST.
-Name resolution, type/effect checking, graph verification, PNIR emission, and
-the independent C++ frontend remain subsequent compiler phases.
+`parse` performs syntax checking. `check` now resolves and type-checks the small
+`local-static-state-v1` profile and emits versioned PNIR. Try
+`.venv/bin/panini check examples/retry.panini`; `audit.panini` is a syntax-only
+demo with unresolved references and features outside that profile.
+
+Use `parse --emit semantic-ast` for the semantics-preserving AST v2; the default
+`parse --emit ast` remains AST v1. Every `check --emit` mode runs semantic checks.
+Use `check --diagnostics json` for structured errors. See the
+[M0/M1 profile and diagnostic contract](../docs/panini-semantic-profile.md).
+
+Graph topology/budget verification (M2), method-body verification, effects,
+invariant proofs, runtime execution, and the independent C++ frontend remain
+future work. M1 acceptance is not a guarantee of bounded or safe execution.
 
 ## Project layout
 
