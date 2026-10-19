@@ -282,6 +282,10 @@ def test_commit_denial_and_invariant_failure_retain_receipt_and_recover(tmp_path
         assert e.failure["code"] == (
             "AuthorizationDenied" if mode == "commit_denial" else "InvariantViolation"
         )
+        # Post-invocation denial cannot prevent an external commit: the bank
+        # observed the charge, and its durable receipt drove recovery afterward.
+        assert len(bank.calls) == 1 and len(bank.results) == 1
+        assert e.history[0]["receipt"] == {"token": bank.calls[0]}
         assert len(bank.undos) == 1 and e.state["balance"] == 2
 
 

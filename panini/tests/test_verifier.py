@@ -187,3 +187,42 @@ def test_cycle_diagnostic_has_exact_utf8_span(parser):
         == "node réessayer using T.run;"
     )
     assert diagnostic.witness == ("réessayer", "réessayer")
+
+
+@pytest.mark.parametrize("handler", ["on_error", "on_timeout"])
+def test_exceptional_cycle_cannot_bypass_bounded_node(parser, handler):
+    contract = (
+        handler + " => b"
+        if handler == "on_error"
+        else "timeout seconds(1) on_timeout => b"
+    )
+    body = f"""
+    node bounded using T.run max_visits 2;
+    node a using T.run {contract};
+    node b using T.run on_error => a;
+    start -> bounded;
+    bounded -> a;
+    a -> when s.retry => bounded otherwise => end;
+    b -> end;
+    """
+    result = compile_graph(parser, body)
+    diagnostic = next(d for d in result.diagnostics if d.code == "E2306")
+    assert "nodes [a, b]" in diagnostic.message
+    edges = {("bounded", "a"), ("a", "bounded"), ("a", "b"), ("b", "a")}
+    assert all(
+        edge in edges for edge in zip(diagnostic.witness, diagnostic.witness[1:])
+    )
+
+
+def test_multiple_exceptional_paths_have_finite_global_budget(parser):
+    result = compile_graph(
+        parser,
+        """
+    node a using T.run max_visits 2 timeout seconds(1) on_timeout => c on_error => b;
+    node b using T.run max_visits 3 timeout seconds(1) on_timeout => a;
+    node c using T.run max_visits 4 on_error => a;
+    start -> a; a -> end; b -> end; c -> end;
+    """,
+    )
+    assert not result.diagnostics
+    assert result.graphs[0]["verification"]["dispatchBound"] == 9

@@ -27,6 +27,11 @@ def _parser() -> argparse.ArgumentParser:
         build.add_argument(f"--{manifest}", type=Path)
     inspect = commands.add_parser("inspect", help="validate and emit artifact PNIR")
     inspect.add_argument("file", type=Path)
+    for command in (build, inspect):
+        command.add_argument("--max-artifact-bytes", type=int, default=16 * 1024 * 1024)
+        command.add_argument("--max-source-bytes", type=int, default=1024 * 1024)
+        command.add_argument("--max-json-depth", type=int, default=128)
+        command.add_argument("--max-states", type=int, default=10000)
     commands.add_parser("capabilities", help="emit reference runtime capabilities")
     lex = commands.add_parser("lex", help="emit the token stream as JSON")
     lex.add_argument("file", type=Path)
@@ -71,26 +76,51 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
     if args.command in {"build", "inspect"}:
-        from .artifact import build_artifact, load_artifact
+        from .artifact import ArtifactLimits, build_artifact, load_artifact
 
         try:
-            content = args.file.read_text(encoding="utf-8")
+            limits = ArtifactLimits(
+                max_artifact_bytes=args.max_artifact_bytes,
+                max_source_bytes=args.max_source_bytes,
+                max_json_depth=args.max_json_depth,
+                max_states=args.max_states,
+            )
+
+            def read_limited(path, bound):
+                with path.open("rb") as stream:
+                    raw = stream.read(bound + 1)
+                if len(raw) > bound:
+                    raise ValueError(f"Input byte limit exceeded: {path}")
+                return raw.decode("utf-8")
+
+            content = read_limited(
+                args.file,
+                limits.max_artifact_bytes
+                if args.command == "inspect"
+                else limits.max_source_bytes,
+            )
             if args.command == "inspect":
                 print(
                     json.dumps(
-                        load_artifact(content).to_dict(), indent=2, sort_keys=True
+                        load_artifact(content, limits=limits).to_dict(),
+                        indent=2,
+                        sort_keys=True,
                     )
                 )
             else:
                 manifests = {
-                    key: json.loads(getattr(args, key).read_text(encoding="utf-8"))
+                    key: json.loads(
+                        read_limited(getattr(args, key), limits.max_artifact_bytes)
+                    )
                     if getattr(args, key)
                     else None
                     for key in ("adapters", "effects", "model")
                 }
-                artifact = build_artifact(content, args.file, **manifests)
+                artifact = build_artifact(
+                    content, args.file, **manifests, limits=limits
+                )
                 args.output.write_text(
-                    json.dumps(artifact, indent=2, sort_keys=True) + "\n",
+                    json.dumps(artifact, separators=(",", ":"), sort_keys=True),
                     encoding="utf-8",
                 )
         except (OSError, ValueError, TypeError, UnexpectedInput) as error:

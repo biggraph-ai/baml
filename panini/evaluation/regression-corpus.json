@@ -1,0 +1,298 @@
+[
+  {
+    "id": "valid-single",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run; start -> a; a -> end;"
+  },
+  {
+    "id": "valid-chain",
+    "defect": null,
+    "expected": [],
+    "body": "node first using Steps.run; node last using Steps.run; start -> first; first -> last; last -> end;"
+  },
+  {
+    "id": "valid-branch",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run; node b using Steps.run; start -> a; a -> when s.retry => b otherwise => end; b -> end;"
+  },
+  {
+    "id": "valid-error-handler",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run on_error => b; node b using Steps.run; start -> a; a -> end; b -> end;"
+  },
+  {
+    "id": "valid-timeout-handler",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run timeout seconds(1) on_timeout => b; node b using Steps.run; start -> a; a -> end; b -> end;"
+  },
+  {
+    "id": "valid-self-loop",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run max_visits 2; start -> a; a -> when s.retry => a otherwise => end;"
+  },
+  {
+    "id": "valid-two-cycle",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run max_visits 2; node b using Steps.run max_visits 3; start -> a; a -> b; b -> when s.retry => a otherwise => end;"
+  },
+  {
+    "id": "valid-error-cycle",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run max_visits 2 on_error => a; start -> a; a -> end;"
+  },
+  {
+    "id": "valid-negated-guard",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run; start -> a; a -> when !s.retry => end otherwise => end;"
+  },
+  {
+    "id": "valid-compound-guard",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run; start -> a; a -> when s.retry && true => end otherwise => end;"
+  },
+  {
+    "id": "valid-timeout-cycle",
+    "defect": null,
+    "expected": [],
+    "body": "node a using Steps.run max_visits 2 timeout seconds(1) on_timeout => a; start -> a; a -> end;"
+  },
+  {
+    "id": "valid-policy-free",
+    "defect": null,
+    "expected": [],
+    "body": "node init using Steps.run; node work using Steps.run; node finish using Steps.run; start -> init; init -> work; work -> finish; finish -> end;"
+  },
+  {
+    "id": "method",
+    "defect": "resolution",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Steps.missing; start -> a; a -> end;"
+  },
+  {
+    "id": "class",
+    "defect": "resolution",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Missing.run; start -> a; a -> end;"
+  },
+  {
+    "id": "unqualified",
+    "defect": "resolution",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using missing; start -> a; a -> end;"
+  },
+  {
+    "id": "different-method",
+    "defect": "resolution",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Steps.apply; start -> a; a -> end;"
+  },
+  {
+    "id": "integer-guard",
+    "defect": "guard-type",
+    "expected": [
+      "E2003"
+    ],
+    "body": "node a using Steps.run; start -> a; a -> when 1 => end otherwise => end;"
+  },
+  {
+    "id": "string-guard",
+    "defect": "guard-type",
+    "expected": [
+      "E2003"
+    ],
+    "body": "node a using Steps.run; start -> a; a -> when \"retry\" => end otherwise => end;"
+  },
+  {
+    "id": "null-guard",
+    "defect": "guard-type",
+    "expected": [
+      "E2003"
+    ],
+    "body": "node a using Steps.run; start -> a; a -> when null => end otherwise => end;"
+  },
+  {
+    "id": "float-guard",
+    "defect": "guard-type",
+    "expected": [
+      "E2003"
+    ],
+    "body": "node a using Steps.run; start -> a; a -> when 1.5 => end otherwise => end;"
+  },
+  {
+    "id": "orphan",
+    "defect": "reachability",
+    "expected": [
+      "E2303"
+    ],
+    "body": "node a using Steps.run; node b using Steps.run; start -> a; a -> end; b -> end;"
+  },
+  {
+    "id": "orphan-chain",
+    "defect": "reachability",
+    "expected": [
+      "E2303"
+    ],
+    "body": "node a using Steps.run; node b using Steps.run; node c using Steps.run; start -> a; a -> end; b -> c; c -> end;"
+  },
+  {
+    "id": "orphan-error",
+    "defect": "reachability",
+    "expected": [
+      "E2303"
+    ],
+    "body": "node a using Steps.run; node b using Steps.run on_error => a; start -> a; a -> end; b -> end;"
+  },
+  {
+    "id": "orphan-timeout",
+    "defect": "reachability",
+    "expected": [
+      "E2303"
+    ],
+    "body": "node a using Steps.run; node b using Steps.run timeout seconds(1) on_timeout => a; start -> a; a -> end; b -> end;"
+  },
+  {
+    "id": "normal-self",
+    "defect": "budget",
+    "expected": [
+      "E2306"
+    ],
+    "body": "node a using Steps.run; start -> a; a -> when s.retry => a otherwise => end;"
+  },
+  {
+    "id": "error-self",
+    "defect": "budget",
+    "expected": [
+      "E2306"
+    ],
+    "body": "node a using Steps.run on_error => a; start -> a; a -> end;"
+  },
+  {
+    "id": "timeout-self",
+    "defect": "budget",
+    "expected": [
+      "E2306"
+    ],
+    "body": "node a using Steps.run timeout seconds(1) on_timeout => a; start -> a; a -> end;"
+  },
+  {
+    "id": "mixed-scc",
+    "defect": "budget",
+    "expected": [
+      "E2306"
+    ],
+    "body": "node a using Steps.run max_visits 2; node b using Steps.run; start -> a; a -> b; b -> when s.retry => a otherwise => end;"
+  },
+  {
+    "id": "bypass-bound",
+    "defect": "budget",
+    "expected": [
+      "E2306"
+    ],
+    "body": "node a using Steps.run max_visits 2; node b using Steps.run on_error => b; start -> a; a -> b; b -> end;"
+  },
+  {
+    "id": "unknown-start",
+    "defect": "endpoint",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Steps.run; start -> missing; a -> end;"
+  },
+  {
+    "id": "unknown-normal",
+    "defect": "endpoint",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Steps.run; start -> a; a -> missing;"
+  },
+  {
+    "id": "unknown-error",
+    "defect": "endpoint",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Steps.run on_error => missing; start -> a; a -> end;"
+  },
+  {
+    "id": "unknown-timeout",
+    "defect": "endpoint",
+    "expected": [
+      "E2001"
+    ],
+    "body": "node a using Steps.run timeout seconds(1) on_timeout => missing; start -> a; a -> end;"
+  },
+  {
+    "id": "unsupported-import",
+    "defect": "unsupported",
+    "expected": [
+      "E2000"
+    ],
+    "source": "import other.State; class State { bool retry; }"
+  },
+  {
+    "id": "syntax-wildcard-import",
+    "defect": "syntax",
+    "expected": [
+      "E1001"
+    ],
+    "source": "import other.*; class State { bool retry; }"
+  },
+  {
+    "id": "unsupported-instance",
+    "defect": "unsupported",
+    "expected": [
+      "E2000"
+    ],
+    "source": "class State { bool retry; } class Steps { public State run(State s); } graph G(s:State) { node a using Steps.run; start -> a; a -> end; }"
+  },
+  {
+    "id": "syntax-unclosed-class",
+    "defect": "syntax",
+    "expected": [
+      "E1001"
+    ],
+    "source": "class State { bool retry;"
+  },
+  {
+    "id": "syntax-missing-semicolon",
+    "defect": "syntax",
+    "expected": [
+      "E1001"
+    ],
+    "source": "class State { bool retry }"
+  },
+  {
+    "id": "unsupported-second-import",
+    "defect": "unsupported",
+    "expected": [
+      "E2000"
+    ],
+    "source": "import external.Account; class Account { int balance; }"
+  },
+  {
+    "id": "unsupported-instance-worker",
+    "defect": "unsupported",
+    "expected": [
+      "E2000"
+    ],
+    "source": "class State { bool retry; } class Worker { public State execute(State s); } graph G(s:State) { node a using Worker.execute; start -> a; a -> end; }"
+  }
+]

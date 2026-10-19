@@ -4,7 +4,9 @@ This directory contains the Python reference frontend for the Panini language
 specified in [`../docs`](../docs/panini-language-design.md). It is deliberately
 an independent project: Panini is a new language rather than a BAML parser mode.
 
-The reference compiler implements an inspectable semantic/graph pipeline,
+This is a reference compiler for bounded sequential agent workflows, with
+structural graph checks and optional finite-state invariant analysis under
+explicit contracts. It implements an inspectable semantic/graph pipeline,
 a durable capability-based executor, and opt-in finite invariant verification:
 
 ```text
@@ -132,3 +134,10 @@ C++ frontend remain outside this reference implementation.
 Portable reference artifacts and reproducible M6 measurements are documented in
 [artifacts and evaluation](../docs/panini-artifacts-evaluation.md). Use `panini build SOURCE -o program.pnir`, `panini inspect program.pnir`, and `panini capabilities`
 to build, validate, and query the reference profile.
+
+
+For a hash-pinned validation environment, clean-checkout tests, installed-wheel
+examples, corpus provenance and repeated measurements, see
+[evaluation and reproducibility](evaluation/README.md). Mutation authorization
+permits adapter invocation; the later authorization check gates Panini's local
+state commit. A remote action may already have happened and need recovery.

@@ -295,3 +295,73 @@ def test_human_scale_timeouts_and_overflow_are_validated():
         SOURCE.replace("max_visits 2", f"max_visits 2 timeout hours({large})")
     )
     assert "E2004" in {d.code for d in result.diagnostics}
+
+
+def test_policy_cannot_mask_unsafe_candidate_counterexample():
+    source = SOURCE + " policy P for G { rule Stop: s.count == 2 => end; }"
+    bad = deepcopy(MODEL)
+    bad["summaries"]["T.step"]["cases"][0]["outputs"] = [{"count": 2}]
+    checked = compile_source(source, model=bad)
+    assert checked.analysis["status"] == "counterexample"
+    candidate = checked.analysis["counterexample"][-1]
+    assert candidate["event"] == "candidate_commit"
+    runtime = Executor(
+        compile_source(source),
+        "G",
+        {"count": 0, "approved": False, "text": "x"},
+        capabilities={"T.step": lambda s: {**s, "count": candidate["state"]["count"]}},
+    )
+    assert runtime.run()["failure"]["code"] == "InvariantViolation"
+    assert runtime.state["count"] == 0
+
+
+def test_abstention_policy_is_enforced_with_finite_summary_contract():
+    source = """enum E { yes, no }
+    class S { string text; Decision<E> result; bool safe; }
+    agent A { public Decision<E> run(S s) {
+      decision_model Mock;
+      decide s.text over { yes:"Y"; no:"N"; } abstain_below 0.8;
+    } }
+    graph G(s:S) { invariant s.safe;
+      node decide using A.run writes s.result; start -> decide; decide -> end;
+    }
+    policy P for G { rule Review: s.result.abstained => throw "human review"; }
+    """
+    model = {
+        "graph": "G",
+        "domains": {"result": "decision", "safe": "bool"},
+        "initial": [{"result": {"choice": "yes", "abstained": False}, "safe": True}],
+        "summaries": {},
+    }
+    checked = compile_source(
+        source,
+        adapters={"Mock": {"output": "probabilities", "version": "v1"}},
+        model=model,
+    )
+    assert not checked.diagnostics
+    assert checked.analysis["status"] == "proved"
+    state = {
+        "text": "ambiguous",
+        "safe": True,
+        "result": {
+            "choice": "yes",
+            "abstained": False,
+            "probabilities": {"yes": 1.0, "no": 0.0},
+            "model": "Mock",
+            "modelVersion": "v1",
+        },
+    }
+    runtime = Executor(
+        checked,
+        "G",
+        state,
+        adapters={
+            "Mock": lambda *_: {
+                "probabilities": {"yes": 0.5, "no": 0.5},
+                "modelVersion": "v1",
+            }
+        },
+    )
+    assert runtime.run()["failure"]["code"] == "PolicyViolation"
+    assert runtime.state["result"]["abstained"] is True
+    assert runtime.dispatches == 1

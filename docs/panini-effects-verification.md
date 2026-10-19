@@ -150,6 +150,11 @@ retroactively revoke a remote action that already committed. A remote service
 must enforce its own authorization/fencing at the external commit boundary if
 revocation races must be prevented. The reference runtime cannot attest that
 an arbitrary callback used the requested permission or respected its manifest.
+There is no prepare/authorize/commit protocol in this reference implementation.
+If post-invocation local commit approval is denied, Panini retains the receipt
+and attempts recovery; it does not claim to have prevented the external effect.
+`test_commit_denial_and_invariant_failure_retain_receipt_and_recover` explicitly
+checks that the remote call happened before denial and recovery.
 
 Reconciliation results:
 
