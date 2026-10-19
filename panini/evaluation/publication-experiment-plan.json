@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "kind": "ProposedPublicationMetrics",
+  "status": "not_run",
+  "design": {
+    "pilotWorkflowCount": 18,
+    "pilotFamilies": 6,
+    "independentAuthorshipRequiredForClaim": true,
+    "splitUnit": "workflow family",
+    "inferenceUnit": "workflow family; process for microbenchmarks",
+    "sampleSizePolicy": "Pilot variance plus prespecified minimum meaningful effect; no automatic sufficiency claim."
+  },
+  "metrics": [
+    {
+      "id": "defect_precision",
+      "unit": "fraction",
+      "definition": "oracle-matched true findings / all findings",
+      "controls": "Held-out logical fault findings; duplicate reports deduplicated",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "defect_recall_by_class",
+      "unit": "fraction",
+      "definition": "detected eligible oracle faults / eligible oracle faults",
+      "controls": "Per defect class, workflow family and static/runtime phase",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "valid_false_positive_rate",
+      "unit": "fraction",
+      "definition": "valid workflows with spurious findings / valid workflows",
+      "controls": "Do not use defect variants as negatives",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "supported_coverage",
+      "unit": "fraction",
+      "definition": "eligible workflows / all proposed workflows",
+      "controls": "Unsupported and unavailable encodings reported explicitly",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "diagnostic_localization",
+      "unit": "fraction",
+      "definition": "matched findings with correct primary location / matched findings",
+      "controls": "Use independent logical-fault locations",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "counterexample_replay",
+      "unit": "fraction",
+      "definition": "replayed modeled counterexamples rejected by runtime / replayable modeled counterexamples",
+      "controls": "Report unencodable or conservative traces separately",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "task_completion",
+      "unit": "fraction",
+      "definition": "correctly completed eligible tasks / eligible tasks",
+      "controls": "Pending, rejected and recovery_failed are not completed",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "model_status_distribution",
+      "unit": "count",
+      "definition": "count each of proved/counterexample/unknown/unsupported/timeout/harness_error",
+      "controls": "Preserve every resource-limited run",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "model_scalability",
+      "unit": "ms and MiB",
+      "definition": "elapsed time and peak RSS by states/transitions explored",
+      "controls": "Vary domains, fields, budgets, branching, history and recovery",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "compiler_scalability",
+      "unit": "ms and MiB",
+      "definition": "per-stage elapsed time and peak RSS by actual V and E",
+      "controls": "Initialization separate; resolution/lowering currently fused",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "paired_runtime_overhead",
+      "unit": "ms and ratio",
+      "definition": "T_enforced - T_matched_baseline; T_enforced / T_matched_baseline",
+      "controls": "Identical callbacks, traces, state and matched safety constraints",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "durability_storage_cost",
+      "unit": "bytes/operation and events/operation",
+      "definition": "journal bytes or events / logical operations",
+      "controls": "Record SQLite mode, fsync/storage, checkpoints and database growth",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "denied_invoke_effect_rate",
+      "unit": "fraction",
+      "definition": "remote mutations under pre-invocation denial / denied invocations",
+      "controls": "Service-side oracle independent of Panini logs",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "post_invoke_local_commit_violation",
+      "unit": "fraction",
+      "definition": "local commits after commit-phase denial / commit-phase denials",
+      "controls": "Remote action may already have occurred; distinct from pre-invoke denial",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "duplicate_business_effect_rate",
+      "unit": "fraction",
+      "definition": "extra remote commits for a logical business action / logical business actions",
+      "controls": "Business identity distinct from per-visit idempotency keys",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "uncertainty_blocking",
+      "unit": "fraction",
+      "definition": "uncertain mutations blocked until final reconciliation / uncertain mutations",
+      "controls": "Blocking does not imply eventual completion",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "recovery_success",
+      "unit": "fraction",
+      "definition": "service-oracle-confirmed successful compensations / recovery-required effects",
+      "controls": "Attempt count is not success; irreversible actions reported separately",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "recovery_latency",
+      "unit": "ms",
+      "definition": "time from fault detection to reconciled recovery; censor unresolved outcomes",
+      "controls": "Report completion probability alongside conditional latency quantiles",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "decision_quality",
+      "unit": "task-specific score and abstention fraction",
+      "definition": "oracle-correct decisions / nonabstained decisions; abstentions / decisions",
+      "controls": "Hold prompts/input/option count/provider/version fixed; report coverage and end-task quality",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "paired_baseline_effect",
+      "unit": "percentage points and ratio",
+      "definition": "paired recall/completion differences and latency ratios on common eligible workflows",
+      "controls": "Cluster intervals by workflow family; same budgets and resources",
+      "measuredValue": null,
+      "status": "proposed"
+    },
+    {
+      "id": "cross_machine_sensitivity",
+      "unit": "ratio and distributions",
+      "definition": "per-machine process-level stage statistics under matching workload",
+      "controls": "Two machines support a narrow hardware comparison, not universal generality",
+      "measuredValue": null,
+      "status": "proposed"
+    }
+  ]
+}

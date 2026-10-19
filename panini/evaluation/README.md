@@ -153,3 +153,20 @@ inputs, the hash-pinned validation lock, and the recorded evidence. It marks a
 review artifact, not completion of the independent corpus, multi-machine or
 external comparison studies. Recreate source inputs through Git; timing samples
 are archival observations and are expected to vary on reproduction.
+
+## Publication evaluation scorecard
+
+[Scientific claims and metrics](publication-evaluation.md) analyzes what the
+recorded evidence supports, corrects the dispatch-bound theorem statement, and
+specifies the held-out/baseline experiments still needed. Generate the measured
+[JSON scorecard](publication-metrics.json) using:
+
+```
+python evaluation/scorecard.py --output evaluation/publication-metrics.json
+```
+
+It derives process-level summaries from recorded raw samples, keeps unsupported
+cases separate, hashes its evidence inputs and leaves unmeasured experiments
+null. [The machine-readable plan](publication-experiment-plan.json) defines
+proposed metrics and controls. No new provider, runtime overhead, state-space
+scalability or second-machine experiment is implied by this derived report.

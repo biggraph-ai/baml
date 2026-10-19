@@ -1,0 +1,437 @@
+{
+  "artifactValidation": {
+    "machines": 1,
+    "passedTests": 196,
+    "successfulCommands": 26,
+    "testSeconds": 37.68,
+    "totalCommands": 26
+  },
+  "detection": {
+    "byClass": {
+      "budget": {
+        "cases": 5,
+        "detected": 5,
+        "exactCodes": 5,
+        "expectedCodeRecall": 1.0
+      },
+      "endpoint": {
+        "cases": 4,
+        "detected": 4,
+        "exactCodes": 4,
+        "expectedCodeRecall": 1.0
+      },
+      "guard-type": {
+        "cases": 4,
+        "detected": 4,
+        "exactCodes": 4,
+        "expectedCodeRecall": 1.0
+      },
+      "reachability": {
+        "cases": 4,
+        "detected": 4,
+        "exactCodes": 4,
+        "expectedCodeRecall": 1.0
+      },
+      "resolution": {
+        "cases": 4,
+        "detected": 4,
+        "exactCodes": 4,
+        "expectedCodeRecall": 1.0
+      },
+      "syntax": {
+        "cases": 3,
+        "detected": 3,
+        "exactCodes": 3,
+        "expectedCodeRecall": 1.0
+      },
+      "unsupported": {
+        "cases": 4,
+        "detected": 4,
+        "exactCodes": 4,
+        "expectedCodeRecall": 1.0
+      },
+      "valid-control": {
+        "cases": 12,
+        "detected": 0,
+        "exactCodes": 12,
+        "expectedCodeRecall": null
+      }
+    },
+    "cases": 40,
+    "diagnosticMicro": {
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 28
+    },
+    "exactCodeMatches": 40,
+    "falsePositiveControls": 0,
+    "falsePositiveRateOnControls": 0.0,
+    "inference": "Descriptive author-derived regression results; no population confidence interval or held-out effectiveness claim.",
+    "supportedFaultCases": 24,
+    "supportedFaultsDetected": 24,
+    "unsupportedCases": 4,
+    "unsupportedRejected": 4,
+    "validControls": 12,
+    "validControlsAccepted": 12
+  },
+  "endpointGrowth": {
+    "resolutionAndLowering": {
+      "endpointLogLogSlope": 1.1188580918209596,
+      "meaning": "Descriptive endpoint ratio; not an asymptotic complexity estimate.",
+      "sizeFactor": 16.0,
+      "timeFactor": 22.245357322336332
+    },
+    "semanticParsing": {
+      "endpointLogLogSlope": 1.0780038968145733,
+      "meaning": "Descriptive endpoint ratio; not an asymptotic complexity estimate.",
+      "sizeFactor": 16.0,
+      "timeFactor": 19.863054468945563
+    },
+    "serialization": {
+      "endpointLogLogSlope": 1.069700632970273,
+      "meaning": "Descriptive endpoint ratio; not an asymptotic complexity estimate.",
+      "sizeFactor": 16.0,
+      "timeFactor": 19.41099991181932
+    },
+    "topologyVerification": {
+      "endpointLogLogSlope": 1.0034790256222321,
+      "meaning": "Descriptive endpoint ratio; not an asymptotic complexity estimate.",
+      "sizeFactor": 16.0,
+      "timeFactor": 16.15508126256687
+    }
+  },
+  "fixedRefundModelTiming": {
+    "maxProcessMedian": 1.7685440016066423,
+    "medianOfProcessMedians": 1.3479219996952452,
+    "minProcessMedian": 1.2490220015024533,
+    "note": "Same refund model across every graph-size run; do not interpret this as model-size scaling.",
+    "processMedians": [
+      1.2662839999393327,
+      1.3479219996952452,
+      1.28926599973056,
+      1.293823999731103,
+      1.3998059985169675,
+      1.5707889997429447,
+      1.7685440016066423,
+      1.4340260004246375,
+      1.2490220015024533
+    ],
+    "processes": 9,
+    "samplesPerProcess": [
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7
+    ],
+    "stateSpaceScalabilityMeasured": false,
+    "unit": "ms"
+  },
+  "hardware": {
+    "cpuModel": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "cpuQuota": "400000 100000",
+    "logicalCpuCount": 5,
+    "memoryLimitBytes": "34359738368",
+    "note": "Host-visible hardware; container quotas below constrain this run.",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41"
+  },
+  "initialization": {
+    "parserInitialization": {
+      "maxProcessMedian": 343.9934420002828,
+      "medianOfProcessMedians": 328.98060800107487,
+      "minProcessMedian": 300.61017099978926,
+      "processMedians": [
+        333.5579409995262,
+        328.6264910002501,
+        300.61017099978926,
+        319.7598160004418,
+        327.0760480008903,
+        328.98060800107487,
+        333.0451580004592,
+        343.9934420002828,
+        332.32663800117734
+      ],
+      "processes": 9,
+      "samplesPerProcess": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "unit": "ms"
+    },
+    "semanticParserInitialization": {
+      "maxProcessMedian": 193.2469460007269,
+      "medianOfProcessMedians": 177.62339699947916,
+      "minProcessMedian": 161.65481899952283,
+      "processMedians": [
+        177.62339699947916,
+        183.70759499885025,
+        161.65481899952283,
+        186.35321500005375,
+        180.79500800013193,
+        175.9577549983078,
+        172.5756559990259,
+        193.2469460007269,
+        169.47771000013745
+      ],
+      "processes": 9,
+      "samplesPerProcess": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "unit": "ms"
+    }
+  },
+  "kind": "PublicationEvaluationScorecard",
+  "proofStatus": "Theorem statements and proof obligations proposed in publication-evaluation.md; no completed metatheoretic or mechanized proof claimed.",
+  "revisionMeasured": "07ca7b064ac0c07e6825f7d05dc7d1de26555a88",
+  "schemaVersion": 1,
+  "sourceSha256": {
+    "regression-corpus.json": "1f02da2cf0a5e71c5e9df6cd0807ff0070cc0b4c37f52e5b5988203784626129",
+    "review-hardware.json": "98911b3c01da7de8e1eb38ce43000473ab6b145080176a6040e7e5a0ed8cd398",
+    "review-matrix-results.json": "7b7d549d1b8107907be7ea6b64e808e76c8d107c748e732650564cde3b442b04",
+    "review-validation-results.json": "867e113acda169909bdae0e7f53bd6f05355cb70236d2f4b355f750e127fff77"
+  },
+  "statisticalUnit": "Process for descriptive timing; workflow family for proposed held-out comparisons. Nested timing samples are not independent experiments.",
+  "unmeasured": {
+    "crossMachineVariance": null,
+    "heldOutWorkflowDetection": null,
+    "matchedBaselineEffect": null,
+    "modelStateSpaceScaling": null,
+    "peakMemory": null,
+    "providerQualityOrLatency": null,
+    "recoveryLatency": null,
+    "runtimeOverhead": null
+  },
+  "warmCompilerStages": {
+    "100": {
+      "resolutionAndLowering": {
+        "maxProcessMedian": 9.740522000356577,
+        "medianOfProcessMedians": 8.873910001057084,
+        "minProcessMedian": 8.3584649983095,
+        "processMedians": [
+          8.3584649983095,
+          8.873910001057084,
+          9.740522000356577
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "semanticParsing": {
+        "maxProcessMedian": 8.934667001085472,
+        "medianOfProcessMedians": 8.9170639985241,
+        "minProcessMedian": 8.399780999752693,
+        "processMedians": [
+          8.9170639985241,
+          8.934667001085472,
+          8.399780999752693
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "serialization": {
+        "maxProcessMedian": 1.3893310006096726,
+        "medianOfProcessMedians": 1.3099759999022353,
+        "minProcessMedian": 1.1491379991639405,
+        "processMedians": [
+          1.3099759999022353,
+          1.1491379991639405,
+          1.3893310006096726
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "topologyVerification": {
+        "maxProcessMedian": 1.7619280006329063,
+        "medianOfProcessMedians": 1.5458039997611195,
+        "minProcessMedian": 1.3932229994679801,
+        "processMedians": [
+          1.7619280006329063,
+          1.5458039997611195,
+          1.3932229994679801
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      }
+    },
+    "25": {
+      "resolutionAndLowering": {
+        "maxProcessMedian": 2.4702500013518147,
+        "medianOfProcessMedians": 2.3162300003605196,
+        "minProcessMedian": 2.2665179985779105,
+        "processMedians": [
+          2.2665179985779105,
+          2.3162300003605196,
+          2.4702500013518147
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "semanticParsing": {
+        "maxProcessMedian": 2.6364040004409617,
+        "medianOfProcessMedians": 2.4606500010122545,
+        "minProcessMedian": 2.397587000814383,
+        "processMedians": [
+          2.397587000814383,
+          2.4606500010122545,
+          2.6364040004409617
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "serialization": {
+        "maxProcessMedian": 0.29397000071185175,
+        "medianOfProcessMedians": 0.29149399961170275,
+        "minProcessMedian": 0.2782949995889794,
+        "processMedians": [
+          0.2782949995889794,
+          0.29397000071185175,
+          0.29149399961170275
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "topologyVerification": {
+        "maxProcessMedian": 0.44034399979864247,
+        "medianOfProcessMedians": 0.4014669993921416,
+        "minProcessMedian": 0.3844759994535707,
+        "processMedians": [
+          0.4014669993921416,
+          0.44034399979864247,
+          0.3844759994535707
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      }
+    },
+    "400": {
+      "resolutionAndLowering": {
+        "maxProcessMedian": 58.76017700029479,
+        "medianOfProcessMedians": 51.525363998734974,
+        "minProcessMedian": 36.3909749994491,
+        "processMedians": [
+          36.3909749994491,
+          58.76017700029479,
+          51.525363998734974
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "semanticParsing": {
+        "maxProcessMedian": 64.61916899934295,
+        "medianOfProcessMedians": 48.87602499911736,
+        "minProcessMedian": 35.75426399947901,
+        "processMedians": [
+          35.75426399947901,
+          64.61916899934295,
+          48.87602499911736
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "serialization": {
+        "maxProcessMedian": 6.580600998859154,
+        "medianOfProcessMedians": 5.658190000758623,
+        "minProcessMedian": 5.1145659999747295,
+        "processMedians": [
+          5.1145659999747295,
+          6.580600998859154,
+          5.658190000758623
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      },
+      "topologyVerification": {
+        "maxProcessMedian": 8.065130001341458,
+        "medianOfProcessMedians": 6.485731999418931,
+        "minProcessMedian": 6.353802000376163,
+        "processMedians": [
+          6.485731999418931,
+          8.065130001341458,
+          6.353802000376163
+        ],
+        "processes": 3,
+        "samplesPerProcess": [
+          7,
+          7,
+          7
+        ],
+        "unit": "ms"
+      }
+    }
+  }
+}
