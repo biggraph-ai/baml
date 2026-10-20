@@ -50,3 +50,13 @@ remain unmeasured. Proposed formal statements are proof obligations, not
 completed metatheoretic proofs. No preprint manuscript is included yet.
 
 Licensed under [Apache-2.0](LICENSE).
+
+## Standalone branch validation
+
+The Panini-only source tree at `2bac0bd3c` was validated from a clean Git
+archive with hash-pinned dependencies and an installed wheel: **203 tests
+passed**, along with the CLI and example checks. The optional Bison grammar
+check reported 512 states and no shift/reduce or reduce/reduce conflicts.
+See [the validation record](panini/evaluation/alphaxiv-validation-results.json)
+for exact commands, environment details and input hashes. This branch-specific
+validation is separate from the historical performance and research evidence.
