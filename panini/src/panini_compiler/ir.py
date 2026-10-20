@@ -1,4 +1,4 @@
-"""Versioned, deterministic PNIR for the sequential M1–M5 profile.
+"""Versioned, deterministic PNIR for the sequential effects profile.
 
 Expressions remain structured semantic AST nodes, with resolved type annotations.
 Verification reports distinguish structural checks from deferred runtime/effect obligations.

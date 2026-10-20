@@ -1,34 +1,24 @@
 # Scientific claims and evaluation metrics for Panini
 
-## Assessment of the statements
+## Research questions and contribution
 
-The distinction between an engineered artifact and an evaluated scientific claim
-is sound. The recorded tests establish regression behavior and reproducibility
-on a particular environment; they do not establish novelty, comparative benefit,
-real-world defect prevalence, or publication acceptance.
+Panini separates probabilistic agent decisions from typed workflow control,
+capability authorization and durable effect handling. Its scientific questions
+are whether these explicit contracts detect relevant orchestration failures,
+whether enforcement preserves declared local-state properties, and what the
+analysis and runtime cost relative to equivalent alternatives.
 
-The categorical venue prediction is too strong. Author-written tests are useful
-correctness evidence, and publication standards depend on the contribution and
-venue. Independent workflows, matched baselines, formal results and additional
-machines strengthen particular claims; none is a universal acceptance checklist.
-Fifteen to twenty workflows is a sensible pilot scale, not a statistically
-justified minimum or a guarantee of acceptance. A second machine probes hardware
-sensitivity; it does not establish broad deployment generality.
+Artifact tests establish specified behavior on recorded inputs. A scientific
+claim additionally needs evidence appropriate to its scope: independent workflow
+families for effectiveness, comparable implementations for relative benefit,
+and a calculus with soundness arguments for formal language guarantees.
+No workflow count or venue checklist guarantees acceptance or novelty.
 
-A calculus and soundness proof are appropriate if the paper claims a new sound
-analysis or language design. Their absence must not be concealed by passing
-implementation tests. A systems paper may emphasize a different contribution,
-but still needs precise semantics and evidence for its central claim. This
-report supplies proposed theorem statements and proof obligations, not a
-completed proof or a novelty assessment.
-
-The named alternative approaches (ETAS, AgentSPEX, LBAC) are candidate related
-work, not automatically runnable or equivalent baselines. Establish the exact
-paper/version, artifact availability, semantics and overlapping properties
-before choosing comparisons. Do not assign them zero detections because a
-Panini-specific construct is unsupported. The same rule applies to LangGraph,
-AutoGen and CrewAI. Raw Python is a useful minimum baseline, but is not evidence
-about those frameworks until their actual configurations are evaluated.
+The formal statements below are proposed proof obligations. The evaluation
+plans are not completed experiments. Candidate related approaches require a
+verified paper/version, runnable artifact and explicit semantic overlap before
+comparison. A framework without equivalent budgets, authorization or recovery
+is a useful ablation but not an equivalent safety baseline.
 
 ## Measured scorecard
 
@@ -216,8 +206,7 @@ edges are included in structural checks. This does **not** establish reaching a
 terminal/pending state within B operational steps: local callback execution,
 recovery, journal operations and repeated pending observations are different
 steps, and an arbitrary host callback can fail to return. B bounds neither
-wall-clock time nor all external actions. The proposed statement in the prompt
-is therefore stronger than the implemented contract.
+wall-clock time nor all external actions. A bound on all operational steps would therefore exceed the implemented contract.
 
 **Conditional model-safety statement.** Let alpha project concrete states onto
 finite domains, I be the declared modeled invariant, and M be the transition

@@ -962,8 +962,8 @@ class Resolver:
                 graph["invariants"].append(expression)
             elif kind == "GraphState":
                 self.unsupported(member, "GraphState initializers")
-        # Names are retained alongside IDs. Unknown endpoints are M1 name errors;
-        # entry cardinality, duplicate transitions, reachability and cycles are M2.
+        # Names are retained alongside IDs. Unknown endpoints are name errors;
+        # entry cardinality, transitions, reachability and cycles are graph checks.
         node_ids = {n["name"]: n["id"] for n in graph["nodes"]}
         for node in graph["nodes"]:
             for contract in node["contracts"]:

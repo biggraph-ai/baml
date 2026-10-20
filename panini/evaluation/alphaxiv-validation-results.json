@@ -18,13 +18,13 @@
         "uv",
         "venv",
         "--python",
-        "/workspace/baml/panini/.venv/bin/python",
+        "<checkout>/panini/.venv/bin/python",
         "/tmp/panini-validation-tb22sin3/venv"
       ],
       "exitCode": 0,
       "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdoutBytes": 0,
-      "stderr": "Using CPython 3.12.14 interpreter at: /workspace/baml/panini/.venv/bin/python\nCreating virtual environment at: /tmp/panini-validation-tb22sin3/venv\nActivate with: source /tmp/panini-validation-tb22sin3/venv/bin/activate\n"
+      "stderr": "Using CPython 3.12.14 interpreter at: <checkout>/panini/.venv/bin/python\nCreating virtual environment at: /tmp/panini-validation-tb22sin3/venv\nActivate with: source /tmp/panini-validation-tb22sin3/venv/bin/activate\n"
     },
     {
       "command": [
@@ -377,5 +377,9 @@
     "Windows/macOS execution",
     "second machine",
     "external provider/framework comparison"
-  ]
+  ],
+  "presentation": {
+    "originalReportSha256": "d51643a443934ad79f60f909dc5f18a394817762ca09340467736be7facf66bc",
+    "redactions": "Host checkout path normalized to <checkout>. Revisions, measurements and recorded input/command/output hashes are unchanged."
+  }
 }

@@ -1,9 +1,14 @@
-# M4/M5: durable effects, runtime policies, and finite safety checking
+# Workflow execution, effects and verification
 
-This supersedes the runtime/PNIR status in the historical M0–M3 documents.
-The implemented reference profile is `sequential-effects-v1`, PNIR **v3**, with
-semantic AST v2 and legacy AST v1 retained. No real payment or model service is
-required by the examples or conformance tests.
+The reference runtime executes one active workflow token, validates state
+changes, and mediates calls to declared capabilities. Its durable journal tracks
+what was invoked, what is known to have completed, and what remains uncertain.
+These mechanics make failure handling part of the orchestration contract.
+
+The executable profile is `sequential-effects-v1`, with PNIR v3 and checkpoint
+schema v2. The examples use local model/payment mocks. See the
+[language guide](language.md) for graph and decision syntax, and the
+[target-language guide](targets.md) for host integration availability.
 
 ```bash
 cd panini
@@ -20,7 +25,7 @@ compensation. Compensation does not turn the original workflow failure into
 success. The SQLite database is temporary for this example; real integrations
 must retain their journal across process restarts.
 
-## M4: explicit exceptional control flow
+## Exceptional control flow
 
 ```panini
 node reserve using Payments.reserve max_visits 1
@@ -210,7 +215,7 @@ outside the protocol's guarantees. Use one authoritative journal and enforce
 keys/fences at the service boundary. Plain callbacks with no effect manifest
 are trusted local operations; arbitrary effect inference is deferred.
 
-## M5: runtime invariants and ordered policies
+## Runtime invariants and ordered policies
 
 Graph invariants and policy invariants must be pure Boolean expressions in the
 supported guard subset. They are checked at entry/resume, before dispatch,
@@ -312,12 +317,16 @@ static-proof claim. PNIR records performed checks separately from obligations
 still deferred, including arbitrary host effect inference, external atomicity,
 and temporal liveness.
 
-## Compatibility and validation
+## Execution formats and conformance
 
-PNIR v3 and checkpoint v2 are intentional version changes. Earlier executable
-artifacts/checkpoints are rejected rather than silently reinterpreted. Legacy
-AST v1 and semantic AST v2 dumps remain unchanged for existing syntax; new
-contract productions add nodes/fields. The action-free Bison prototype and
-strict Python LALR grammar both accept the new timeout/error syntax without
-conflicts. Capability and model files contain metadata only; callback and
-credential bindings are supplied at runtime, not serialized in PNIR.
+The executor accepts PNIR v3 with the declared profile and rechecks graph
+structure before dispatch. Checkpoint schema v2 preserves program fingerprints,
+state, counters, pending work and completion history. Incompatible programs,
+malformed counters and unsupported formats are rejected. Program schemas and
+source maps are described in [artifacts](artifacts.md).
+
+Capabilities and finite-model files contain metadata, not callback implementations
+or credentials. The conformance suite exercises exceptional edges, authorization,
+receipt durability, crash/resume, reconciliation, compensation and model-contract
+violations. Passing these tests establishes the tested reference behavior;
+it does not prove an arbitrary adapter or external service correct.

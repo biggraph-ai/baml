@@ -1,4 +1,4 @@
-"""M0/M1 acceptance tests; topology and runtime proofs are deliberately absent."""
+"""Semantic-resolution tests; graph and runtime checks have separate suites."""
 
 import json
 from pathlib import Path
@@ -207,7 +207,7 @@ def test_cli_valid_and_parse_remains_syntax_only(tmp_path, capsys):
 
 
 def test_m1_does_not_claim_m2_verification(parser):
-    # Valid names/types, but unbounded cycle and no end path: intentionally M2.
+    # Valid names/types, but unbounded cycle and no end path: checked by graph verification.
     source = BASE.replace(" max_visits 3", "").replace(
         "a -> when state.retry => a otherwise => end;", "a -> a;"
     )

@@ -1,143 +1,115 @@
-# Panini reference compiler
+# Develop and run Panini
 
-This directory contains the Python reference frontend for the Panini language
-specified in [`../docs`](../docs/panini-language-design.md). It is deliberately
-an independent project: Panini is a new language rather than a BAML parser mode.
+The `panini-compiler` package supplies the `panini` CLI and the
+`panini_compiler` Python API. It includes a strict parser, semantic resolver,
+graph verifier, sequential runtime and optional finite-state safety checker.
+See the [language guide](../docs/language.md) for source constructs and the
+[runtime guide](../docs/runtime.md) for execution contracts.
 
-This is a reference compiler for bounded sequential agent workflows, with
-structural graph checks and optional finite-state invariant analysis under
-explicit contracts. It implements an inspectable semantic/graph pipeline,
-a durable capability-based executor, and opt-in finite invariant verification:
+## Install
 
-```text
-.panini source -> tokens/CST -> semantic AST -> typed PNIR -> graph checks
-```
-
-## Install and run on Windows
-
-Panini requires Python 3.11 or newer. In PowerShell, run these commands
-from the repository root:
-
-```powershell
-cd panini
-py -3.11 -m venv .venv
-& .\.venv\Scripts\python.exe -m pip install --upgrade pip
-& .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
-& .\.venv\Scripts\python.exe -m pytest
-& .\.venv\Scripts\panini.exe parse examples\audit.panini --emit ast
-```
-
-Activation is intentionally not required, so these commands also work when the
-PowerShell execution policy prevents running `Activate.ps1`. If you prefer an
-activated environment, run `.\.venv\Scripts\Activate.ps1` first and then use
-`python`, `pytest`, and `panini` without their full paths.
-
-From `cmd.exe`, the equivalent setup is:
-
-```batch
-cd panini
-py -3.11 -m venv .venv
-.venv\Scripts\python.exe -m pip install --upgrade pip
-.venv\Scripts\python.exe -m pip install -e ".[dev]"
-.venv\Scripts\python.exe -m pytest
-.venv\Scripts\panini.exe parse examples\audit.panini --emit ast
-```
-
-This Python frontend does not need a C/C++ compiler: installing it creates the
-`panini.exe` command-line launcher inside `.venv\Scripts`. The repository's
-Bison C++ grammar tooling is separate and is not required for this initial
-frontend.
-
-### Build an installable package
-
-To produce a wheel and source archive on Windows, run:
-
-```powershell
-& .\.venv\Scripts\python.exe -m build
-& .\.venv\Scripts\python.exe -m pip install --force-reinstall .\dist\panini_compiler-0.1.0-py3-none-any.whl
-& .\.venv\Scripts\panini.exe --help
-```
-
-The artifacts are written to `panini\dist`. A wheel is the normal compiled
-distribution artifact for this pure-Python project; it is portable across
-Windows machines that have a supported Python version.
-
-If `py` is not recognized, install Python from python.org with the Python
-Launcher enabled, or replace `py -3.11` with the full path to a Python 3.11+
-executable. If Windows Store aliases intercept `python`, using `py` or the
-explicit `.venv\Scripts\python.exe` path avoids the alias.
-
-## Development on macOS or Linux
-
-Panini requires Python 3.11 or newer.
+Python 3.11 or newer is required. From this directory:
 
 ```bash
-cd panini
 python -m venv .venv
-.venv/bin/pip install -e '.[dev]'
-.venv/bin/pytest
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/python -m pytest
 ```
 
-The installed command exposes the initial compiler debugging surface:
+On Windows PowerShell, use the environment's executables directly:
+
+```powershell
+py -3.11 -m venv .venv
+& .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+& .\.venv\Scripts\python.exe -m pytest
+& .\.venv\Scripts\panini.exe check examples\retry.panini
+```
+
+Activation is optional. Compiler and parser usage do not require a C/C++ compiler.
+Timed process-isolated local callbacks require POSIX `fork`; that runtime
+restriction does not apply to syntax checking or finite analysis. The recorded
+validation environment is Linux/Python 3.12; Windows/macOS runs are not recorded.
+
+## CLI
+
+The commands below assume the environment's executable directory is on `PATH`;
+otherwise use `.venv/bin/panini` and `.venv/bin/python` explicitly.
 
 ```bash
 panini lex examples/audit.panini
 panini parse examples/audit.panini --emit cst
 panini parse examples/audit.panini --emit ast
+panini parse examples/retry.panini --emit semantic-ast
 panini check examples/retry.panini
 panini check examples/decision.panini --adapters examples/decision-adapters.json
-python examples/run_decision.py
 panini check examples/refund.panini --effects examples/refund-effects.json --model examples/refund-model.json
+panini build examples/retry.panini -o /tmp/retry.pnir
+panini inspect /tmp/retry.pnir
+panini capabilities
+python examples/run_decision.py
 python examples/run_refund.py
 ```
 
-`parse` performs syntax checking. `check` resolves/types the
-`sequential-effects-v1` profile, verifies graph structure and dispatch budgets,
-and emits PNIR v3. `audit.panini` remains a syntax-only design demo.
+`parse` inspects syntax; `check` validates names, types and graph structure.
+`audit.panini` is a syntax demonstration and is not an executable workflow.
+Every `check --emit` mode validates before emitting a representation.
+`--diagnostics json` writes structured diagnostics to stderr; invalid programs
+return nonzero. Strict finite analysis also returns nonzero for `counterexample`,
+`unknown` or `unsupported`. `--max-states` sets the finite exploration budget.
 
-`parse --emit ast` remains AST v1; `--emit semantic-ast` emits semantic AST v2.
-All `check --emit` modes validate. `--diagnostics json` emits structured errors.
-Use `--effects` for typed capability/receipt metadata and `--model` for finite
-safety analysis. Non-proofs return a nonzero exit code with a counterexample,
-`unknown`, or `unsupported` report instead of a proof.
+`build` packages checked source and contracts. `inspect` validates the package
+by recompiling it. `capabilities` reports the reference profile; it does not
+list installed vendor integrations. See [artifacts](../docs/artifacts.md) for
+manifest and resource-limit options.
 
-The runtime supports deadlines, exceptional edges, authorized effects, SQLite
-journaling/resume, bounded reconciliation/compensation, and runtime invariants
-and ordered policies. The finite checker uses explicit domains, initial states,
-and checked transition-summary contracts; the runtime enforces those contracts.
-See the [M4/M5 contract and examples](../docs/panini-effects-verification.md).
-[M2/M3](../docs/panini-graph-decisions.md) and [M0/M1](../docs/panini-semantic-profile.md)
-remain historical milestone documentation.
+## Python API
 
-No real provider/payment adapter ships with these examples. Opaque host bodies
-are not executed or verified. External idempotency/authorization protocols are
-trusted; compensation is fallible and does not imply rollback or success.
-General liveness, arbitrary host termination, remote atomicity, and the native
-C++ frontend remain outside this reference implementation.
+This example runs from this directory and uses a local state transformer:
 
-## Project layout
+```python
+from pathlib import Path
+from panini_compiler import compile_source, Executor
 
-- `src/panini_compiler/panini.lark` is the executable reference grammar.
-- `lexer.py` provides the shared token shape and byte-accurate spans.
-- `parser.py` constructs strict LALR trees and deterministic normalized ASTs.
-- `cli.py` implements the representation-debugging commands.
-- `tests/` is the beginning of the shared conformance corpus.
-- `resolver.py` checks local symbols, types, decisions, and output bindings.
-- `verifier.py` checks graph structure and cyclic budgets with iterative traversal.
-- `decisions.py` validates probability results and applies threshold/tie rules.
-- `runtime.py` executes trusted callbacks with enforced budgets/checkpoints.
-- `effects.py` defines typed capability, receipt, authorization, and reconciliation contracts.
-- `journal.py` stores transactional invocation/event history with stale-writer fencing.
-- `execution.py` implements local isolation and bounded remote waits.
-- `modelcheck.py` explores a restricted finite safety model with explicit proof statuses.
+source = Path("examples/retry.panini").read_text(encoding="utf-8")
+program = compile_source(source, "retry.panini")
+assert not program.diagnostics
+execution = Executor(
+    program,
+    "BoundedRetry",
+    {"retry": False},
+    capabilities={"Steps.attempt": lambda state: state},
+)
+assert execution.run()["status"] == "ended"
+```
 
-Portable reference artifacts and reproducible M6 measurements are documented in
-[artifacts and evaluation](../docs/panini-artifacts-evaluation.md). Use `panini build SOURCE -o program.pnir`, `panini inspect program.pnir`, and `panini capabilities`
-to build, validate, and query the reference profile.
+Register decision callbacks through `adapters=...`; register effect callbacks as
+`Capability` values with an authorizer and a durable `SQLiteJournal` for mutations.
+The runnable examples show both patterns. Callback bodies are trusted host code
+and are not inferred from source method bodies.
 
+## Build and validate
 
-For a hash-pinned validation environment, clean-checkout tests, installed-wheel
-examples, corpus provenance and repeated measurements, see
-[evaluation and reproducibility](evaluation/README.md). Mutation authorization
-permits adapter invocation; the later authorization check gates Panini's local
-state commit. A remote action may already have happened and need recovery.
+```bash
+python -m build
+python -m pip install --force-reinstall dist/panini_compiler-0.1.0-py3-none-any.whl
+python -m pytest
+```
+
+For a fresh environment with hash-pinned dependencies, an installed-wheel test
+suite and example checks, follow [the validation protocol](evaluation/README.md).
+The optional grammar check, run from the repository root, is
+`tools/check-panini-grammar.sh`; it requires GNU Bison and m4.
+
+## Package layout
+
+| Path | Purpose |
+| --- | --- |
+| `src/panini_compiler/panini.lark` | Executable syntax definition |
+| `parser.py`, `lexer.py`, `resolver.py`, `ir.py` | Source representations, symbols and typed PNIR |
+| `verifier.py`, `modelcheck.py` | Graph structure and conditional finite safety analysis |
+| `runtime.py`, `execution.py` | Sequential dispatch, state validation and bounded waits |
+| `effects.py`, `journal.py` | Capability contracts, receipts and durable run records |
+| `decisions.py`, `artifact.py`, `cli.py` | Decision validation, portable bundles and commands |
+| `tests/`, `examples/`, `evaluation/` | Conformance, runnable workflows and measured evidence |
+
+Python module names in the table are relative to `src/panini_compiler/`.
