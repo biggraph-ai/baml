@@ -1,52 +1,52 @@
-<div align="center">
-<a href="https://boundaryml.com?utm_source=github" target="_blank" rel="noopener noreferrer">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="fern/assets/baml-logo-white.png">
-    <img src="fern/assets/baml-logo-white.png" height="220" id="top" alt="BAML logo">
-  </picture>
-</a>
+# Panini
 
-# BAML: Basically A Made-up Language
+A reference compiler for bounded sequential agent workflows, with structural
+graph checks, a capability-based executor, and optional finite-state invariant
+analysis under explicit contracts.
 
-BAML is the programming language for agents.
+This `alphaxiv` branch contains the standalone Panini research implementation,
+examples, tests, language documentation and evaluation evidence. It was branched
+from `nag/create-new-project-for-panini-compiler` at commit
+`8390c95c0`; the unrelated monorepo implementation has been removed from this
+branch's source tree. Git ancestry and original license are preserved.
 
-[![BAML Version](https://img.shields.io/pypi/v/baml-py?color=006dad&label=BAML%20Version)](https://pypi.org/project/baml-py/)
+## Quick start
 
-[Homepage](https://www.boundaryml.com/) | [Explore BAML](https://www.boundaryml.com/explore) | [Discord](https://www.boundaryml.com/discord)
-
-</div>
-
-BAML looks like TypeScript, but every feature is built so agents make fewer mistakes:
-
-- It has a type system like Rust, but compiles even faster than Go.
-- Types persist at runtime. There is no `any` nor casting dangerously to any type.
-- Errors are typed and statically analyzed.
-- The filesystem describes the modules/namespaces.
-- Has green threads, and colorless concurrency like Go
-- Built-in tests / eval framework
-- Built-in stdlib for agents
-- Every baml tool is natively designed for agents, with no garbage outputs, etc.
-- Can be run standalone or adopt incrementally (you can call a BAML function from TS, Py, Go, C#, Java, etc).
-
-[Explore the website and examples](https://www.boundaryml.com/explore).
-
-## Try it out
+Python 3.11+ is supported; the pinned evaluation environment uses Python 3.12
+on Linux. From this repository root:
 
 ```bash
-brew install baml
-baml agent install
-baml init
-baml ide install --code
+cd panini
+python -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/python -m pytest
+.venv/bin/panini check examples/retry.panini
+.venv/bin/python examples/run_decision.py
+.venv/bin/python examples/run_refund.py
 ```
 
-Or read the [quickstart](https://boundaryml.com/quickstart).
+See the [package README](panini/README.md) for Windows setup, CLI commands,
+portable artifacts and runtime bindings. The optional Bison grammar check uses
+`tools/check-panini-grammar.sh` and requires GNU Bison and m4.
 
-## Contributing
+## Research artifact
 
-See our [guide on getting started](/CONTRIBUTING.md).
+- [Language design](docs/panini-language-design.md)
+- [Runtime effects and conditional verification](docs/panini-effects-verification.md)
+- [Portable artifact contract](docs/panini-artifacts-evaluation.md)
+- [Evaluation and reproducibility protocol](panini/evaluation/README.md)
+- [Scientific claims and evaluation metrics](panini/evaluation/publication-evaluation.md)
+- [Recorded scorecard](panini/evaluation/publication-metrics.json)
 
----
+The `panini/` layout is retained so existing fixtures, examples and evidence paths
+remain valid. Historical evaluation records identify the commits actually tested;
+removing unrelated source does not turn those observations into new experiments.
+The original artifact tag remains attached to its original revision.
 
-Made with ❤️ by Boundary. HQ in Seattle, WA.
+The implementation does not prove arbitrary host-code termination, general
+liveness, provider accuracy, remote atomicity or successful compensation.
+Held-out effectiveness, matched framework baselines and multi-machine results
+remain unmeasured. Proposed formal statements are proof obligations, not
+completed metatheoretic proofs. No preprint manuscript is included yet.
 
-We're hiring software engineers who love Rust. [Email us](mailto:founders@boundaryml.com) or reach out on [Discord](https://www.boundaryml.com/discord).
+Licensed under [Apache-2.0](LICENSE).
