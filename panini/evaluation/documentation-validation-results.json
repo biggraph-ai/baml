@@ -1,0 +1,381 @@
+{
+  "revision": "e87789b0c925b0e40f44d71fb05e7e074d145f8a",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "commands": [
+    {
+      "command": [
+        "uv",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "bda25a2f047af04626be126cd42f9e6b995ee476ad4b94ac47d3a528a6f4cea9",
+      "stdoutBytes": 38,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "uv",
+        "venv",
+        "--python",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "/tmp/panini-validation-sbip3j5k/venv"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stderr": "Using CPython 3.12.14 interpreter at: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12\nCreating virtual environment at: /tmp/panini-validation-sbip3j5k/venv\nActivate with: source /tmp/panini-validation-sbip3j5k/venv/bin/activate\n"
+    },
+    {
+      "command": [
+        "uv",
+        "pip",
+        "sync",
+        "--python",
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "--require-hashes",
+        "requirements-validation.txt"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stderr": "Using Python 3.12.14 environment at: /tmp/panini-validation-sbip3j5k/venv\nResolved 13 packages in 1.04s\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\nInstalled 13 packages in 117ms\n + build==1.6.1\n + hatchling==1.32.4\n + iniconfig==2.3.1\n + interegular==0.3.3\n + lark==1.3.1\n + packaging==26.3\n + pathspec==1.1.1\n + pluggy==1.7.0\n + pygments==2.21.0\n + pyproject-hooks==1.3.3\n + pytest==8.4.2\n + tomlkit==0.15.2\n + trove-classifiers==2026.9.21.13\n"
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "-m",
+        "build",
+        "--no-isolation",
+        "--outdir",
+        "/tmp/panini-validation-sbip3j5k/dist"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "60837d83f995c63f5cf557e0c1ce4df95f46d3e3f1e9a56a40a5896b594caf0b",
+      "stdoutBytes": 91,
+      "stderr": "* Getting build dependencies for sdist...\n* Building sdist...\n* Building wheel from sdist\n* Getting build dependencies for wheel...\n* Building wheel...\n"
+    },
+    {
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "--no-deps",
+        "/tmp/panini-validation-sbip3j5k/dist/panini_compiler-0.1.0-py3-none-any.whl"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stderr": "Using Python 3.12.14 environment at: /tmp/panini-validation-sbip3j5k/venv\nResolved 1 package in 3ms\nPrepared 1 package in 11ms\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\nInstalled 1 package in 2ms\n + panini-compiler==0.1.0 (from file:///tmp/panini-validation-sbip3j5k/dist/panini_compiler-0.1.0-py3-none-any.whl)\n"
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "-c",
+        "import panini_compiler; assert 'site-packages' in panini_compiler.__file__; print(panini_compiler.__file__)"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "edf65cb1e4cbbb8801c13edcd73e26b3299f238ac0a703d187ced625243ad25d",
+      "stdoutBytes": 94,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "3758f636d27a323108aaf3e61515b63a60f7b8cf8eec106efb1601c935de33d3",
+      "stdoutBytes": 261,
+      "stderr": "",
+      "testResult": "........................................................................ [ 35%]\n........................................................................ [ 70%]\n...........................................................              [100%]\n203 passed in 43.11s\n"
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "--help"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "5da54ea2bce9d30bdfa14cd80328e7e6fc4dfd17f753464b2eae73eaa7983afd",
+      "stdoutBytes": 563,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "lex",
+        "examples/audit.panini"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "2ffc9768032613e81d33496586c2a92c65520aada55b01b72667de58d759f29e",
+      "stdoutBytes": 30668,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "parse",
+        "examples/audit.panini",
+        "--emit",
+        "cst"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "b04fe76a84ac65c90da595a288dce8dbe8a90f9c47b6baf22b88e818cf9c27ac",
+      "stdoutBytes": 2192,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "parse",
+        "examples/audit.panini",
+        "--emit",
+        "ast"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "6d863d6690c9a13c425f5fe5e49cc2ea03434d382f5c4b7c4a5738da85536d65",
+      "stdoutBytes": 25166,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "parse",
+        "examples/retry.panini",
+        "--emit",
+        "semantic-ast"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "13bd8f044eec834af04c7f55785625db7c6c78a32c30e3cf82035470075b3041",
+      "stdoutBytes": 30698,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "check",
+        "examples/retry.panini"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "4e148cae5d5dbfbb6a4e5302a65e077026a1f122cda6c2c6a3a435acd9426d00",
+      "stdoutBytes": 6625,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "check",
+        "examples/retry.panini",
+        "--diagnostics",
+        "json"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "4e148cae5d5dbfbb6a4e5302a65e077026a1f122cda6c2c6a3a435acd9426d00",
+      "stdoutBytes": 6625,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "check",
+        "examples/decision.panini",
+        "--adapters",
+        "examples/decision-adapters.json"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "4893041aa89e44f2e2802fb034dca8866c8920ca4569345ef718e26db992a2dd",
+      "stdoutBytes": 25931,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "check",
+        "examples/refund.panini",
+        "--effects",
+        "examples/refund-effects.json",
+        "--model",
+        "examples/refund-model.json"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "8022b6d9bcc62296f85cc96b8b8027a9f9acdcd55fea965fdc78c667269b6e24",
+      "stdoutBytes": 27563,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "examples/run_decision.py"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "96246a4546d9af28bc830cffad92f6a4d88e6e8fe9c5c84baf84660fac426a5f",
+      "stdoutBytes": 605,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/python",
+        "examples/run_refund.py"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "d3541b406de3992714c96ce150094b006d638653bb9bbdb4cb77cabd25312493",
+      "stdoutBytes": 417,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "build",
+        "examples/retry.panini",
+        "-o",
+        "/tmp/panini-validation-sbip3j5k/retry.pnir"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "inspect",
+        "/tmp/panini-validation-sbip3j5k/retry.pnir"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "4e148cae5d5dbfbb6a4e5302a65e077026a1f122cda6c2c6a3a435acd9426d00",
+      "stdoutBytes": 6625,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "build",
+        "examples/decision.panini",
+        "-o",
+        "/tmp/panini-validation-sbip3j5k/decision.pnir",
+        "--adapters",
+        "examples/decision-adapters.json"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "inspect",
+        "/tmp/panini-validation-sbip3j5k/decision.pnir"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "4893041aa89e44f2e2802fb034dca8866c8920ca4569345ef718e26db992a2dd",
+      "stdoutBytes": 25931,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "build",
+        "examples/refund.panini",
+        "-o",
+        "/tmp/panini-validation-sbip3j5k/refund.pnir",
+        "--effects",
+        "examples/refund-effects.json",
+        "--model",
+        "examples/refund-model.json"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutBytes": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "inspect",
+        "/tmp/panini-validation-sbip3j5k/refund.pnir"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "8022b6d9bcc62296f85cc96b8b8027a9f9acdcd55fea965fdc78c667269b6e24",
+      "stdoutBytes": 27563,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/panini-validation-sbip3j5k/venv/bin/panini",
+        "capabilities"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "98e30de639c48e02f76d7f3d6f01a9142bcf70f5d46fa52ad64a544e03e4e785",
+      "stdoutBytes": 71,
+      "stderr": ""
+    }
+  ],
+  "archiveSha256": "a864732e7be25a4a7d71bb5c9163d2fde8b13fe9fcc2e5b051ef34f4708dc21b",
+  "inputs": {
+    "src/panini_compiler/__init__.py": "33cd9fdb093673b467acdc03f2a734bc1a3681deae04aa21f244854e3da411f6",
+    "src/panini_compiler/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "src/panini_compiler/artifact.py": "779679851cdd3ff351db2c125ccb99a9c53ecfce2594c6f1ebe62d54ecbd1688",
+    "src/panini_compiler/cli.py": "a54c2d63f1434f91f9f01bd4f8e5da27ca571884da70f8c1f9d9a7b3d0e7620f",
+    "src/panini_compiler/compiler.py": "33643199e6912600e809d5a8a0f468d95ddce6088f64318a3234de7d64b97415",
+    "src/panini_compiler/decisions.py": "2e5c9f197e193aa3ed3a6b16c01c90ccceeab153719dbe340ebf1006ef4d0e58",
+    "src/panini_compiler/diagnostics.py": "dfeb67c36805043ae6660b8f603d8906972753d39d0ac80724dd6030c704bff3",
+    "src/panini_compiler/effects.py": "e91b1e33911477959feed7c10f13c3e7c494d77ae64d78f0d7204f657d2c89e0",
+    "src/panini_compiler/execution.py": "c0e9a0ef5255713b1d5e3833010c8cd8ab758635ad130b796f0d847a61996bc3",
+    "src/panini_compiler/ir.py": "8a4840902142675d17bec7f4f3e5d66c0581799bc82dc510a47697aa0fe5bb34",
+    "src/panini_compiler/journal.py": "bb0a60ec5a35fe84eba7b6f084f705cdbc339155b8e3ac201b7581857bb287b2",
+    "src/panini_compiler/lexer.py": "8df53cc8ef1c29f011fe4f2f51f1b095d4d67b69de1bac48e5e194cc3a2c2098",
+    "src/panini_compiler/modelcheck.py": "1faf88740a9ddb701ac815546333e24a4c2e2ff00dec889cdfe482f01441fd74",
+    "src/panini_compiler/panini.lark": "053117d15cae0c9612760a0255fbfb982c962c809161347b51ab0b48bbf03163",
+    "src/panini_compiler/parser.py": "5ce8d4bf324c9662c6e0af8ca1582c95879d29fe25a82d7e926df282fd43f39e",
+    "src/panini_compiler/resolver.py": "c5498ac59f51de9c8a37c231a6163b211e269a77912e0b34c1222051ba2e89de",
+    "src/panini_compiler/runtime.py": "dd1e9f4b93d1365a591ecd7d0ca06c97186e9ae953f0126f2447da76cfe9d06d",
+    "src/panini_compiler/verifier.py": "05377424c30053813785c3c10ca2ee88085d0e2f60c10479c038c8b34c507aef",
+    "tests/fixtures/artifact-v1.json": "c3453a655743d56d1cf98080fb2fd32c6e1a072030b80e5becbd0fe419d1d221",
+    "tests/fixtures/ast-v1.json": "36f37d164553466c30af30ff5344217e282124e64fe12c80609eec78a8fb278b",
+    "tests/fixtures/ast-v2.json": "473d0c8210a288c2d685c7d35c540718f92c8b580cdb70d25559ab22a2e17054",
+    "tests/fixtures/decision-pnir.json": "6944c8c6e7bdac30bbdb6513e6c2e2d34de1478dfa1f5dc4827b6c658705972a",
+    "tests/fixtures/pnir.json": "309d4c87c8a3a64144c5d68544dcb4573a65b4ba101e75f561102cecdb84e3e7",
+    "tests/fixtures/semantic.panini": "7dae57bbf276265b0a421aa85d05ee72bd6970a8f6a81c5d72b7d320d63a323c",
+    "tests/test_artifact.py": "23958e8be80ca02e1febface9f12aa6715d235f3e5c364e08b539af8d0fd8e1b",
+    "tests/test_decisions.py": "d969cf2b2cd1c0b08dc94d54cbb6e889934211693faba8d1240243e0bb123efc",
+    "tests/test_effects_runtime.py": "1953d173edea717a8ba7ef8bc8ac48ea68d76046b8059efc991a4211a5ce312f",
+    "tests/test_frontend.py": "7cb7ebdcef93fa3f817c970aee468bde63a317edcfabd79842953c1f4066153b",
+    "tests/test_modelcheck.py": "658eccf1206c6a30616ba0704dcd1d2505911152c9668e3bc8fb8496a5f0960a",
+    "tests/test_runtime.py": "dd6614ca776b9e701ecdffc316d14a41c5363bbe14408f509e236f27851c0c19",
+    "tests/test_scorecard.py": "d4ffefa36d4928bc18d675aff151beeceda0455f763c4c3ed86273a0c41684a3",
+    "tests/test_semantics.py": "e4059721401c2b425333210dd8577811c0b4a6f07928a435e8e629fcc61f4f71",
+    "tests/test_verifier.py": "6dc1f727a5e777a58ee7651b59c5b68dd9ba04d6538515da847f58f2a960967d",
+    "examples/audit.panini": "162d9da28ee8fe19d043db7376ede7524471083727fbef4ad0998b85c5eb7012",
+    "examples/decision-adapters.json": "047ad7cf7141bac064e937d3af5359c799d4a1d99e68aab5d56b92053d6a7bc8",
+    "examples/decision.panini": "8de16b2f4eb65bc0de25e85e025a0af61d96d048caa022d05014181d1d81570a",
+    "examples/refund-effects.json": "d909ce824b7e23b31cdfb99369a84ac44cb681934814d9b33d1b96c89dd092b9",
+    "examples/refund-model.json": "894f5d3c60165c852a6105b2767ea5ae6f4d4f74af0f846816a7a3a43ef35a0e",
+    "examples/refund.panini": "fdc33e24250a7b9e88984cd8243717f191dc6aad0ad13409246eeb59b80cba9d",
+    "examples/retry.panini": "a2e102ae1e4008b556cee61fea6a67e4536e797af6ee20d54c56b47874b0ea14",
+    "examples/run_decision.py": "71bc037a65aaf9b2af0ce55590218d69dbb619cc72fb73b15060852bd918383f",
+    "examples/run_refund.py": "0311dbc4514eeb273974a3a66258a0616dc4bd7ebee4de3205f8ad5f832fcc6f",
+    "evaluation/build-requirements.in": "4faffd6b1633e3d82f8e33ab112ffbac8a74ea05836f4e3b27b717ab482e1eb4",
+    "evaluation/corpus.json": "b54583bc0058089447e992c7929a425e1a3e28ca69d899e17d1d6ef860a0b772",
+    "evaluation/matrix.py": "e4ef5d78c7389c42e18e1965d03300ba432b35eef98e4f91cafefb3b6245ee5b",
+    "evaluation/publication-experiment-plan.json": "ca4baef137b1c758a89ca7bdcf95629f2e5196c3da117d9b06b671d116d33bf0",
+    "evaluation/publication-metrics.json": "a559eaf18fd4cc99854ab4579114b5f640cf78400813e35ed27cebcedf9272f8",
+    "evaluation/regression-corpus.json": "1f02da2cf0a5e71c5e9df6cd0807ff0070cc0b4c37f52e5b5988203784626129",
+    "evaluation/review-hardware.json": "98911b3c01da7de8e1eb38ce43000473ab6b145080176a6040e7e5a0ed8cd398",
+    "evaluation/run.py": "d94ccafa6d0a74fb634a63c3ad5c9b1b4ca1ef7f5a3400f26854754c2732cf96",
+    "evaluation/scorecard.py": "54bfef4db5696cb1a27e0e0883436c1336c5ffb517d81179a93688edcdfaf800",
+    "evaluation/validate.py": "785527f84883463b786d890cc1c2ab47b72ee3a7ab9f893460d9d7f96c92f9bf"
+  },
+  "requirementsSha256": "e88ea31df38487967561ff3c9c646e776dc37305e415ad8e7a2dbb046e3f9b36",
+  "wheelSha256": "4ca4f5ddbe90aa2a157c876aa9219860b892d0a0cc4543a4dd11cbeeb341d653",
+  "status": "passed",
+  "notRun": [
+    "Windows/macOS execution",
+    "second machine",
+    "external provider/framework comparison"
+  ]
+}

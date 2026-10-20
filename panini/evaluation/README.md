@@ -9,6 +9,7 @@ realistic effectiveness and comparative performance.
 
 | Record | Scope |
 | --- | --- |
+| `documentation-validation-results.json` | Current guide examples and clean installed-wheel suite: 203 tests and 25 successful commands |
 | `alphaxiv-validation-results.json` | Clean-archive, installed-wheel validation: 203 tests and 25 successful commands |
 | `review-validation-results.json` | Pinned reference validation used by the measured scorecard: 196 tests and 26 commands |
 | `review-matrix-results.json` | Nine fresh-process runs: 25/100/400 nodes, three processes per size, seven samples per stage |
